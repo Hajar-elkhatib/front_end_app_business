@@ -1,0 +1,83 @@
+<div class="mb-10">
+  <h1 class="text-3xl font-semibold mb-2 tracking-tight">Overview</h1>
+  <p class="text-secondary text-sm">Welcome back. Here is the latest from your infrastructure.</p>
+</div>
+
+<div class="grid grid-cols-3 gap-6 mb-10">
+  <!-- Insight Card -->
+  <div class="card premium-glow glow-indigo col-span-2 relative overflow-hidden flex flex-col justify-between p-8">
+    <div class="glow-bg"></div>
+    <div class="relative z-10 flex-col h-full bg-blur-layer">
+      <div class="flex items-center gap-2 mb-6">
+        <div class="magic-icon shadow-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+        <h2 class="font-semibold text-lg text-indigo">Revenue Intelligence</h2>
+      </div>
+      <p class="mb-8 max-w-lg text-muted-premium">Your checkout conversion rate dropped by 2.4% over the last 24h. Our model suggests optimizing the payment gateway latency.</p>
+      
+      <div class="flex gap-3 mt-auto">
+        <button class="btn btn-indigo shadow-md">Analyze Issue</button>
+        <button class="btn btn-secondary">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Actions Card -->
+  <div class="card flex flex-col justify-between p-6">
+    <div>
+       <h2 class="font-semibold text-sm text-secondary uppercase tracking-widest mb-6">Quick Links</h2>
+       <div class="flex flex-col gap-2">
+         <button class="action-btn flex items-center gap-3">
+            <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+            <div class="text-sm font-medium">Create Project</div>
+         </button>
+         <button class="action-btn flex items-center gap-3">
+            <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <div class="text-sm font-medium">Domains Setup</div>
+         </button>
+         <button class="action-btn flex items-center gap-3">
+            <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="text-sm font-medium">Invite Team</div>
+         </button>
+       </div>
+    </div>
+  </div>
+</div>
+
+<!-- Table Section -->
+<div class="projects-section">
+  <div class="flex items-center justify-between mb-6">
+    <h2 class="text-lg font-semibold tracking-tight">Recent Projects</h2>
+  </div>
+  
+  <div class="card p-0 overflow-hidden border-subtle">
+    <table class="w-full text-left border-collapse table-auto">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray">
+          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Project Name</th>
+          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Environment</th>
+          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Status</th>
+          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Last Deployed</th>
+          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted text-right"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of projects" class="border-b border-gray hover-bg-gray transition-colors group">
+          <td class="py-4 px-6">
+             <div class="flex items-center gap-3">
+               <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-xs text-gray-600">{{ p.title.substring(0,1) }}</div>
+               <span class="font-medium text-sm">{{ p.title }}</span>
+             </div>
+          </td>
+          <td class="py-4 px-6 text-secondary text-sm">{{ p.type }}</td>
+          <td class="py-4 px-6">
+            <span class="badge shadow-sm" [ngClass]="p.statusClass">{{ p.status }}</span>
+          </td>
+          <td class="py-4 px-6 text-muted text-sm tabular-nums">{{ p.lastUpdated }}</td>
+          <td class="py-4 px-6 text-right">
+             <button class="icon-btn opacity-0 group-hover-opacity-100"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
