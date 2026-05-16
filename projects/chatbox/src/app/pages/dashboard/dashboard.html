@@ -5,7 +5,7 @@
 
 <div class="grid grid-cols-3 gap-6 mb-10">
   <!-- Insight Card -->
-  <div class="card premium-glow glow-indigo col-span-2 relative overflow-hidden flex flex-col justify-between p-8">
+  <div class="card premium-glow glow-indigo col-span-2 relative overflow-hidden flex flex-col justify-between p-8" *ngIf="showInsight">
     <div class="glow-bg"></div>
     <div class="relative z-10 flex-col h-full bg-blur-layer">
       <div class="flex items-center gap-2 mb-6">
@@ -15,10 +15,15 @@
       <p class="mb-8 max-w-lg text-muted-premium">Your checkout conversion rate dropped by 2.4% over the last 24h. Our model suggests optimizing the payment gateway latency.</p>
       
       <div class="flex gap-3 mt-auto">
-        <button class="btn btn-indigo shadow-md">Analyze Issue</button>
-        <button class="btn btn-secondary">Dismiss</button>
+        <button class="btn btn-indigo shadow-md" (click)="analyzeIssue()">Analyze Issue</button>
+        <button class="btn btn-secondary" (click)="dismissInsight()">Dismiss</button>
       </div>
     </div>
+  </div>
+
+  <!-- Dismissed placeholder -->
+  <div class="card col-span-2 flex items-center justify-center p-8 text-muted text-sm" *ngIf="!showInsight">
+    <p>No new insights. Everything looks good! ✓</p>
   </div>
 
   <!-- Quick Actions Card -->
@@ -26,15 +31,15 @@
     <div>
        <h2 class="font-semibold text-sm text-secondary uppercase tracking-widest mb-6">Quick Links</h2>
        <div class="flex flex-col gap-2">
-         <button class="action-btn flex items-center gap-3">
+         <button class="action-btn flex items-center gap-3" (click)="openCreateProject()">
             <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
             <div class="text-sm font-medium">Create Project</div>
          </button>
-         <button class="action-btn flex items-center gap-3">
+         <button class="action-btn flex items-center gap-3" (click)="goToDomains()">
             <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
             <div class="text-sm font-medium">Domains Setup</div>
          </button>
-         <button class="action-btn flex items-center gap-3">
+         <button class="action-btn flex items-center gap-3" (click)="goToInviteTeam()">
             <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
             <div class="text-sm font-medium">Invite Team</div>
          </button>
@@ -79,5 +84,30 @@
         </tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- Create Project Modal -->
+<div *ngIf="showCreateModal" style="position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);" (click)="closeCreateProject()">
+  <div class="card" style="max-width: 440px; width: 100%; margin: 1rem; padding: 2rem;" (click)="$event.stopPropagation()">
+    <h3 class="text-lg font-semibold mb-6">Create New Project</h3>
+    <div style="margin-bottom: 1rem;">
+      <label class="text-sm font-medium" style="display: block; margin-bottom: 0.5rem;">Project Name</label>
+      <input type="text" class="input w-full" [(ngModel)]="newProjectName" placeholder="Enter project name">
+    </div>
+    <div style="margin-bottom: 1.5rem;">
+      <label class="text-sm font-medium" style="display: block; margin-bottom: 0.5rem;">Project Type</label>
+      <select class="input w-full" [(ngModel)]="newProjectType">
+        <option>Web App</option>
+        <option>Mobile App</option>
+        <option>SaaS Tool</option>
+        <option>Fintech</option>
+        <option>E-commerce</option>
+      </select>
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+      <button class="btn btn-secondary" (click)="closeCreateProject()">Cancel</button>
+      <button class="btn btn-primary" (click)="createProject()" [disabled]="!newProjectName.trim()">Create Project</button>
+    </div>
   </div>
 </div>

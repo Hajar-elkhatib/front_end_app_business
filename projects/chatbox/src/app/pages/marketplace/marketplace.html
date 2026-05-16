@@ -10,14 +10,17 @@
 <!-- Filters -->
 <div class="card mb-10 px-4 py-3 flex items-center justify-between filters-bar shadow-sm">
   <div class="flex gap-4">
-    <select class="input filter-select bg-transparent border-none focus:ring-0 cursor-pointer text-sm font-medium">
+    <select class="input filter-select bg-transparent border-none focus:ring-0 cursor-pointer text-sm font-medium" [(ngModel)]="roleFilter" (ngModelChange)="onFilterChange()">
       <option>All Roles</option>
-      <option>Frontend</option>
-      <option>Backend</option>
-      <option>UI/UX Design</option>
+      <option>Frontend Architect</option>
+      <option>Backend Developer</option>
+      <option>UI/UX Designer</option>
+      <option>AI Integration</option>
+      <option>DevOps Engineer</option>
+      <option>Product Manager</option>
     </select>
     <div class="v-divider"></div>
-    <select class="input filter-select bg-transparent border-none focus:ring-0 cursor-pointer text-sm font-medium">
+    <select class="input filter-select bg-transparent border-none focus:ring-0 cursor-pointer text-sm font-medium" [(ngModel)]="pricingFilter" (ngModelChange)="onFilterChange()">
       <option>Any Pricing</option>
       <option>$50 - $100/hr</option>
       <option>$100+/hr</option>
@@ -26,10 +29,15 @@
   <div class="flex items-center gap-3">
     <div class="text-sm font-medium text-secondary">Available Now</div>
     <label class="toggle-switch">
-       <input type="checkbox" checked>
+       <input type="checkbox" [(ngModel)]="availableOnly" (ngModelChange)="onFilterChange()">
        <span class="slider"></span>
     </label>
   </div>
+</div>
+
+<!-- Empty state -->
+<div *ngIf="specialists.length === 0" class="card p-12 text-center">
+  <p class="text-muted">No specialists match your filters. Try adjusting your criteria.</p>
 </div>
 
 <!-- Specialists Grid -->
@@ -52,12 +60,12 @@
         <span>{{ spec.rating }}</span>
         <span class="text-muted font-normal ml-1">({{ spec.reviews }})</span>
       </div>
-      <div class="text-sm font-medium">$85<span class="text-muted font-normal">/hr</span></div>
+      <div class="text-sm font-medium">${{ spec.hourlyRate }}<span class="text-muted font-normal">/hr</span></div>
     </div>
   </div>
 </div>
 
-<!-- Specialist Modal Mock -->
+<!-- Specialist Modal -->
 <div class="modal-overlay flex items-center justify-center p-4 backdrop-blur-sm" *ngIf="selectedSpecialist" (click)="closeProfile()">
   <div class="card modal-content p-0 overflow-hidden shadow-xl border border-gray-200" (click)="$event.stopPropagation()">
     <div class="p-8 flex flex-col relative">
@@ -94,9 +102,17 @@
              </div>
            </div>
            
+           <div *ngIf="hireSuccess" style="background: #ecfdf5; border: 1px solid #a7f3d0; border-radius: 8px; padding: 0.75rem 1rem; margin-bottom: 1rem; color: #065f46; font-size: 0.875rem;">
+             ✓ Request sent to {{ selectedSpecialist.name }}! They will respond shortly.
+           </div>
+
            <div class="flex justify-end gap-3">
-              <button class="btn btn-secondary" (click)="closeProfile()">Close</button>
-              <button class="btn btn-primary">Hire Specialist</button>
+              <button class="btn btn-secondary" (click)="contactSpecialist()">Message</button>
+              <button class="btn btn-primary" (click)="hireSpecialist()" [disabled]="hireLoading || hireSuccess">
+                <span *ngIf="!hireLoading && !hireSuccess">Hire Specialist</span>
+                <span *ngIf="hireLoading">Sending...</span>
+                <span *ngIf="hireSuccess">✓ Sent</span>
+              </button>
            </div>
         </div>
       </div>
