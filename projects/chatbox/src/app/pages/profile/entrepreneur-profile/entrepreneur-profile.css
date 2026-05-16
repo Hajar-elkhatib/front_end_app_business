@@ -1,0 +1,125 @@
+:host { display: block; }
+
+.ep-page { padding: 2rem 0; }
+.ep-max { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
+
+/* Header Banner */
+.ep-banner {
+  position: relative; border-radius: 20px; overflow: hidden;
+  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 2.5rem; margin-bottom: 2rem;
+}
+.ep-banner::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #6366f1, #a855f7, transparent); opacity: 0.6;
+}
+.ep-banner-content { display: flex; gap: 2rem; align-items: center; position: relative; z-index: 2; }
+
+.ep-avatar {
+  width: 96px; height: 96px; border-radius: 20px; flex-shrink: 0;
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; font-weight: 700; color: #fff;
+  box-shadow: 0 8px 24px rgba(99,102,241,0.3);
+  border: 2px solid rgba(255,255,255,0.15);
+}
+
+.ep-info h1 { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
+.ep-company { color: #a1a1aa; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
+.ep-company-dot { width: 4px; height: 4px; background: #52525b; border-radius: 50%; }
+.ep-badge {
+  display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.75rem;
+  padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2);
+}
+.ep-badge-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; animation: pulseDot 2s infinite; }
+@keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.ep-actions { margin-left: auto; display: flex; gap: 0.75rem; }
+.ep-btn-edit {
+  padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: 0.875rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  color: #e4e4e7; cursor: pointer; transition: all 0.2s;
+}
+.ep-btn-edit:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+.ep-btn-primary {
+  padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: 0.875rem;
+  background: linear-gradient(to right, #4f46e5, #7c3aed); border: 1px solid rgba(255,255,255,0.1);
+  color: #fff; cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(99,102,241,0.3);
+}
+.ep-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(99,102,241,0.5); }
+
+/* Stats */
+.ep-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.ep-stat-card {
+  background: rgba(24,24,27,0.5); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.5rem;
+  text-align: center; transition: all 0.3s ease;
+}
+.ep-stat-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.ep-stat-value { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
+.ep-stat-label { font-size: 0.8rem; color: #71717a; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.ep-stat-icon {
+  width: 36px; height: 36px; margin: 0 auto 0.75rem auto; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+}
+.ep-stat-icon.indigo { background: rgba(99,102,241,0.15); color: #818cf8; }
+.ep-stat-icon.purple { background: rgba(168,85,247,0.15); color: #c084fc; }
+.ep-stat-icon.emerald { background: rgba(16,185,129,0.15); color: #34d399; }
+.ep-stat-icon.amber { background: rgba(245,158,11,0.15); color: #fbbf24; }
+
+/* Content Grid */
+.ep-grid { display: grid; grid-template-columns: 1fr 340px; gap: 1.5rem; }
+
+/* Cards */
+.ep-card {
+  background: rgba(24,24,27,0.5); backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.75rem;
+  position: relative; overflow: hidden;
+}
+.ep-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+.ep-card h3 { font-size: 1rem; font-weight: 600; color: #e4e4e7; margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.ep-bio { color: #a1a1aa; font-size: 0.95rem; line-height: 1.7; }
+
+/* Contact list */
+.ep-contact-item {
+  display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.ep-contact-item:last-child { border-bottom: none; }
+.ep-contact-icon {
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; color: #71717a;
+}
+.ep-contact-label { font-size: 0.75rem; color: #52525b; }
+.ep-contact-value { font-size: 0.875rem; color: #e4e4e7; font-weight: 500; }
+
+/* Projects Table */
+.ep-project-row {
+  display: flex; align-items: center; gap: 1rem; padding: 0.875rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s;
+}
+.ep-project-row:last-child { border-bottom: none; }
+.ep-project-row:hover { background: rgba(255,255,255,0.02); margin: 0 -1rem; padding: 0.875rem 1rem; border-radius: 8px; }
+.ep-project-name { font-size: 0.9rem; font-weight: 600; color: #e4e4e7; flex: 1; }
+.ep-project-meta { font-size: 0.8rem; color: #71717a; min-width: 80px; text-align: right; }
+
+.status-badge {
+  padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em;
+}
+.status-progress { background: rgba(99,102,241,0.15); color: #818cf8; border: 1px solid rgba(99,102,241,0.2); }
+.status-planning { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.2); }
+.status-completed { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+
+@media (max-width: 768px) {
+  .ep-stats { grid-template-columns: repeat(2, 1fr); }
+  .ep-grid { grid-template-columns: 1fr; }
+  .ep-banner-content { flex-direction: column; text-align: center; }
+  .ep-actions { margin-left: 0; justify-content: center; }
+}

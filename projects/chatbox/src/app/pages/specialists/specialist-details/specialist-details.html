@@ -1,0 +1,142 @@
+<div class="sd-page">
+  <a routerLink="/specialists" class="sd-back">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Back to specialists
+  </a>
+
+  <div *ngIf="isLoading" class="sd-loading">Loading profile...</div>
+
+  <div *ngIf="specialist">
+    <!-- Header -->
+    <div class="sd-header">
+      <div class="sd-header-banner"></div>
+      <div class="sd-header-body">
+        <div class="sd-header-row">
+          <div class="sd-avatar">{{specialist.avatarUrl}}</div>
+          <div class="sd-info">
+            <h1>{{specialist.fullName}}</h1>
+            <div class="sd-info-sub">
+              <span>{{specialist.expertiseDomain}}</span>
+              <span class="sd-dot"></span>
+              <span>{{specialist.location}}</span>
+              <span class="sd-dot"></span>
+              <span>{{specialist.yearsExperience}} years exp.</span>
+            </div>
+            <div class="sd-avail-badge" [ngClass]="specialist.available ? 'available' : 'unavailable'">
+              <span class="sd-avail-dot" [ngClass]="specialist.available ? 'on' : 'off'"></span>
+              {{specialist.available ? 'Available for hire' : 'Currently unavailable'}}
+            </div>
+          </div>
+          <div class="sd-actions">
+            <button class="sd-btn-secondary">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline; vertical-align: -2px; margin-right: 4px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Contact
+            </button>
+            <button class="sd-btn-chat" routerLink="/chat">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Start Chat
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="sd-stats">
+      <div class="sd-stat">
+        <div class="sd-stat-val">${{specialist.hourlyRate}}</div>
+        <div class="sd-stat-label">Hourly Rate</div>
+      </div>
+      <div class="sd-stat">
+        <div class="sd-stat-val">{{specialist.averageRating}}</div>
+        <div class="sd-stat-label">Rating</div>
+      </div>
+      <div class="sd-stat">
+        <div class="sd-stat-val">{{specialist.completedProjects || 0}}</div>
+        <div class="sd-stat-label">Projects</div>
+      </div>
+      <div class="sd-stat">
+        <div class="sd-stat-val">{{specialist.responseRate || 0}}%</div>
+        <div class="sd-stat-label">Response Rate</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="sd-grid">
+      <!-- Left Column -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="sd-card">
+          <h3>About</h3>
+          <p class="sd-bio">{{specialist.bio}}</p>
+        </div>
+
+        <div class="sd-card">
+          <h3>Skills & Expertise</h3>
+          <div class="sd-skills">
+            <span *ngFor="let skill of specialist.skills" class="sd-skill-tag">{{skill}}</span>
+          </div>
+        </div>
+
+        <div class="sd-card">
+          <h3>Reviews ({{reviews.length}})</h3>
+          <div *ngIf="reviews.length === 0" class="sd-calendar-placeholder">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p style="margin-top: 0.75rem;">No reviews yet.</p>
+          </div>
+          <div *ngFor="let r of reviews" class="sd-review">
+            <div class="sd-review-header">
+              <span class="sd-review-author">{{r.author}}</span>
+              <span class="sd-review-date">{{r.date}}</span>
+            </div>
+            <div class="sd-review-stars">
+              <svg *ngFor="let s of getRatingStars(r.rating)" class="sd-star" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg *ngFor="let s of getEmptyStars(r.rating)" class="sd-star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <p class="sd-review-text">{{r.comment}}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+        <div class="sd-card">
+          <h3>Languages</h3>
+          <div *ngFor="let lang of specialist.languages" class="sd-lang-row">
+            <span class="sd-lang-name">{{lang}}</span>
+            <span class="sd-lang-level">Fluent</span>
+          </div>
+        </div>
+
+        <div class="sd-card">
+          <h3>Availability</h3>
+          <div class="sd-calendar-placeholder">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <p style="margin-top: 0.75rem;">Calendar integration coming soon.</p>
+            <p>Contact the specialist directly to discuss availability.</p>
+          </div>
+        </div>
+
+        <div class="sd-card">
+          <h3>Project History</h3>
+          <div class="sd-calendar-placeholder">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <p style="margin-top: 0.75rem;">{{specialist.completedProjects || 0}} projects completed.</p>
+            <p>Detailed history available after hiring.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
+<div *ngIf="showDeleteModal" style="position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);">
+  <div class="sd-card" style="max-width: 400px; width: 100%; margin: 1rem;">
+    <h3 style="color: #f87171;">Confirm Deletion</h3>
+    <p style="color: #a1a1aa; font-size: 0.9rem; margin-bottom: 1.5rem;">Are you sure you want to remove {{specialist?.fullName}}? This cannot be undone.</p>
+    <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+      <button class="sd-btn-secondary" (click)="showDeleteModal = false">Cancel</button>
+      <button style="padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: 0.875rem; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3); color: #f87171; cursor: pointer;" (click)="deleteSpecialist()">Delete</button>
+    </div>
+  </div>
+</div>

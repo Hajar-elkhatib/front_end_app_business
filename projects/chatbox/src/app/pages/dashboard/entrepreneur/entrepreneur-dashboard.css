@@ -1,0 +1,15 @@
+/* Reuse same dashboard styles */
+.premium-glow { background: var(--bg-primary); border: 1px solid var(--border-color); }
+.glow-bg { position: absolute; top: 0; right: 0; bottom: 0; left: 0; background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.1), transparent 50%); z-index: 1; }
+.magic-icon { width: 28px; height: 28px; background: var(--bg-primary); color: var(--indigo-600); border-radius: 6px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border-color); }
+.text-muted-premium { color: #52525b; line-height: 1.6; font-size: 0.95rem; }
+.border-subtle { border-color: var(--border-color); box-shadow: var(--sh-sm); }
+.border-collapse { border-collapse: collapse; }
+.border-b { border-bottom: 1px solid var(--border-color); }
+.py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+.px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tabular-nums { font-variant-numeric: tabular-nums; }
+.transition-colors { transition: background-color 0.15s ease; }
+.hover-bg-gray:hover { background-color: #fcfcfd; }

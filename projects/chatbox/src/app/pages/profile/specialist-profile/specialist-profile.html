@@ -1,0 +1,100 @@
+<div class="container py-8 max-w-4xl">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold">My Specialist Profile</h1>
+    <button class="btn btn-primary text-sm">Save Changes</button>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    
+    <!-- Sidebar -->
+    <div class="flex flex-col gap-6">
+      <div class="card text-center relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-purple-500 to-indigo-600 opacity-80"></div>
+        <div class="relative pt-6">
+          <div class="avatar shadow-lg border-4 border-white m-auto mb-4" style="width: 80px; height: 80px; font-size: 2rem;">{{user.avatarUrl}}</div>
+          <h2 class="text-xl font-bold">{{user.fullName}}</h2>
+          <p class="text-sm text-secondary mb-4">{{user.expertiseDomain}}</p>
+          <button class="btn btn-secondary w-full justify-center text-sm">Upload Photo</button>
+        </div>
+      </div>
+
+      <div class="card p-0 overflow-hidden">
+        <div class="flex flex-col">
+          <a class="p-4 border-b border-color hover-bg-gray font-medium flex items-center gap-3 text-indigo bg-indigo-50">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Personal Info
+          </a>
+          <a class="p-4 border-b border-color hover-bg-gray font-medium text-secondary flex items-center gap-3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            Skills & Expertise
+          </a>
+          <a class="p-4 border-b border-color hover-bg-gray font-medium text-secondary flex items-center gap-3">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Security
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="md:col-span-2 flex flex-col gap-8">
+      <div class="card">
+        <h3 class="text-xl font-bold mb-6">Personal Information</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Full Name</label>
+            <input type="text" class="input" [value]="user.fullName">
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Email Address</label>
+            <input type="email" class="input text-muted" [value]="user.email" disabled>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Location</label>
+            <input type="text" class="input" [value]="user.location">
+          </div>
+        </div>
+        
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium">Bio</label>
+          <textarea class="input" rows="4">{{user.bio}}</textarea>
+        </div>
+      </div>
+
+      <div class="card glass">
+        <h3 class="text-xl font-bold mb-6">Skills & Expertise</h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Expertise Domain</label>
+            <select class="input">
+              <option selected>{{user.expertiseDomain}}</option>
+              <option>Frontend Architecture</option>
+              <option>Cloud DevOps</option>
+            </select>
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Years of Experience</label>
+            <input type="number" class="input" [value]="user.yearsExperience">
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Hourly Rate ($)</label>
+            <input type="number" class="input" [value]="user.hourlyRate">
+          </div>
+        </div>
+        
+        <div class="flex flex-col gap-2 mb-4">
+          <label class="text-sm font-medium">Skills (comma separated)</label>
+          <input type="text" class="input" [value]="user.skills.join(', ')">
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-medium">Languages</label>
+          <input type="text" class="input" [value]="user.languages.join(', ')">
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>

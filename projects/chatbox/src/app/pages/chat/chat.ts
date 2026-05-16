@@ -1,23 +1,79 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ChatService } from '../../services/chat.service';
+import { Conversation, ChatMessage } from '../../models/chat.model';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './chat.html',
   styleUrls: ['./chat.css']
 })
-export class Chat {
-  conversations = [
-    { id: 1, name: 'Alex Rivera', lastMessage: 'The new UI looks great!', unread: 2, time: '10:42 AM', active: true, avatar: 'A' },
-    { id: 2, name: 'Project: Nexus E-commerce', lastMessage: 'Are we launching today?', unread: 0, time: '09:15 AM', active: false, avatar: 'N' },
-    { id: 3, name: 'Sophia Chen', lastMessage: 'I sent the API keys over.', unread: 0, time: 'Yesterday', active: false, avatar: 'S' }
-  ];
+export class Chat implements OnInit, AfterViewChecked {
+  @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
-  messages = [
-    { id: 1, sender: 'Alex Rivera', isMe: false, text: 'Hey there! I just reviewed the latest mockups for the dashboard.', time: '10:30 AM', avatar: 'A' },
-    { id: 2, sender: 'Me', isMe: true, text: 'Awesome! Did you like the new layout with the AI recommendations?', time: '10:35 AM' },
-    { id: 3, sender: 'Alex Rivera', isMe: false, text: 'Yes, it flows much better. The new UI looks great!', time: '10:42 AM', avatar: 'A' }
-  ];
+  conversations: Conversation[] = [];
+  messages: ChatMessage[] = [];
+  activeConversation: Conversation | null = null;
+  newMessage = '';
+  isTyping = false;
+  isLoading = true;
+
+  constructor(private chatService: ChatService) {}
+
+  ngOnInit() {
+    this.chatService.getConversations().subscribe(convos => {
+      this.conversations = convos;
+      this.isLoading = false;
+      if (convos.length > 0) {
+        this.selectConversation(convos[0]);
+      }
+    });
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  selectConversation(convo: Conversation) {
+    this.activeConversation = convo;
+    this.chatService.getMessages(convo.id).subscribe(msgs => {
+      this.messages = msgs;
+      this.scrollToBottom();
+    });
+  }
+
+  sendMessage() {
+    if (!this.newMessage.trim() || !this.activeConversation) return;
+    
+    this.chatService.sendMessage(this.activeConversation.id, this.newMessage).subscribe(msg => {
+      this.messages.push(msg);
+      this.newMessage = '';
+      this.scrollToBottom();
+      
+      // Simulate reply
+      this.isTyping = true;
+      setTimeout(() => {
+        this.isTyping = false;
+        this.messages.push({
+          id: Date.now().toString(),
+          senderId: 'other',
+          senderName: this.activeConversation!.name,
+          text: 'Got it. Let me check that and get back to you.',
+          timestamp: new Date(),
+          isRead: true,
+          avatarUrl: this.activeConversation!.avatarUrl
+        });
+        this.scrollToBottom();
+      }, 1500);
+    });
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
+    } catch(err) { }
+  }
 }
