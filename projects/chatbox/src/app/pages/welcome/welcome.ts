@@ -1,11 +1,22 @@
 import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-welcome',
   standalone: true,
-  imports: [RouterLink],
+  imports: [CommonModule, RouterModule],
   templateUrl: './welcome.html',
   styleUrls: ['./welcome.css']
 })
-export class Welcome {}
+export class Welcome {
+  isMobileMenuOpen = false;
+
+  toggleMobileMenu() {
+    this.isMobileMenuOpen = !this.isMobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.isMobileMenuOpen = false;
+  }
+}

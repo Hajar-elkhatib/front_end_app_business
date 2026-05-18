@@ -1,26 +1,49 @@
 <div class="welcome-dark-theme">
   <!-- Premium Navbar -->
   <header class="navbar flex items-center justify-between glass-dark transition-all">
-    <div class="logo font-bold text-xl flex items-center gap-3 text-white">
+    <div class="logo font-bold text-xl flex items-center gap-3 text-white cursor-pointer" routerLink="/">
       <div class="icon-brand shadow-glow-indigo">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
       </div>
       <span class="tracking-tight">NexusAI</span>
     </div>
+    
+    <!-- Desktop Navigation Links (Smooth scrolls to public landing sections) -->
     <nav class="flex gap-8 desktop-nav">
-      <a href="#" class="nav-link-dark">Platform</a>
-      <a href="#" class="nav-link-dark">Solutions</a>
-      <a href="#" class="nav-link-dark">Marketplace</a>
-      <a href="#" class="nav-link-dark">Pricing</a>
+      <a href="#showcase" class="nav-link-dark">Platform</a>
+      <a href="#features" class="nav-link-dark">Solutions</a>
+      <a href="#marketplace" class="nav-link-dark">Marketplace</a>
+      <a href="#pricing" class="nav-link-dark">Pricing</a>
     </nav>
-    <div class="flex items-center gap-4">
+    
+    <!-- Action buttons (Desktop) -->
+    <div class="flex items-center gap-4 desktop-actions">
       <a routerLink="/login" class="btn-ghost-dark">Sign in</a>
       <a routerLink="/register" class="btn-glow-primary">
         <span>Sign up</span>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
+
+    <!-- Mobile Menu Button (Hamburger) -->
+    <button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Toggle Navigation">
+      <svg *ngIf="!isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg *ngIf="isMobileMenuOpen" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
   </header>
+
+  <!-- Mobile Dropdown Navigation Drawer -->
+  <div class="mobile-menu-drawer glass-dark" *ngIf="isMobileMenuOpen" (click)="closeMobileMenu()">
+    <nav class="mobile-nav flex-col">
+      <a href="#showcase" class="mobile-nav-link">Platform Showcase</a>
+      <a href="#features" class="mobile-nav-link">SaaS Solutions</a>
+      <a href="#marketplace" class="mobile-nav-link">Elite Marketplace</a>
+      <a href="#pricing" class="mobile-nav-link">Pricing Models</a>
+      <div class="mobile-divider"></div>
+      <a routerLink="/login" class="mobile-nav-link btn-secondary-mobile">Sign in</a>
+      <a routerLink="/register" class="mobile-btn-primary">Get Started Free</a>
+    </nav>
+  </div>
 
   <main class="welcome-main container relative z-10">
     <!-- Animated Hero Section with blurred mesh gradient -->
@@ -40,29 +63,40 @@
       
       <div class="flex justify-center gap-4 hero-buttons mb-20">
         <a routerLink="/register" class="btn-glow-primary btn-lg flex items-center gap-2">Start building <span>&rarr;</span></a>
-        <button class="btn-glass-dark btn-lg flex items-center gap-2 text-white"><span>▶</span> Watch Demo</button>
+        <a href="#showcase" class="btn-glass-dark btn-lg flex items-center gap-2 text-white">Explore Platform</a>
       </div>
 
-      <!-- Interface Showcase (Ultra realistic) -->
-      <div class="hero-showcase mx-auto">
+      <!-- Interface Showcase (Ultra realistic browser mockup) -->
+      <div class="hero-showcase mx-auto" id="showcase">
         <div class="showcase-card glass-dark flex-col">
-          <div class="showcase-header border-b border-gray-800 p-4 flex gap-2">
-            <div class="mac-dot red"></div><div class="mac-dot yellow"></div><div class="mac-dot green"></div>
+          <div class="showcase-header border-b border-gray-800 p-4 flex justify-between items-center">
+            <div class="flex gap-2">
+              <div class="mac-dot red"></div><div class="mac-dot yellow"></div><div class="mac-dot green"></div>
+            </div>
+            <div class="showcase-browser-tab text-xs text-gray-500 font-medium">nexusai.io/dashboard/preview</div>
+            <div style="width: 40px;"></div>
           </div>
           <div class="showcase-body p-8 flex gap-6">
              <div class="w-1-3 flex-col gap-4">
                <div class="sk-line w-full skeleton-dark h-4"></div>
                <div class="sk-line w-3-4 skeleton-dark h-4"></div>
                <div class="sk-line w-1-2 skeleton-dark h-4"></div>
-               <div class="sk-box mt-4 skeleton-dark"></div>
+               
+               <div class="mini-spec-card mt-4 p-4 rounded-lg border border-gray-800 bg-black/40">
+                 <div class="flex justify-between mb-2">
+                   <span class="text-xs text-gray-500">Security Index</span>
+                   <span class="text-xs text-emerald-400 font-bold">100%</span>
+                 </div>
+                 <div class="pd-progress-bar-bg"><div class="pd-progress-bar-fill" style="width: 100%; height: 4px;"></div></div>
+               </div>
              </div>
              <div class="w-2-3 flex-col gap-4">
-               <div class="hero-graph flex items-end gap-2 p-6 skeleton-dark border border-gray-800 rounded-lg">
-                  <div class="bar h-20 bg-purple-900 rounded-sm"></div>
-                  <div class="bar h-32 bg-purple-800 rounded-sm"></div>
-                  <div class="bar h-48 bg-purple-600 rounded-sm"></div>
-                  <div class="bar h-64 bg-purple-500 rounded-sm shadow-glow-purple"></div>
-                  <div class="bar h-56 bg-purple-700 rounded-sm"></div>
+               <div class="hero-graph flex items-end justify-between gap-2 p-6 skeleton-dark border border-gray-800 rounded-lg" style="height: 180px;">
+                  <div class="bar h-20 bg-purple-950/60 rounded-sm" style="height: 25%;"></div>
+                  <div class="bar h-32 bg-purple-900/60 rounded-sm" style="height: 45%;"></div>
+                  <div class="bar h-48 bg-purple-800/80 rounded-sm" style="height: 70%;"></div>
+                  <div class="bar h-64 bg-purple-600 rounded-sm shadow-glow-purple" style="height: 95%;"></div>
+                  <div class="bar h-56 bg-purple-700/80 rounded-sm" style="height: 80%;"></div>
                </div>
              </div>
           </div>
@@ -71,7 +105,7 @@
     </section>
 
     <!-- High-end Features Section -->
-    <section class="features mt-32 relative z-10">
+    <section class="features mt-32 relative z-10" id="features">
       <div class="text-center mb-16">
         <h2 class="text-4xl font-bold mb-4 tracking-tight text-white">Everything you need to ship faster.</h2>
         <p class="text-lg text-gray-400">A unified toolset built for performance and scale.</p>
@@ -97,6 +131,131 @@
           <div class="icon-orb mb-6 gradient-bg-3 shadow-[0_0_15px_rgba(52,211,153,0.4)]"></div>
           <h3 class="text-xl font-bold mb-3 text-white">Real-time Sync</h3>
           <p class="text-gray-400 leading-relaxed text-sm">Collaborate via high-performance WebSocket infrastructure. No refreshing, no conflicts. Just speed.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Public Specialists Preview Section (New!) -->
+    <section class="marketplace-preview mt-32 relative z-10" id="marketplace">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4 tracking-tight text-white">Meet our Elite Specialist Network</h2>
+        <p class="text-lg text-gray-400">Instantly deploy highly skilled specialists verified by cognitive audits.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Specialist 1 -->
+        <div class="specialist-preview-card glass-dark">
+          <div class="sp-card-header flex items-center gap-3 mb-4">
+            <div class="sp-avatar">S</div>
+            <div>
+              <h4 class="text-sm font-semibold text-white">Sarah Jenkins</h4>
+              <p class="text-xs text-purple-400 font-medium">AI Engineering Specialist</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 leading-relaxed mb-4">Expert in deep learning model fine-tuning, NLP, and agentic workflows. Ex-OpenAI contributor.</p>
+          <div class="flex justify-between items-center text-xs border-t border-gray-800 pt-3">
+            <span class="text-gray-500">Rate: <strong class="text-white">$120/hr</strong></span>
+            <span style="color: #fbbf24; display: flex; align-items: center; gap: 0.25rem;">★ 4.9</span>
+          </div>
+        </div>
+
+        <!-- Specialist 2 -->
+        <div class="specialist-preview-card glass-dark">
+          <div class="sp-card-header flex items-center gap-3 mb-4">
+            <div class="sp-avatar" style="background: linear-gradient(135deg, #3b82f6, #60a5fa);">D</div>
+            <div>
+              <h4 class="text-sm font-semibold text-white">David Chen</h4>
+              <p class="text-xs text-blue-400 font-medium">Frontend Architect</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 leading-relaxed mb-4">Specializes in responsive Angular core integrations, RxJS state management, and high-end animations.</p>
+          <div class="flex justify-between items-center text-xs border-t border-gray-800 pt-3">
+            <span class="text-gray-500">Rate: <strong class="text-white">$95/hr</strong></span>
+            <span style="color: #fbbf24; display: flex; align-items: center; gap: 0.25rem;">★ 4.8</span>
+          </div>
+        </div>
+
+        <!-- Specialist 3 -->
+        <div class="specialist-preview-card glass-dark">
+          <div class="sp-card-header flex items-center gap-3 mb-4">
+            <div class="sp-avatar" style="background: linear-gradient(135deg, #10b981, #34d399);">E</div>
+            <div>
+              <h4 class="text-sm font-semibold text-white">Elena Rodriguez</h4>
+              <p class="text-xs text-emerald-400 font-medium">Cloud DevOps Engineer</p>
+            </div>
+          </div>
+          <p class="text-xs text-gray-400 leading-relaxed mb-4">Kubernetes orchestration pro. Focuses on secure Terraform script assemblies and Prometheus alert configs.</p>
+          <div class="flex justify-between items-center text-xs border-t border-gray-800 pt-3">
+            <span class="text-gray-500">Rate: <strong class="text-white">$110/hr</strong></span>
+            <span style="color: #fbbf24; display: flex; align-items: center; gap: 0.25rem;">★ 5.0</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="text-center mt-8">
+        <a routerLink="/register" class="btn btn-secondary inline-flex items-center gap-2 text-xs">
+          Join to Access Full Network <span>&rarr;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Pricing Plans Section -->
+    <section class="pricing mt-32 relative z-10" id="pricing">
+      <div class="text-center mb-16">
+        <h2 class="text-4xl font-bold mb-4 tracking-tight text-white">Simple, transparent pricing.</h2>
+        <p class="text-lg text-gray-400">Unlock the complete SaaS pipeline tailored to your scope.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Starter tier -->
+        <div class="pricing-card glass-dark">
+          <span class="price-tier">Sandbox</span>
+          <div class="price-value">$0</div>
+          <span class="price-period">Forever free trial</span>
+          <p class="price-desc">Perfect for testing architecture analysis pipelines and exploring the network.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span>✓</span> 3 active mock projects</li>
+            <li><span>✓</span> Standard AI Scoreboard views</li>
+            <li><span>✓</span> Browse marketplace networks</li>
+            <li><span>✓</span> Dynamic sandbox profile</li>
+          </ul>
+          <a routerLink="/register" class="btn btn-secondary justify-center w-full mt-6 text-sm">Get Started</a>
+        </div>
+
+        <!-- Pro Tier (Glowing) -->
+        <div class="pricing-card glass-dark featured">
+          <div class="popular-tag">Most Selected</div>
+          <span class="price-tier">Professional Creator</span>
+          <div class="price-value">$49<span class="price-mo">/mo</span></div>
+          <span class="price-period">Billed monthly</span>
+          <p class="price-desc">For active entrepreneurs seeking dedicated elite expert integrations.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span>✓</span> Unlimited project pipelines</li>
+            <li><span>✓</span> Detailed AI cryptographic audits</li>
+            <li><span>✓</span> Direct chat with active specialists</li>
+            <li><span>✓</span> Priority queue matching</li>
+            <li><span>✓</span> Advanced report generators</li>
+          </ul>
+          <a routerLink="/register" class="btn-glow-primary justify-center w-full mt-6 text-sm">Go Professional</a>
+        </div>
+
+        <!-- Enterprise Tier -->
+        <div class="pricing-card glass-dark">
+          <span class="price-tier">Enterprise Matrix</span>
+          <div class="price-value">Custom</div>
+          <span class="price-period">Contact details</span>
+          <p class="price-desc">Complete cryptographic security arrays for high-volume operational firms.</p>
+          <div class="price-divider"></div>
+          <ul class="price-features">
+            <li><span>✓</span> Everything in Creator plan</li>
+            <li><span>✓</span> Custom SLA response times</li>
+            <li><span>✓</span> Dedicated account auditor</li>
+            <li><span>✓</span> Custom analytical configurations</li>
+            <li><span>✓</span> Dedicated backend database</li>
+          </ul>
+          <a routerLink="/login" class="btn btn-secondary justify-center w-full mt-6 text-sm">Contact Scale</a>
         </div>
       </div>
     </section>
