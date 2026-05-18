@@ -1,0 +1,280 @@
+<div class="pd-page" *ngIf="!isLoading && project">
+  <!-- Top Nav & Actions -->
+  <div class="pd-top-nav">
+    <a routerLink="/projects" class="pd-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      Back to Projects
+    </a>
+    <div class="pd-header-actions">
+      <button (click)="generateReport()" class="btn btn-secondary text-sm btn-report" [disabled]="isGeneratingReport">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; display: inline-block; vertical-align: -2px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        {{isGeneratingReport ? 'Analyzing Core...' : 'Generate AI Report'}}
+      </button>
+      <a [routerLink]="['/projects', project.id, 'edit']" class="btn btn-secondary text-sm">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; display: inline-block; vertical-align: -2px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+        Edit Specifications
+      </a>
+      <button (click)="openDeleteModal()" class="btn btn-secondary text-sm btn-delete">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px; display: inline-block; vertical-align: -2px;"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+        Delete Container
+      </button>
+    </div>
+  </div>
+
+  <!-- Hero Header Section -->
+  <div class="pd-hero-banner card glass">
+    <div class="pd-hero-main">
+      <div class="pd-hero-meta">
+        <span class="pd-hero-category">{{project.category}}</span>
+        <span class="pd-badge" [ngClass]="getStatusClass(project.status)">
+          {{getStatusLabel(project.status)}}
+        </span>
+      </div>
+      <h1 class="pd-hero-title">{{project.title}}</h1>
+      <div class="pd-hero-timestamps">
+        <div class="pd-timestamp">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Created: {{project.createdAt | date:'mediumDate'}}</span>
+        </div>
+        <div class="pd-timestamp" *ngIf="project.updatedAt">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+          <span>Last Update: {{project.updatedAt | date:'mediumDate'}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="pd-hero-progress">
+      <div class="pd-progress-header">
+        <span>Operational Alignment</span>
+        <strong>{{project.progress}}%</strong>
+      </div>
+      <div class="pd-progress-bar-bg">
+        <div class="pd-progress-bar-fill" [style.width.%]="project.progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Layout Container -->
+  <div class="pd-grid">
+    <!-- Left Column (Main Info & AI Metrics) -->
+    <div class="pd-main-col">
+      <!-- Description & Specs -->
+      <div class="pd-card">
+        <h3>Architectural Guidelines</h3>
+        <p class="pd-description">{{project.description}}</p>
+
+        <!-- Dynamic Tags / Tech Stack -->
+        <div class="pd-tags-section" *ngIf="project.tags && project.tags.length > 0">
+          <h4>Technologies Deployments</h4>
+          <div class="pd-tags-grid">
+            <span class="pd-tag" *ngFor="let tag of project.tags">{{tag}}</span>
+          </div>
+        </div>
+
+        <!-- Specifications block -->
+        <div class="pd-specs-block">
+          <div class="pd-spec-grid-item">
+            <span class="pd-spec-lbl">Allocated Budget</span>
+            <span class="pd-spec-val font-bold text-indigo">${{project.budget | number}}</span>
+          </div>
+          <div class="pd-spec-grid-item">
+            <span class="pd-spec-lbl">Milestone Deadline</span>
+            <span class="pd-spec-val">{{project.deadline | date:'mediumDate'}}</span>
+          </div>
+          <div class="pd-spec-grid-item">
+            <span class="pd-spec-lbl">Priority Matrix</span>
+            <span class="pd-spec-val priority-badge" [ngClass]="getPriorityClass(project.priority)">
+              {{project.priority || 'medium'}}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Analysis Preview (Glow stats grid) -->
+      <div class="pd-card ai-analysis" *ngIf="project.aiScores">
+        <div class="pd-card-header">
+          <svg class="pd-icon-glow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#818cf8" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <h3>NexusAI Cognitive Scoreboard</h3>
+        </div>
+        <p class="pd-analysis-text">{{project.analysisSummary}}</p>
+
+        <div class="pd-ai-grid">
+          <div class="pd-ai-card">
+            <span class="pd-ai-label">Market Fit Score</span>
+            <div class="pd-ai-circle-wrap">
+              <span class="pd-ai-value">{{project.aiScores.marketScore}}%</span>
+              <div class="pd-ai-bar"><div class="pd-ai-fill blue" [style.width.%]="project.aiScores.marketScore"></div></div>
+            </div>
+          </div>
+          <div class="pd-ai-card">
+            <span class="pd-ai-label">Success Probability</span>
+            <div class="pd-ai-circle-wrap">
+              <span class="pd-ai-value">{{project.aiScores.successProbability}}%</span>
+              <div class="pd-ai-bar"><div class="pd-ai-fill purple" [style.width.%]="project.aiScores.successProbability"></div></div>
+            </div>
+          </div>
+          <div class="pd-ai-card">
+            <span class="pd-ai-label">Competitive Density</span>
+            <span class="pd-ai-value font-bold text-emerald">{{project.aiScores.competitionLevel}}</span>
+            <p class="pd-ai-helper">Lower density indicates higher marketplace leverage.</p>
+          </div>
+          <div class="pd-ai-card">
+            <span class="pd-ai-label">Sentiment Sentiment</span>
+            <div class="pd-ai-circle-wrap">
+              <span class="pd-ai-value">{{project.aiScores.sentimentScore}}%</span>
+              <div class="pd-ai-bar"><div class="pd-ai-fill amber" [style.width.%]="project.aiScores.sentimentScore"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column (Specialist & Timeline) -->
+    <div class="pd-side-col">
+      <!-- Specialist Card -->
+      <div class="pd-card specialist">
+        <h3>Assigned Specialist</h3>
+        <div class="pd-spec-info" *ngIf="project.assignedSpecialist">
+          <div class="pd-spec-header">
+            <div class="pd-avatar">{{project.assignedSpecialist.avatarUrl}}</div>
+            <div>
+              <h4 class="pd-spec-name">{{project.assignedSpecialist.fullName}}</h4>
+              <p class="pd-spec-role">{{project.assignedSpecialist.expertiseDomain}}</p>
+            </div>
+          </div>
+          <div class="pd-spec-meta">
+            <div class="pd-spec-meta-item">
+              <span>Hourly Rate</span>
+              <strong>${{project.assignedSpecialist.hourlyRate}}/hr</strong>
+            </div>
+            <div class="pd-spec-meta-item">
+              <span>Expert Rating</span>
+              <strong style="color: #fbbf24; display: flex; align-items: center; gap: 0.25rem;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {{project.assignedSpecialist.averageRating}}
+              </strong>
+            </div>
+            <div class="pd-spec-meta-item">
+              <span>Status</span>
+              <strong style="color: #34d399;">{{project.assignedSpecialist.available ? 'Available Now' : 'Busy'}}</strong>
+            </div>
+          </div>
+          <div class="pd-spec-actions">
+            <a routerLink="/chat" class="btn btn-indigo w-full justify-center text-sm">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              Send Live Message
+            </a>
+            <a [routerLink]="['/specialists', project.assignedSpecialist.id]" class="btn btn-secondary w-full justify-center text-sm">
+              View Complete Profile
+            </a>
+          </div>
+        </div>
+
+        <!-- Unassigned Specialist state -->
+        <div class="pd-spec-unassigned" *ngIf="!project.assignedSpecialist">
+          <div class="pd-avatar-placeholder">?</div>
+          <h4>Awaiting Expert Specialist</h4>
+          <p>Hire a dedicated professional specialist from our elite network to unlock development progress.</p>
+          <a routerLink="/marketplace" class="btn btn-indigo w-full justify-center text-sm">
+            Browse Specialists Marketplace
+          </a>
+        </div>
+      </div>
+
+      <!-- Vertical Progress Timeline -->
+      <div class="pd-card timeline">
+        <h3>Development Pipeline</h3>
+        
+        <div class="pd-timeline-container">
+          <!-- Step 1: Project created -->
+          <div class="pd-timeline-step" [ngClass]="getTimelineStepStatus(0)">
+            <div class="pd-timeline-marker">
+              <span class="pd-timeline-check" *ngIf="getTimelineStepStatus(0) === 'completed'">✓</span>
+            </div>
+            <div class="pd-timeline-content">
+              <h5>Project Created</h5>
+              <p>Repository allocated successfully.</p>
+            </div>
+          </div>
+
+          <!-- Step 2: Analysis started -->
+          <div class="pd-timeline-step" [ngClass]="getTimelineStepStatus(1)">
+            <div class="pd-timeline-marker">
+              <span class="pd-timeline-check" *ngIf="getTimelineStepStatus(1) === 'completed'">✓</span>
+            </div>
+            <div class="pd-timeline-content">
+              <h5>AI Architecture Audit</h5>
+              <p>Analysis metrics completed by SaaS engine.</p>
+            </div>
+          </div>
+
+          <!-- Step 3: Specialist assigned -->
+          <div class="pd-timeline-step" [ngClass]="getTimelineStepStatus(2)">
+            <div class="pd-timeline-marker">
+              <span class="pd-timeline-check" *ngIf="getTimelineStepStatus(2) === 'completed'">✓</span>
+            </div>
+            <div class="pd-timeline-content">
+              <h5>Expert Allocated</h5>
+              <p>{{project.assignedSpecialist ? 'Specialist actively linked.' : 'Awaiting specialist hire.'}}</p>
+            </div>
+          </div>
+
+          <!-- Step 4: Development started -->
+          <div class="pd-timeline-step" [ngClass]="getTimelineStepStatus(3)">
+            <div class="pd-timeline-marker">
+              <span class="pd-timeline-check" *ngIf="getTimelineStepStatus(3) === 'completed'">✓</span>
+            </div>
+            <div class="pd-timeline-content">
+              <h5>Workspace Active</h5>
+              <p>Core builds and sprint commits active.</p>
+            </div>
+          </div>
+
+          <!-- Step 5: Review phase -->
+          <div class="pd-timeline-step" [ngClass]="getTimelineStepStatus(4)">
+            <div class="pd-timeline-marker">
+              <span class="pd-timeline-check" *ngIf="getTimelineStepStatus(4) === 'completed'">✓</span>
+            </div>
+            <div class="pd-timeline-content">
+              <h5>Quality Audit & Code Review</h5>
+              <p>Staging deployment verification.</p>
+            </div>
+          </div>
+
+          <!-- Step 6: Deployment -->
+          <div class="pd-timeline-step" [ngClass]="getTimelineStepStatus(5)">
+            <div class="pd-timeline-marker">
+              <span class="pd-timeline-check" *ngIf="getTimelineStepStatus(5) === 'completed'">✓</span>
+            </div>
+            <div class="pd-timeline-content">
+              <h5>Production Deployment</h5>
+              <p>Project deployed to scalable cloud.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal (Glassmorphism design) -->
+  <div class="modal-backdrop" *ngIf="showDeleteModal">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f87171" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h2>Delete Project Container?</h2>
+      <p>Are you sure you want to permanently delete <strong>{{project.title}}</strong>? All repository configurations, analysis reports, and matching history will be lost.</p>
+      <div class="modal-actions">
+        <button (click)="closeDeleteModal()" class="btn btn-secondary text-sm" [disabled]="isDeleting">Cancel</button>
+        <button (click)="confirmDelete()" class="btn btn-primary text-sm btn-danger" [disabled]="isDeleting">
+          {{isDeleting ? 'Deleting Container...' : 'Confirm Delete'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Loading state -->
+<div *ngIf="isLoading" class="pd-loading">
+  <div class="spinner"></div>
+  <p>Securing project details credentials...</p>
+</div>

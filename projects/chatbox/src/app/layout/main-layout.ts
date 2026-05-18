@@ -42,7 +42,7 @@ export class MainLayout {
   }
 
   deployProject() {
-    alert('Deploying project... This will be connected to your CI/CD pipeline.');
+    this.router.navigate(['/projects/create']);
   }
 
   onSearch() {

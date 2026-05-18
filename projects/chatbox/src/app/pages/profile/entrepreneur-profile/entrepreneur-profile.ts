@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-entrepreneur-profile',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, FormsModule],
   templateUrl: './entrepreneur-profile.html',
   styleUrls: ['./entrepreneur-profile.css']
 })
@@ -26,6 +27,9 @@ export class EntrepreneurProfile {
     joinedDate: 'March 2024'
   };
 
+  // Temp working object for edits
+  editUser = { ...this.user };
+
   stats = [
     { value: '12', label: 'Active Projects', icon: 'folder' },
     { value: '7', label: 'Hired Specialists', icon: 'users' },
@@ -40,6 +44,19 @@ export class EntrepreneurProfile {
   ];
 
   toggleEdit() {
-    this.isEditing = !this.isEditing;
+    this.isEditing = true;
+    this.editUser = { ...this.user };
+  }
+
+  saveEdit() {
+    this.user = { 
+      ...this.editUser,
+      avatarInitial: this.editUser.fullName ? this.editUser.fullName[0].toUpperCase() : 'J'
+    };
+    this.isEditing = false;
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
   }
 }

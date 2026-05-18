@@ -1,0 +1,68 @@
+:host { display: block; }
+
+.pf-page { padding: 2rem 0; }
+
+/* Back Link */
+.pf-top-nav { display: flex; align-items: center; margin-bottom: 2rem; }
+.pf-back {
+  display: inline-flex; align-items: center; gap: 0.5rem; color: #a1a1aa; font-size: 0.9rem;
+  transition: color 0.2s; text-decoration: none;
+}
+.pf-back:hover { color: #fff; }
+
+/* Container */
+.pf-container { max-width: 720px; margin: 0 auto; }
+
+/* Card Form */
+.pf-card {
+  background: rgba(24,24,27,0.45); border: 1px solid rgba(255,255,255,0.06);
+  padding: 2.5rem; border-radius: 20px;
+}
+.pf-card-header { margin-bottom: 2.25rem; }
+.pf-card-header h2 { font-size: 1.45rem; color: #fff; font-weight: 700; letter-spacing: -0.02em; }
+.pf-card-header p { color: #71717a; font-size: 0.875rem; margin-top: 0.35rem; line-height: 1.5; }
+
+/* Forms Structure */
+.pf-form { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.form-label { font-size: 0.85rem; font-weight: 500; color: #fff; }
+.form-helper { font-size: 0.725rem; color: #52525b; line-height: 1.4; margin-top: 0.2rem; }
+
+.pf-input {
+  background: rgba(24,24,27,0.5); border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px; padding: 0.75rem 1rem; color: #fff;
+  transition: all 0.3s;
+}
+.pf-input:focus {
+  border-color: rgba(99,102,241,0.5); box-shadow: 0 0 0 3px rgba(99,102,241,0.1);
+}
+
+.pf-select {
+  cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 1rem center; background-size: 16px;
+  padding-right: 2.5rem;
+}
+.pf-select option { background: #18181b; color: #fff; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+/* Form Error States */
+.form-group.has-error .pf-input { border-color: #ef4444; }
+.form-group.has-error .pf-input:focus { box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+.error-msg { color: #f87171; font-size: 0.75rem; font-weight: 500; margin-top: 0.15rem; }
+
+/* Form Actions */
+.pf-actions {
+  display: flex; justify-content: flex-end; gap: 0.75rem;
+  margin-top: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.04);
+}
+
+/* Loading */
+.pf-loading { text-align: center; padding: 6rem; color: #818cf8; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
+
+@media (max-width: 640px) {
+  .pf-card { padding: 1.5rem; }
+  .form-grid { grid-template-columns: 1fr; }
+}

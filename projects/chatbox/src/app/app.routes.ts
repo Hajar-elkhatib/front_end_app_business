@@ -30,6 +30,11 @@ export const routes: Routes = [
       { path: 'specialists/:id', loadComponent: () => import('./pages/specialists/specialist-details/specialist-details').then(m => m.SpecialistDetails) },
       { path: 'specialists/:id/edit', loadComponent: () => import('./pages/specialists/specialist-form/specialist-form').then(m => m.SpecialistForm) },
 
+      { path: 'projects', loadComponent: () => import('./pages/projects/project-list/project-list').then(m => m.ProjectList) },
+      { path: 'projects/create', loadComponent: () => import('./pages/projects/project-form/project-form').then(m => m.ProjectForm) },
+      { path: 'projects/:id', loadComponent: () => import('./pages/projects/project-details/project-details').then(m => m.ProjectDetails) },
+      { path: 'projects/:id/edit', loadComponent: () => import('./pages/projects/project-form/project-form').then(m => m.ProjectForm) },
+
       { path: 'profile/entrepreneur', loadComponent: () => import('./pages/profile/entrepreneur-profile/entrepreneur-profile').then(m => m.EntrepreneurProfile) },
       { path: 'profile/specialist', loadComponent: () => import('./pages/profile/specialist-profile/specialist-profile').then(m => m.SpecialistProfile) }
     ]

@@ -1,0 +1,103 @@
+<div class="pf-page" *ngIf="!isLoading">
+  <!-- Back -->
+  <div class="pf-top-nav">
+    <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']" class="pf-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      {{isEditMode ? 'Back to Project Details' : 'Back to Projects'}}
+    </a>
+  </div>
+
+  <div class="pf-container">
+    <div class="card glass pf-card">
+      <div class="pf-card-header">
+        <h2>{{isEditMode ? 'Modify Project Parameters' : 'Deploy New Project Container'}}</h2>
+        <p>{{isEditMode ? 'Update technical, financial and resource properties.' : 'Launch a fresh project architecture container on the NexusAI SaaS core.'}}</p>
+      </div>
+
+      <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="pf-form">
+        <!-- Title -->
+        <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('title')}">
+          <label class="form-label">Project Title</label>
+          <input type="text" class="input pf-input" formControlName="title" placeholder="e.g. Nexus Core API Optimization">
+          <div class="error-msg" *ngIf="isFieldInvalid('title')">
+            <span *ngIf="projectForm.get('title')?.errors?.['required']">Project title is required.</span>
+            <span *ngIf="projectForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters.</span>
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('description')}">
+          <label class="form-label">Architectural Description</label>
+          <textarea rows="5" class="input pf-input" formControlName="description" placeholder="Describe the technical guidelines, deliverables, stack specifications and target milestones..."></textarea>
+          <div class="error-msg" *ngIf="isFieldInvalid('description')">
+            <span *ngIf="projectForm.get('description')?.errors?.['required']">A project description is required.</span>
+            <span *ngIf="projectForm.get('description')?.errors?.['minlength']">Description must be at least 20 characters.</span>
+          </div>
+        </div>
+
+        <!-- Grid for Budget, Deadline -->
+        <div class="form-grid">
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('budget')}">
+            <label class="form-label">Budget Allocation ($ USD)</label>
+            <input type="number" class="input pf-input" formControlName="budget" placeholder="10000">
+            <div class="error-msg" *ngIf="isFieldInvalid('budget')">
+              <span *ngIf="projectForm.get('budget')?.errors?.['required']">Budget allocation is required.</span>
+              <span *ngIf="projectForm.get('budget')?.errors?.['min']">Minimum budget allocation is $100.</span>
+            </div>
+          </div>
+
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('deadline')}">
+            <label class="form-label">Milestone Deadline</label>
+            <input type="date" class="input pf-input" formControlName="deadline">
+            <div class="error-msg" *ngIf="isFieldInvalid('deadline')">
+              <span *ngIf="projectForm.get('deadline')?.errors?.['required']">A target milestone deadline is required.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grid for Category, Status -->
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label">Operational Category</label>
+            <select class="input pf-input pf-select" formControlName="category">
+              <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Operational Status</label>
+            <select class="input pf-input pf-select" formControlName="status">
+              <option value="planning">Planning (Draft)</option>
+              <option value="active">Active (Development)</option>
+              <option value="completed">Completed (Archived)</option>
+              <option value="on-hold">On Hold</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Specialist assignment -->
+        <div class="form-group">
+          <label class="form-label">Assign Nexus Specialist (Optional)</label>
+          <select class="input pf-input pf-select" formControlName="assignedSpecialistId">
+            <option value="">-- No Specialist Assigned --</option>
+            <option *ngFor="let spec of specialists" [value]="spec.id">{{spec.fullName}} ({{spec.expertiseDomain}} - ${{spec.hourlyRate}}/hr)</option>
+          </select>
+          <p class="form-helper">Assigning a specialist links them directly to project dashboard and enables immediate workspace chats.</p>
+        </div>
+
+        <!-- Actions -->
+        <div class="pf-actions">
+          <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']" class="btn btn-secondary text-sm">Cancel</a>
+          <button type="submit" class="btn btn-indigo text-sm" [disabled]="isSubmitting">
+            {{isSubmitting ? 'Processing Workspace...' : (isEditMode ? 'Save Architectural Changes' : 'Initialize Project Container')}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="pf-loading">
+  <div class="spinner"></div>
+  <p>Synchronizing project repository form parameters...</p>
+</div>
