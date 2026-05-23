@@ -1,65 +1,78 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+import { ProjectService } from '../../services/project.service';
+import { Project } from '../../models/project.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.html',
   styleUrls: ['./dashboard.css']
 })
-export class Dashboard {
-  projects = [
-    { title: 'Nexus E-commerce', type: 'Web App', status: 'In Progress', statusClass: 'badge-progress', lastUpdated: '2 hrs ago' },
-    { title: 'Smart CRM', type: 'SaaS Tool', status: 'Idea', statusClass: 'badge-idea', lastUpdated: '1 day ago' },
-    { title: 'AI Marketing Assistant', type: 'Mobile App', status: 'Launched', statusClass: 'badge-launched', lastUpdated: '3 days ago' },
-    { title: 'Crypto Tracker', type: 'Fintech', status: 'Improving', statusClass: 'badge-improving', lastUpdated: '1 week ago' },
-  ];
+export class Dashboard implements OnInit {
+  private projectService = inject(ProjectService);
+  private cdr = inject(ChangeDetectorRef);
 
-  showInsight = true;
-  showCreateModal = false;
-  newProjectName = '';
-  newProjectType = 'Web App';
+  projects: Project[] = [];
+  recentProjects: Project[] = [];
+  spotlightProject: Project | undefined;
+  isLoading = true;
 
-  constructor(private router: Router) {}
+  totalProjects = 0;
+  submittedProjects = 0;
+  draftProjects = 0;
+  sectorsTracked = 0;
+  averageGrowth = 0;
 
-  dismissInsight() {
-    this.showInsight = false;
+  ngOnInit() {
+    this.loadProjects();
   }
 
-  analyzeIssue() {
-    alert('AI analysis started. You will receive a report within minutes.');
-  }
-
-  openCreateProject() {
-    this.showCreateModal = true;
-    this.newProjectName = '';
-    this.newProjectType = 'Web App';
-  }
-
-  closeCreateProject() {
-    this.showCreateModal = false;
-  }
-
-  createProject() {
-    if (!this.newProjectName.trim()) return;
-    this.projects.unshift({
-      title: this.newProjectName,
-      type: this.newProjectType,
-      status: 'Idea',
-      statusClass: 'badge-idea',
-      lastUpdated: 'Just now'
+  loadProjects() {
+    this.isLoading = true;
+    this.projectService.getProjects().subscribe({
+      next: (data) => {
+        this.projects = data;
+        this.recentProjects = data.slice(0, 5);
+        this.spotlightProject = data.find(project => project.projectStatus === 'SUBMITTED') || data[0];
+        this.totalProjects = data.length;
+        this.submittedProjects = data.filter(project => project.projectStatus === 'SUBMITTED').length;
+        this.draftProjects = data.filter(project => project.projectStatus !== 'SUBMITTED').length;
+        this.sectorsTracked = new Set(data.map(project => project.sector).filter(Boolean)).size;
+        this.averageGrowth = data.length
+          ? Math.round(data.reduce((sum, project) => sum + (project.marketGrowthRatePercent || 0), 0) / data.length)
+          : 0;
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
     });
-    this.showCreateModal = false;
   }
 
-  goToDomains() {
-    alert('Domains setup coming soon.');
+  getStatusClass(status?: string): string {
+    switch (status) {
+      case 'active': return 'badge-progress';
+      case 'planning': return 'badge-idea';
+      case 'completed': return 'badge-launched';
+      case 'on-hold': return 'badge-improving';
+      case 'pending': return 'badge-idea';
+      default: return 'badge-idea';
+    }
   }
 
-  goToInviteTeam() {
-    alert('Team invitations coming soon.');
+  getStatusLabel(status?: string): string {
+    switch (status) {
+      case 'active': return 'In Progress';
+      case 'planning': return 'Planning';
+      case 'completed': return 'Completed';
+      case 'on-hold': return 'On Hold';
+      case 'pending': return 'Pending';
+      default: return status || 'Draft';
+    }
   }
 }

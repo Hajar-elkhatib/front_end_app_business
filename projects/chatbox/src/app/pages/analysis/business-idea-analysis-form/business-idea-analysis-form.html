@@ -1,0 +1,112 @@
+<section class="form-page">
+  <a routerLink="/analysis/business-idea" class="back-link">Back to business idea analysis</a>
+
+  <div class="form-card">
+    <header>
+      <p class="kicker">AI Analysis</p>
+      <h1>{{isEditMode ? 'Edit Business Idea Analysis' : 'Create Business Idea Analysis'}}</h1>
+      <p>{{isEditMode ? 'Update the stored analysis record.' : 'Create a manual record. Generated predictions should come from the backend model endpoint.'}}</p>
+    </header>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading analysis...</p>
+    </div>
+
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="save()">
+      <label>
+        <span>Project ID</span>
+        <input class="input" type="text" formControlName="projectId" placeholder="Project id">
+        <small *ngIf="isInvalid('projectId')">Project ID is required.</small>
+      </label>
+
+      <div class="form-grid">
+        <label>
+          <span>Success probability</span>
+          <input class="input" type="number" formControlName="successProbability" min="0" max="100">
+        </label>
+        <label>
+          <span>Confidence score</span>
+          <input class="input" type="number" formControlName="confidenceScore" min="0" max="100">
+        </label>
+        <label>
+          <span>Final score</span>
+          <input class="input" type="number" formControlName="finalScore" min="0" max="100">
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          <span>Prediction label</span>
+          <input class="input" type="text" formControlName="predictionLabel" placeholder="Unknown">
+        </label>
+        <label>
+          <span>Final label</span>
+          <select class="input" formControlName="finalLabel">
+            <option value="Unknown">Unknown</option>
+            <option value="Promising">Promising</option>
+            <option value="Needs Review">Needs Review</option>
+            <option value="High Risk">High Risk</option>
+          </select>
+        </label>
+        <label>
+          <span>Model name</span>
+          <input class="input" type="text" formControlName="modelName" placeholder="Empty until backend returns it">
+        </label>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          <span>Startup score</span>
+          <input class="input" type="number" formControlName="startupSuccessScore" min="0" max="100">
+        </label>
+        <label>
+          <span>Market score</span>
+          <input class="input" type="number" formControlName="marketAnalysisScore" min="0" max="100">
+        </label>
+        <label>
+          <span>Sentiment score</span>
+          <input class="input" type="number" formControlName="sentimentScore" min="0" max="100">
+        </label>
+      </div>
+
+      <div class="form-grid two">
+        <label>
+          <span>Specialist score</span>
+          <input class="input" type="number" formControlName="specialistScore" min="0" max="100">
+        </label>
+        <label>
+          <span>Model version</span>
+          <input class="input" type="text" formControlName="modelVersion" placeholder="Empty until backend returns it">
+        </label>
+      </div>
+
+      <label>
+        <span>Strengths</span>
+        <textarea class="input" rows="3" formControlName="strengths" placeholder="Strengths returned by backend or entered manually"></textarea>
+      </label>
+
+      <label>
+        <span>Weaknesses</span>
+        <textarea class="input" rows="3" formControlName="weaknesses" placeholder="Weaknesses returned by backend or entered manually"></textarea>
+      </label>
+
+      <label>
+        <span>Recommendation summary</span>
+        <textarea class="input" rows="3" formControlName="recommendationsSummary" placeholder="No recommendation until backend or user provides it"></textarea>
+      </label>
+
+      <label>
+        <span>Warnings</span>
+        <textarea class="input" rows="3" formControlName="warnings" placeholder="Warnings"></textarea>
+      </label>
+
+      <div class="actions">
+        <a routerLink="/analysis/business-idea" class="btn btn-secondary">Cancel</a>
+        <button class="btn btn-indigo" type="submit" [disabled]="isSaving">
+          {{isSaving ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Create Analysis')}}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

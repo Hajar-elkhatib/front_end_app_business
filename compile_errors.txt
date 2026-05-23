@@ -1,0 +1,1598 @@
+[33m>[39m Building...
+[32m√[39m Building...
+Application bundle generation failed. [14.789 seconds] - 2026-05-21T14:23:21.180Z
+
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'avatarUrl' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:22:20:
+[37m      22 │            {{ convo.[32mavatarUrl[37m }}
+         ╵                     [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:23:30:
+[37m      23 │ ...       <span *ngIf="convo.[32munreadCount[37m > 0" class="unread-dot re...
+         ╵                              [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isOnline' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:24:30:
+[37m      24 │            <span *ngIf="convo.[32misOnline[37m" class="absolute bottom-0 r...
+         ╵                               [32m~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:28:88:
+[37m      28 │ ...]="{'text-primary': convo.[32munreadCount[37m > 0, 'text-secondary': co...
+         ╵                              [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:28:129:
+[37m      28 │ ..., 'text-secondary': convo.[32munreadCount[37m === 0}">{{ convo.name }}<...
+         ╵                              [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'name' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:28:158:
+[37m      28 │ ... 'text-secondary': convo.unreadCount === 0}">{{ convo.[32mname[37m }}</h4>
+         ╵                                                          [32m~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:29:52:
+[37m      29 │ ...text-xs" [ngClass]="convo.[32munreadCount[37m > 0 ? 'text-indigo font-m...
+         ╵                              [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'lastMessage' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:29:121:
+[37m      29 │ ... : 'text-muted'">{{ convo.[32mlastMessage[37m?.timestamp | date:'shortT...
+         ╵                              [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:31:56:
+[37m      31 │ ...runcate" [ngClass]="convo.[32munreadCount[37m > 0 ? 'text-primary font-...
+         ╵                              [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'lastMessage' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:31:126:
+[37m      31 │ ... : 'text-muted'">{{ convo.[32mlastMessage[37m?.text || 'No messages yet...
+         ╵                              [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'avatarUrl' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:42:80:
+[37m      42 │ ...ndigo-50 text-indigo-700">{{ activeConversation.[32mavatarUrl[37m }}</div>
+         ╵                                                    [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'name' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:44:67:
+[37m      44 │ ...3 class="font-semibold text-sm">{{ activeConversation.[32mname[37m }}</h3>
+         ╵                                                          [32m~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isOnline' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:46:82:
+[37m      46 │ ...gClass]="activeConversation.[32misOnline[37m ? 'bg-success' : 'bg-gray-...
+         ╵                                [32m~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isOnline' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:47:65:
+[37m      47 │ ...uted">{{ activeConversation.[32misOnline[37m ? 'Active now' : 'Offline'...
+         ╵                                [32m~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'name' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:67:92:
+[37m      67 │ ... mt-1">Start the conversation with {{activeConversation.[32mname[37m}}</p>
+         ╵                                                            [32m~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'avatarUrl' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.html:86:102:
+[37m      86 │ ...ndigo-50 text-indigo-700">{{ activeConversation.[32mavatarUrl[37m }}</div>
+         ╵                                                    [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component Chat.
+
+    projects/chatbox/src/app/pages/chat/chat.ts:11:15:
+[37m      11 │   templateUrl: [32m'./chat.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../../models/chat.model"' has no exported member 'ChatMessage'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:5:23:
+[37m      5 │ import { Conversation, [32mChatMessage[37m } from '../../models/chat.model';
+        ╵                        [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'name' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:63:47:
+[37m      63 │           senderName: this.activeConversation!.[32mname[37m,
+         ╵                                                [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'avatarUrl' does not exist on type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:67:46:
+[37m      67 │           avatarUrl: this.activeConversation!.[32mavatarUrl[37m
+         ╵                                               [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'User'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/profile/entrepreneur-profile/entrepreneur-profile.ts:58:50:
+[37m      58 │ ... fullName: res.fullName || currentUser.[32mfullName[37m || 'Entrepreneur',
+         ╵                                           [32m~~~~~~~~[0m
+
+  'fullname' is declared here.
+
+    projects/chatbox/src/app/models/user.model.ts:3:2:
+[37m      3 │   [32mfullname[37m: string;
+        ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'User'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/profile/entrepreneur-profile/entrepreneur-profile.ts:67:56:
+[37m      67 │ ...l: (res.fullName || currentUser.[32mfullName[37m || 'E')[0].toUpperCase(),
+         ╵                                    [32m~~~~~~~~[0m
+
+  'fullname' is declared here.
+
+    projects/chatbox/src/app/models/user.model.ts:3:2:
+[37m      3 │   [32mfullname[37m: string;
+        ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'User'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/profile/specialist-profile/specialist-profile.ts:47:50:
+[37m      47 │ ...   fullName: res.fullName || currentUser.[32mfullName[37m || 'Specialist',
+         ╵                                             [32m~~~~~~~~[0m
+
+  'fullname' is declared here.
+
+    projects/chatbox/src/app/models/user.model.ts:3:2:
+[37m      3 │   [32mfullname[37m: string;
+        ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'User'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/profile/specialist-profile/specialist-profile.ts:57:52:
+[37m      57 │ ...rl: (res.fullName || currentUser.[32mfullName[37m || 'S')[0].toUpperCase()
+         ╵                                     [32m~~~~~~~~[0m
+
+  'fullname' is declared here.
+
+    projects/chatbox/src/app/models/user.model.ts:3:2:
+[37m      3 │   [32mfullname[37m: string;
+        ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'category' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:4:40:
+[37m      4 │     <span class="pr-category">{{project.[32mcategory[37m}}</span>
+        ╵                                         [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:5:61:
+[37m      5 │     <span class="pr-badge" [ngClass]="getStatusClass(project.[32mstatus[37m)">
+        ╵                                                              [32m~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:6:31:
+[37m      6 │       {{getStatusLabel(project.[32mstatus[37m)}}
+        ╵                                [32m~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'progress' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:23:22:
+[37m      23 │       <span>{{project.[32mprogress[37m}}%</span>
+         ╵                       [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'progress' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:26:65:
+[37m      26 │ ...s="pr-progress-bar-fill" [style.width.%]="project.[32mprogress[37m"></div>
+         ╵                                                      [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:34:62:
+[37m      34 │ ...r-value font-bold text-indigo">${{project.[32mbudget[37m | number}}</span>
+         ╵                                              [32m~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deadline' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:38:39:
+[37m      38 │ ...n class="pr-value">{{project.[32mdeadline[37m | date:'mediumDate'}}</span>
+         ╵                                 [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:44:46:
+[37m      44 │     <div class="pr-specialist" *ngIf="project.[32massignedSpecialist[37m">
+         ╵                                               [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:45:39:
+[37m      45 │ ...v class="pr-avatar">{{project.[32massignedSpecialist[37m.avatarUrl}}</div>
+         ╵                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:47:44:
+[37m      47 │ ...class="pr-spec-name">{{project.[32massignedSpecialist[37m.fullName}}</div>
+         ╵                                   [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:51:53:
+[37m      51 │ ...v class="pr-specialist empty" *ngIf="!project.[32massignedSpecialist[37m">
+         ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.html:58:101:
+[37m      58 │ ...tn" title="Contact Specialist" *ngIf="project.[32massignedSpecialist[37m">
+         ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectCard.
+
+    projects/chatbox/src/app/pages/projects/project-card/project-card.ts:10:15:
+[37m      10 │   templateUrl: [32m'./project-card.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'category' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:28:49:
+[37m      28 │         <span class="pd-hero-category">{{project.[32mcategory[37m}}</span>
+         ╵                                                  [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:29:65:
+[37m      29 │ ...<span class="pd-badge" [ngClass]="getStatusClass(project.[32mstatus[37m)">
+         ╵                                                             [32m~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:30:35:
+[37m      30 │           {{getStatusLabel(project.[32mstatus[37m)}}
+         ╵                                    [32m~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'updatedAt' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:39:49:
+[37m      39 │         <div class="pd-timestamp" *ngIf="project.[32mupdatedAt[37m">
+         ╵                                                  [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'updatedAt' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:41:39:
+[37m      41 │ ...span>Last Update: {{project.[32mupdatedAt[37m | date:'mediumDate'}}</span>
+         ╵                                [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'progress' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:48:26:
+[37m      48 │         <strong>{{project.[32mprogress[37m}}%</strong>
+         ╵                           [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'progress' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:51:67:
+[37m      51 │ ...s="pd-progress-bar-fill" [style.width.%]="project.[32mprogress[37m"></div>
+         ╵                                                      [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'tags' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:66:52:
+[37m      66 │ ..."pd-tags-section" *ngIf="project.[32mtags[37m && project.tags.length > 0">
+         ╵                                     [32m~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'tags' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:66:68:
+[37m      66 │ ..."pd-tags-section" *ngIf="project.tags && project.[32mtags[37m.length > 0">
+         ╵                                                     [32m~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'tags' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:69:60:
+[37m      69 │ ...pan class="pd-tag" *ngFor="let tag of project.[32mtags[37m">{{tag}}</span>
+         ╵                                                  [32m~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:77:71:
+[37m      77 │ ...pec-val font-bold text-indigo">${{project.[32mbudget[37m | number}}</span>
+         ╵                                              [32m~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deadline' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:81:48:
+[37m      81 │ ...lass="pd-spec-val">{{project.[32mdeadline[37m | date:'mediumDate'}}</span>
+         ╵                                 [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'priority' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:85:89:
+[37m      85 │ ...al priority-badge" [ngClass]="getPriorityClass(project.[32mpriority[37m)">
+         ╵                                                           [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'priority' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:86:24:
+[37m      86 │               {{project.[32mpriority[37m || 'medium'}}
+         ╵                         [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:93:54:
+[37m      93 │       <div class="pd-card ai-analysis" *ngIf="project.[32maiScores[37m">
+         ╵                                                       [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'analysisSummary' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:98:46:
+[37m      98 │         <p class="pd-analysis-text">{{project.[32manalysisSummary[37m}}</p>
+         ╵                                               [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:104:50:
+[37m      104 │ ...span class="pd-ai-value">{{project.[32maiScores[37m.marketScore}}%</span>
+          ╵                                       [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:105:91:
+[37m      105 │ ...blue" [style.width.%]="project.[32maiScores[37m.marketScore"></div></div>
+          ╵                                   [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:111:50:
+[37m      111 │ ...ass="pd-ai-value">{{project.[32maiScores[37m.successProbability}}%</span>
+          ╵                                [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:112:93:
+[37m      112 │ ..." [style.width.%]="project.[32maiScores[37m.successProbability"></div>...
+          ╵                               [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:117:71:
+[37m      117 │ ...t-bold text-emerald">{{project.[32maiScores[37m.competitionLevel}}</span>
+          ╵                                   [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:123:50:
+[37m      123 │ ...n class="pd-ai-value">{{project.[32maiScores[37m.sentimentScore}}%</span>
+          ╵                                    [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'aiScores' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:124:92:
+[37m      124 │ ...r" [style.width.%]="project.[32maiScores[37m.sentimentScore"></div></div>
+          ╵                                [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:136:49:
+[37m      136 │ ...    <div class="pd-spec-info" *ngIf="project.[32massignedSpecialist[37m">
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:138:45:
+[37m      138 │ ... class="pd-avatar">{{project.[32massignedSpecialist[37m.avatarUrl}}</div>
+          ╵                                 [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:140:49:
+[37m      140 │ ...class="pd-spec-name">{{project.[32massignedSpecialist[37m.fullName}}</h4>
+          ╵                                   [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:141:48:
+[37m      141 │ ..."pd-spec-role">{{project.[32massignedSpecialist[37m.expertiseDomain}}</p>
+          ╵                             [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:147:33:
+[37m      147 │ ...   <strong>${{project.[32massignedSpecialist[37m.hourlyRate}}/hr</strong>
+          ╵                          [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:153:26:
+[37m      153 │                 {{project.[32massignedSpecialist[37m.averageRating}}
+          ╵                           [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:158:56:
+[37m      158 │ ...: #34d399;">{{project.[32massignedSpecialist[37m.available ? 'Availabl...
+          ╵                          [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:166:54:
+[37m      166 │ ...specialists', project.[32massignedSpecialist[37m.id]" class="btn btn-s...
+          ╵                          [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:173:56:
+[37m      173 │ ...v class="pd-spec-unassigned" *ngIf="!project.[32massignedSpecialist[37m">
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.html:217:27:
+[37m      217 │ ...         <p>{{project.[32massignedSpecialist[37m ? 'Specialist activel...
+          ╵                          [32m~~~~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectDetails.
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./project-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:110:32:
+[37m      110 │     const status = this.project.[32mstatus[37m;
+          ╵                                 [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialistId' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-details/project-details.ts:121:21:
+[37m      121 │     if (this.project.[32massignedSpecialistId[37m && currentStep < 3) {
+          ╵                      [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'Specialist'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-form/project-form.html:83:78:
+[37m      83 │ ...s" [value]="spec.id">{{spec.[32mfullName[37m}} ({{spec.expertiseDomain}...
+         ╵                                [32m~~~~~~~~[0m
+
+  Error occurs in the template of component ProjectForm.
+
+    projects/chatbox/src/app/pages/projects/project-form/project-form.ts:13:15:
+[37m      13 │   templateUrl: [32m'./project-form.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-form/project-form.ts:75:26:
+[37m      75 │           budget: project.[32mbudget[37m,
+         ╵                           [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deadline' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-form/project-form.ts:76:28:
+[37m      76 │           deadline: project.[32mdeadline[37m,
+         ╵                             [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'category' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-form/project-form.ts:77:28:
+[37m      77 │           category: project.[32mcategory[37m,
+         ╵                             [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-form/project-form.ts:78:26:
+[37m      78 │           status: project.[32mstatus[37m,
+         ╵                           [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialistId' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-form/project-form.ts:79:40:
+[37m      79 │           assignedSpecialistId: project.[32massignedSpecialistId[37m || ''
+         ╵                                         [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:71:54:
+[37m      71 │ ...rojects = this.projects.filter(p => p.[32mstatus[37m === 'active').length;
+         ╵                                          [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:72:57:
+[37m      72 │ ...ects = this.projects.filter(p => p.[32mstatus[37m === 'completed').length;
+         ╵                                       [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:73:55:
+[37m      73 │ ...ojects = this.projects.filter(p => p.[32mstatus[37m === 'pending').length;
+         ╵                                         [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:74:65:
+[37m      74 │ ...dget = this.projects.reduce((sum, p) => sum + (p.[32mbudget[37m ?? 0), 0);
+         ╵                                                     [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:89:11:
+[37m      89 │         (p.[32massignedSpecialist[37m && p.assignedSpecialist.fullName.toL...
+         ╵            [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:89:35:
+[37m      89 │ ...ssignedSpecialist && p.[32massignedSpecialist[37m.fullName.toLowerCase(...
+         ╵                           [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'category' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:94:38:
+[37m      94 │       results = results.filter(p => p.[32mcategory[37m === category);
+         ╵                                       [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'status' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:98:38:
+[37m      98 │       results = results.filter(p => p.[32mstatus[37m === status);
+         ╵                                       [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:112:18:
+[37m      112 │         return (b.[32mbudget[37m ?? 0) - (a.budget ?? 0);
+          ╵                   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:112:36:
+[37m      112 │         return (b.budget ?? 0) - (a.[32mbudget[37m ?? 0);
+          ╵                                     [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:114:18:
+[37m      114 │         return (a.[32mbudget[37m ?? 0) - (b.budget ?? 0);
+          ╵                   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'budget' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:114:36:
+[37m      114 │         return (a.budget ?? 0) - (b.[32mbudget[37m ?? 0);
+          ╵                                     [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deadline' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:116:37:
+[37m      116 │ ...nst deadlineA = new Date(a.[32mdeadline[37m ?? new Date().toISOString(...
+          ╵                               [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'deadline' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/projects/project-list/project-list.ts:117:37:
+[37m      117 │ ...nst deadlineB = new Date(b.[32mdeadline[37m ?? new Date().toISOString(...
+          ╵                               [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'avatarUrl' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:15:46:
+[37m      15 │           <div class="sd-avatar">{{specialist.[32mavatarUrl[37m}}</div>
+         ╵                                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'Specialist'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:17:29:
+[37m      17 │             <h1>{{specialist.[32mfullName[37m}}</h1>
+         ╵                              [32m~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'yearsExperience' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:23:33:
+[37m      23 │               <span>{{specialist.[32myearsExperience[37m}} years exp.</span>
+         ╵                                  [32m~~~~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:25:62:
+[37m      25 │ ...dge" [ngClass]="specialist.[32mavailable[37m ? 'available' : 'unavailab...
+         ╵                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:26:63:
+[37m      26 │ ...avail-dot" [ngClass]="specialist.[32mavailable[37m ? 'on' : 'off'"></span>
+         ╵                                     [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:27:27:
+[37m      27 │               {{specialist.[32mavailable[37m ? 'Available for hire' : 'Cur...
+         ╵                            [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'responseRate' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:59:46:
+[37m      59 │ ...  <div class="sd-stat-val">{{specialist.[32mresponseRate[37m || 0}}%</div>
+         ╵                                            [32m~~~~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'Specialist'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.html:136:119:
+[37m      136 │ ...nt to remove {{specialist?.[32mfullName[37m}}? This cannot be undone.</p>
+          ╵                               [32m~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistDetails.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:11:15:
+[37m      11 │   templateUrl: [32m'./specialist-details.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../../../models/specialist.model"' has no exported member 'SpecialistReview'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:5:21:
+[37m      5 │ import { Specialist, [32mSpecialistReview[37m } from '../../../models/speci...
+        ╵                      [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'join' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-form/specialist-form.ts:45:32:
+[37m      45 │             skills: spec.skills.[32mjoin[37m(', '),
+         ╵                                 [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'join' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-form/specialist-form.ts:46:38:
+[37m      46 │             languages: spec.languages.[32mjoin[37m(', ')
+         ╵                                       [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'avatarUrl' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.html:44:17:
+[37m      44 │           {{spec.[32mavatarUrl[37m}}
+         ╵                  [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistList.
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:13:15:
+[37m      13 │   templateUrl: [32m'./specialist-list.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.html:45:53:
+[37m      45 │ ...avail-dot" [ngClass]="spec.[32mavailable[37m ? 'online' : 'offline'"></...
+         ╵                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistList.
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:13:15:
+[37m      13 │   templateUrl: [32m'./specialist-list.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.html:47:53:
+[37m      47 │ ...ail-badge" [ngClass]="spec.[32mavailable[37m ? 'available' : 'unavailab...
+         ╵                               [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistList.
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:13:15:
+[37m      13 │   templateUrl: [32m'./specialist-list.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.html:48:17:
+[37m      48 │           {{spec.[32mavailable[37m ? 'Available' : 'Busy'}}
+         ╵                  [32m~~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistList.
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:13:15:
+[37m      13 │   templateUrl: [32m'./specialist-list.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'Specialist'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.html:52:34:
+[37m      52 │       <div class="sl-name">{{spec.[32mfullName[37m}}</div>
+         ╵                                   [32m~~~~~~~~[0m
+
+  Error occurs in the template of component SpecialistList.
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:13:15:
+[37m      13 │   templateUrl: [32m'./specialist-list.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'Specialist'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:57:10:
+[37m      57 │         s.[32mfullName[37m.toLowerCase().includes(query) ||
+         ╵           [32m~~~~~~~~[0m
+
+  'fullname' is declared here.
+
+    projects/chatbox/src/app/models/user.model.ts:3:2:
+[37m      3 │   [32mfullname[37m: string;
+        ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'some' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:59:17:
+[37m      59 │         s.skills.[32msome[37m(skill => skill.toLowerCase().includes(query))
+         ╵                  [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'skill' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:59:22:
+[37m      59 │         s.skills.some([32mskill[37m => skill.toLowerCase().includes(query))
+         ╵                       [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:66:38:
+[37m      66 │       results = results.filter(s => s.[32mavailable[37m);
+         ╵                                       [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'available' does not exist on type 'Specialist'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-list/specialist-list.ts:68:39:
+[37m      68 │       results = results.filter(s => !s.[32mavailable[37m);
+         ╵                                        [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2353: Object literal may only specify known properties, and 'userId' does not exist in type 'AIRequest'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/ai.service.ts:66:6:
+[37m      66 │       [32muserId[37m: '', // Should be set by interceptor
+         ╵       [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/analysis.model"' has no exported member 'Analysis'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/analysis.service.ts:6:2:
+[37m      6 │   [32mAnalysis[37m,
+        ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/analysis.model"' has no exported member 'AnalysisType'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/analysis.service.ts:7:2:
+[37m      7 │   [32mAnalysisType[37m,
+        ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/user.model"' has no exported member 'AuthResponse'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/auth.service.ts:5:15:
+[37m      5 │ import { User, [32mAuthResponse[37m } from '../models/user.model';
+        ╵                [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2561: Object literal may only specify known properties, but 'fullName' does not exist in type 'User'. Did you mean to write 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/auth.service.ts:51:10:
+[37m      51 │           [32mfullName[37m: res.fullName || 'User'
+         ╵           [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/user.model"' has no exported member 'Availability'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/availability-complaint.service.ts:5:9:
+[37m      5 │ import { [32mAvailability[37m } from '../models/user.model';
+        ╵          [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/complaint.model"' has no exported member 'ComplaintStatus'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/availability-complaint.service.ts:6:20:
+[37m      6 │ import { Complaint, [32mComplaintStatus[37m, ComplaintType } from '../model...
+        ╵                     [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2724: '"../models/complaint.model"' has no exported member named 'ComplaintType'. Did you mean 'Complaint'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/availability-complaint.service.ts:6:37:
+[37m      6 │ ...mplaint, ComplaintStatus, [32mComplaintType[37m } from '../models/compla...
+        ╵                              [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/chat.model"' has no exported member 'ChatMessage'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/chat.service.ts:4:23:
+[37m      4 │ import { Conversation, [32mChatMessage[37m } from '../models/chat.model';
+        ╵                        [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2353: Object literal may only specify known properties, and 'type' does not exist in type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/chat.service.ts:12:15:
+[37m      12 │       id: '1', [32mtype[37m: 'direct', participants: ['current', 'alex'], ...
+         ╵                [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2353: Object literal may only specify known properties, and 'type' does not exist in type 'Conversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/chat.service.ts:17:15:
+[37m      17 │       id: '2', [32mtype[37m: 'group', participants: ['current', 'project-n...
+         ╵                [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/evaluation.model"' has no exported member 'EvaluationSummary'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/evaluation.service.ts:5:21:
+[37m      5 │ import { Evaluation, [32mEvaluationSummary[37m, Recommendation } from '../m...
+        ╵                      [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/evaluation.model"' has no exported member 'Recommendation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/evaluation.service.ts:5:40:
+[37m      5 │ ...tion, EvaluationSummary, [32mRecommendation[37m } from '../models/evalua...
+        ╵                             [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/knowledge-document.model"' has no exported member 'DocumentType'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/knowledge-document.service.ts:5:28:
+[37m      5 │ import { KnowledgeDocument, [32mDocumentType[37m, DocumentStatus } from '.....
+        ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/knowledge-document.model"' has no exported member 'DocumentStatus'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/knowledge-document.service.ts:5:42:
+[37m      5 │ ...eDocument, DocumentType, [32mDocumentStatus[37m } from '../models/knowle...
+        ╵                             [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialistId' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/project.service.ts:199:16:
+[37m      199 │     if (project.[32massignedSpecialistId[37m) {
+          ╵                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialistId' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/project.service.ts:205:53:
+[37m      205 │ ...t found = specs.find(s => s.id === project.[32massignedSpecialistId[37m);
+          ╵                                               [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'assignedSpecialist' does not exist on type 'Project'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/project.service.ts:207:16:
+[37m      207 │         project.[32massignedSpecialist[37m = found as any;
+          ╵                 [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2561: Object literal may only specify known properties, but 'userWordBank' does not exist in type 'Project'. Did you mean to write 'useWorldBank'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/project.service.ts:235:8:
+[37m      235 │         [32muserWordBank[37m: true,
+          ╵         [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/report.model"' has no exported member 'ReportType'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/report.service.ts:5:17:
+[37m      5 │ import { Report, [32mReportType[37m, ReportStatus } from '../models/report....
+        ╵                  [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/report.model"' has no exported member 'ReportStatus'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/report.service.ts:5:29:
+[37m      5 │ import { Report, ReportType, [32mReportStatus[37m } from '../models/report....
+        ╵                              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2305: Module '"../models/specialist.model"' has no exported member 'SpecialistReview'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:4:21:
+[37m      4 │ import { Specialist, [32mSpecialistReview[37m } from '../models/specialist....
+        ╵                      [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:13:6:
+[37m      13 │       [32mskills[37m: ['Python', 'TensorFlow', 'NLP', 'PyTorch', 'Computer...
+         ╵       [32m~~~~~~[0m
+
+  The expected type comes from property 'skills' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:6:2:
+[37m      6 │   [32mskills[37m: string;
+        ╵   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:14:54:
+[37m      14 │ ... location: 'San Francisco, CA', [32mlanguages[37m: ['English', 'Spanish'],
+         ╵                                    [32m~~~~~~~~~[0m
+
+  The expected type comes from property 'languages' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:10:2:
+[37m      10 │   [32mlanguages[37m: string;
+         ╵   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:20:6:
+[37m      20 │       [32mskills[37m: ['Angular', 'TypeScript', 'RxJS', 'Tailwind CSS', 'N...
+         ╵       [32m~~~~~~[0m
+
+  The expected type comes from property 'skills' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:6:2:
+[37m      6 │   [32mskills[37m: string;
+        ╵   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:21:42:
+[37m      21 │ ...yRate: 95, location: 'Remote', [32mlanguages[37m: ['English', 'Mandarin'],
+         ╵                                   [32m~~~~~~~~~[0m
+
+  The expected type comes from property 'languages' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:10:2:
+[37m      10 │   [32mlanguages[37m: string;
+         ╵   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:27:6:
+[37m      27 │       [32mskills[37m: ['AWS', 'Kubernetes', 'CI/CD', 'Terraform', 'Docker'],
+         ╵       [32m~~~~~~[0m
+
+  The expected type comes from property 'skills' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:6:2:
+[37m      6 │   [32mskills[37m: string;
+        ╵   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:28:49:
+[37m      28 │ ...0, location: 'New York, NY', [32mlanguages[37m: ['English', 'Portuguese'],
+         ╵                                 [32m~~~~~~~~~[0m
+
+  The expected type comes from property 'languages' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:10:2:
+[37m      10 │   [32mlanguages[37m: string;
+         ╵   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:34:6:
+[37m      34 │       [32mskills[37m: ['Node.js', 'PostgreSQL', 'GraphQL', 'Redis', 'Go'],
+         ╵       [32m~~~~~~[0m
+
+  The expected type comes from property 'skills' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:6:2:
+[37m      6 │   [32mskills[37m: string;
+        ╵   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:35:47:
+[37m      35 │ ...te: 105, location: 'London, UK', [32mlanguages[37m: ['English', 'French'],
+         ╵                                     [32m~~~~~~~~~[0m
+
+  The expected type comes from property 'languages' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:10:2:
+[37m      10 │   [32mlanguages[37m: string;
+         ╵   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:41:6:
+[37m      41 │       [32mskills[37m: ['Figma', 'Design Systems', 'Prototyping', 'User Res...
+         ╵       [32m~~~~~~[0m
+
+  The expected type comes from property 'skills' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:6:2:
+[37m      6 │   [32mskills[37m: string;
+        ╵   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:42:48:
+[37m      42 │ ... 90, location: 'Tokyo, Japan', [32mlanguages[37m: ['English', 'Japanese'],
+         ╵                                   [32m~~~~~~~~~[0m
+
+  The expected type comes from property 'languages' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:10:2:
+[37m      10 │   [32mlanguages[37m: string;
+         ╵   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:48:6:
+[37m      48 │       [32mskills[37m: ['Python', 'LLMs', 'Langchain', 'RAG', 'FastAPI'],
+         ╵       [32m~~~~~~[0m
+
+  The expected type comes from property 'skills' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:6:2:
+[37m      6 │   [32mskills[37m: string;
+        ╵   [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2322: Type 'string[]' is not assignable to type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:49:47:
+[37m      49 │ ...te: 130, location: 'Dubai, UAE', [32mlanguages[37m: ['English', 'Arabic'],
+         ╵                                     [32m~~~~~~~~~[0m
+
+  The expected type comes from property 'languages' which is declared here on type 'Specialist'
+
+    projects/chatbox/src/app/models/specialist.model.ts:10:2:
+[37m      10 │   [32mlanguages[37m: string;
+         ╵   [32m~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'fullName' does not exist on type 'Specialist'. Did you mean 'fullname'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:115:10:
+[37m      115 │         s.[32mfullName[37m.toLowerCase().includes(query) ||
+          ╵           [32m~~~~~~~~[0m
+
+  'fullname' is declared here.
+
+    projects/chatbox/src/app/models/user.model.ts:3:2:
+[37m      3 │   [32mfullname[37m: string;
+        ╵   [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'some' does not exist on type 'string'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:117:17:
+[37m      117 │         s.skills.[32msome[37m(skill => skill.toLowerCase().includes(query))
+          ╵                  [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'skill' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/specialist.service.ts:117:22:
+[37m      117 │         s.skills.some([32mskill[37m => skill.toLowerCase().includes(query))
+          ╵                       [32m~~~~~[0m
+
+[39m[22m

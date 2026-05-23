@@ -6,9 +6,12 @@
 /* Header Banner */
 .ep-banner {
   position: relative; border-radius: 20px; overflow: hidden;
-  background: linear-gradient(135deg, rgba(99,102,241,0.15), rgba(168,85,247,0.1));
-  border: 1px solid rgba(255,255,255,0.06);
+  background:
+    linear-gradient(135deg, rgba(99,102,241,0.14), rgba(20,184,166,0.08)),
+    var(--bg-primary);
+  border: 1px solid var(--border-color);
   padding: 2.5rem; margin-bottom: 2rem;
+  box-shadow: var(--sh-sm);
 }
 .ep-banner::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
@@ -25,24 +28,24 @@
   border: 2px solid rgba(255,255,255,0.15);
 }
 
-.ep-info h1 { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; letter-spacing: -0.02em; }
-.ep-company { color: #a1a1aa; font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
-.ep-company-dot { width: 4px; height: 4px; background: #52525b; border-radius: 50%; }
+.ep-info h1 { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; letter-spacing: 0; }
+.ep-company { color: var(--text-secondary); font-size: 0.95rem; display: flex; align-items: center; gap: 0.5rem; }
+.ep-company-dot { width: 4px; height: 4px; background: var(--text-muted); border-radius: 50%; }
 .ep-badge {
   display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 0.75rem;
   padding: 0.3rem 0.75rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
-  background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2);
+  background: var(--success-bg); color: #047857; border: 1px solid rgba(16,185,129,0.24);
 }
-.ep-badge-dot { width: 6px; height: 6px; background: #34d399; border-radius: 50%; animation: pulseDot 2s infinite; }
+.ep-badge-dot { width: 6px; height: 6px; background: var(--success); border-radius: 50%; animation: pulseDot 2s infinite; }
 @keyframes pulseDot { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
 .ep-actions { margin-left: auto; display: flex; gap: 0.75rem; }
 .ep-btn-edit {
   padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: 0.875rem;
-  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
-  color: #e4e4e7; cursor: pointer; transition: all 0.2s;
+  background: var(--bg-secondary); border: 1px solid var(--border-color);
+  color: var(--text-primary); cursor: pointer; transition: all 0.2s;
 }
-.ep-btn-edit:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+.ep-btn-edit:hover { background: var(--bg-tertiary); border-color: var(--indigo-500); }
 .ep-btn-primary {
   padding: 0.6rem 1.25rem; border-radius: 10px; font-weight: 600; font-size: 0.875rem;
   background: linear-gradient(to right, #4f46e5, #7c3aed); border: 1px solid rgba(255,255,255,0.1);
@@ -54,13 +57,14 @@
 /* Stats */
 .ep-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
 .ep-stat-card {
-  background: rgba(24,24,27,0.5); backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.5rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color); border-radius: 16px; padding: 1.5rem;
   text-align: center; transition: all 0.3s ease;
+  box-shadow: var(--sh-sm);
 }
-.ep-stat-card:hover { border-color: rgba(99,102,241,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
-.ep-stat-value { font-size: 1.75rem; font-weight: 700; color: #fff; margin-bottom: 0.25rem; }
-.ep-stat-label { font-size: 0.8rem; color: #71717a; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+.ep-stat-card:hover { border-color: rgba(99,102,241,0.35); transform: translateY(-2px); box-shadow: var(--sh-lg); }
+.ep-stat-value { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.25rem; }
+.ep-stat-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
 .ep-stat-icon {
   width: 36px; height: 36px; margin: 0 auto 0.75rem auto; border-radius: 10px;
   display: flex; align-items: center; justify-content: center;
@@ -75,40 +79,41 @@
 
 /* Cards */
 .ep-card {
-  background: rgba(24,24,27,0.5); backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; padding: 1.75rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color); border-radius: 16px; padding: 1.75rem;
   position: relative; overflow: hidden;
+  box-shadow: var(--sh-sm);
 }
 .ep-card::before {
   content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(99,102,241,0.22), transparent);
 }
-.ep-card h3 { font-size: 1rem; font-weight: 600; color: #e4e4e7; margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.ep-card h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 1.25rem; text-transform: uppercase; letter-spacing: 0.04em; }
 
-.ep-bio { color: #a1a1aa; font-size: 0.95rem; line-height: 1.7; }
+.ep-bio { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.7; }
 
 /* Contact list */
 .ep-contact-item {
   display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
+  border-bottom: 1px solid var(--border-subtle);
 }
 .ep-contact-item:last-child { border-bottom: none; }
 .ep-contact-icon {
   width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-  background: rgba(255,255,255,0.04); display: flex; align-items: center; justify-content: center; color: #71717a;
+  background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; color: var(--text-secondary);
 }
-.ep-contact-label { font-size: 0.75rem; color: #52525b; }
-.ep-contact-value { font-size: 0.875rem; color: #e4e4e7; font-weight: 500; }
+.ep-contact-label { font-size: 0.75rem; color: var(--text-muted); }
+.ep-contact-value { font-size: 0.875rem; color: var(--text-primary); font-weight: 500; }
 
 /* Projects Table */
 .ep-project-row {
   display: flex; align-items: center; gap: 1rem; padding: 0.875rem 0;
-  border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.15s;
+  border-bottom: 1px solid var(--border-subtle); transition: background 0.15s;
 }
 .ep-project-row:last-child { border-bottom: none; }
-.ep-project-row:hover { background: rgba(255,255,255,0.02); margin: 0 -1rem; padding: 0.875rem 1rem; border-radius: 8px; }
-.ep-project-name { font-size: 0.9rem; font-weight: 600; color: #e4e4e7; flex: 1; }
-.ep-project-meta { font-size: 0.8rem; color: #71717a; min-width: 80px; text-align: right; }
+.ep-project-row:hover { background: var(--surface-hover); margin: 0 -1rem; padding: 0.875rem 1rem; border-radius: 8px; }
+.ep-project-name { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); flex: 1; }
+.ep-project-meta { font-size: 0.8rem; color: var(--text-muted); min-width: 80px; text-align: right; }
 
 .status-badge {
   padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.02em;
@@ -126,10 +131,10 @@
 
 /* Edit Form Elements styling */
 .ep-inline-input {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-primary);
   padding: 0.4rem 0.8rem;
   font-family: inherit;
   outline: none;
@@ -138,15 +143,15 @@
 }
 .ep-inline-input:focus {
   border-color: rgba(99, 102, 241, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--bg-primary);
 }
 
 .ep-edit-input {
   width: 100%;
-  background: rgba(24, 24, 27, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: #e4e4e7;
+  color: var(--text-primary);
   padding: 0.35rem 0.6rem;
   font-size: 0.825rem;
   font-family: inherit;
@@ -156,15 +161,15 @@
 }
 .ep-edit-input:focus {
   border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(24, 24, 27, 0.8);
+  background: var(--bg-primary);
 }
 
 .ep-textarea {
   width: 100%;
-  background: rgba(24, 24, 27, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  color: #a1a1aa;
+  color: var(--text-primary);
   padding: 0.75rem;
   font-size: 0.9rem;
   font-family: inherit;
@@ -175,6 +180,11 @@
 }
 .ep-textarea:focus {
   border-color: rgba(99, 102, 241, 0.4);
-  background: rgba(24, 24, 27, 0.8);
-  color: #e4e4e7;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+:host-context([data-theme="dark"]) .ep-badge {
+  background: rgba(16,185,129,0.1);
+  color: #34d399;
 }

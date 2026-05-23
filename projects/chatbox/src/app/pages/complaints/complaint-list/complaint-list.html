@@ -1,0 +1,67 @@
+<section class="complaints-page">
+  <header class="complaints-header">
+    <div>
+      <p class="kicker">Support</p>
+      <h1>Complaints</h1>
+      <p>Create, update, and track your support complaints.</p>
+    </div>
+    <a routerLink="/complaints/new" class="btn btn-indigo">New Complaint</a>
+  </header>
+
+  <div class="complaints-toolbar">
+    <label>
+      <span>Status</span>
+      <select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()" class="input">
+        <option value="all">All statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+        <option value="Dismissed">Dismissed</option>
+        <option value="Escalated">Escalated</option>
+      </select>
+    </label>
+    <button class="btn btn-secondary" type="button" (click)="loadComplaints()">Refresh</button>
+  </div>
+
+  <div *ngIf="isLoading" class="state-card">
+    <div class="spinner"></div>
+    <p>Loading complaints...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredComplaints.length === 0" class="state-card">
+    <h2>{{query ? 'No complaints match your search' : 'No complaints yet'}}</h2>
+    <p>{{query ? 'Try another search term or clear the search bar.' : 'Create a complaint when you need support. Your saved complaints appear here.'}}</p>
+    <a routerLink="/complaints/new" class="btn btn-indigo">Create Complaint</a>
+  </div>
+
+  <div *ngIf="!isLoading && filteredComplaints.length > 0" class="complaints-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Subject</th>
+          <th>Category</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let complaint of filteredComplaints">
+          <td>
+            <strong>{{complaint.subject}}</strong>
+            <span>{{complaint.description}}</span>
+          </td>
+          <td>{{complaint.category}}</td>
+          <td>{{complaint.priority}}</td>
+          <td><span class="status-pill">{{complaint.status}}</span></td>
+          <td>{{complaint.createdAt | date:'mediumDate'}}</td>
+          <td class="actions">
+            <a [routerLink]="['/complaints', complaint.id, 'edit']" class="btn btn-secondary text-xs">Edit</a>
+            <button type="button" class="btn btn-secondary text-xs danger" (click)="deleteComplaint(complaint)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

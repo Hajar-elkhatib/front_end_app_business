@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
@@ -21,7 +21,7 @@ export class Chat implements OnInit, AfterViewChecked {
   isTyping = false;
   isLoading = true;
 
-  constructor(private chatService: ChatService) {}
+  constructor(private chatService: ChatService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.chatService.getConversations().subscribe(convos => {
@@ -30,6 +30,7 @@ export class Chat implements OnInit, AfterViewChecked {
       if (convos.length > 0) {
         this.selectConversation(convos[0]);
       }
+      this.cdr.markForCheck();
     });
   }
 
@@ -41,6 +42,7 @@ export class Chat implements OnInit, AfterViewChecked {
     this.activeConversation = convo;
     this.chatService.getMessages(convo.id).subscribe(msgs => {
       this.messages = msgs;
+      this.cdr.markForCheck();
       this.scrollToBottom();
     });
   }
@@ -51,23 +53,8 @@ export class Chat implements OnInit, AfterViewChecked {
     this.chatService.sendMessage(this.activeConversation.id, this.newMessage).subscribe(msg => {
       this.messages.push(msg);
       this.newMessage = '';
+      this.cdr.markForCheck();
       this.scrollToBottom();
-      
-      // Simulate reply
-      this.isTyping = true;
-      setTimeout(() => {
-        this.isTyping = false;
-        this.messages.push({
-          id: Date.now().toString(),
-          senderId: 'other',
-          senderName: this.activeConversation!.name,
-          text: 'Got it. Let me check that and get back to you.',
-          timestamp: new Date(),
-          isRead: true,
-          avatarUrl: this.activeConversation!.avatarUrl
-        });
-        this.scrollToBottom();
-      }, 1500);
     });
   }
 

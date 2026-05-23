@@ -1,25 +1,39 @@
-import { Specialist } from './specialist.model';
-
 export interface Project {
   id: string;
+  entrepreneurId: string;
   title: string;
   description: string;
-  budget: number;
-  deadline: string; // ISO Date string
-  category: string;
-  status: 'planning' | 'active' | 'completed' | 'on-hold' | 'pending';
+  sector: string;
+  projectStatus: string;
+  country: string;
+  countryCode: string;
+  region: string;
+  keyword: string;
+  founderExperienceYears: number;
+  fundingRounds: number;
+  teamSize: number;
+  marketSizeBillion: number;
+  marketGrowthRatePercent: number;
+  productTractionUsers: number;
+  burnRateMillion: number;
+  revenueMillion: number;
+  runwayMonths: number;
+  founderBackground: string;
+  competitionLevel: string;
+  searchTrendScore: number;
+  viewsWorldRank: number;
+  opinions: string;
+  createdAt: Date | string;
   assignedSpecialistId?: string;
-  assignedSpecialist?: Specialist;
-  analysisSummary?: string;
-  progress: number; // 0 to 100
-  createdAt: string; // ISO Date string
-  updatedAt?: string; // ISO Date string
-  priority?: 'low' | 'medium' | 'high' | 'critical';
+  assignedSpecialist?: any;
+  budget?: number;
+  deadline?: string;
+  category?: string;
+  status?: 'active' | 'planning' | string;
+  progress?: number;
+  updatedAt?: string;
+  priority?: string;
   tags?: string[];
-  aiScores?: {
-    marketScore: number; // 0 to 100
-    successProbability: number; // 0 to 100
-    competitionLevel: 'Low' | 'Medium' | 'High';
-    sentimentScore: number; // 0 to 100
-  };
+  aiScores?: any;
+  analysisSummary?: string;
 }

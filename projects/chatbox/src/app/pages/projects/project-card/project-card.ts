@@ -14,26 +14,19 @@ export class ProjectCard {
   @Input({ required: true }) project!: Project;
   @Output() delete = new EventEmitter<string>();
 
-  getStatusClass(status: string): string {
-    switch (status) {
-      case 'active': return 'status-active';
-      case 'planning': return 'status-planning';
-      case 'completed': return 'status-completed';
-      case 'on-hold': return 'status-hold';
-      case 'pending': return 'status-pending';
+  getStatusClass(status?: string): string {
+    switch ((status || '').toUpperCase()) {
+      case 'SUBMITTED': return 'status-active';
+      case 'DRAFT': return 'status-planning';
+      case 'COMPLETED': return 'status-completed';
+      case 'ON_HOLD': return 'status-hold';
+      case 'PENDING': return 'status-pending';
       default: return '';
     }
   }
 
-  getStatusLabel(status: string): string {
-    switch (status) {
-      case 'active': return 'In Progress';
-      case 'planning': return 'Planning';
-      case 'completed': return 'Completed';
-      case 'on-hold': return 'On Hold';
-      case 'pending': return 'Pending';
-      default: return status;
-    }
+  getStatusLabel(status?: string): string {
+    return (status || 'DRAFT').replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, letter => letter.toUpperCase());
   }
 
   onDeleteClick(event: Event) {

@@ -1,0 +1,76 @@
+<section class="complaint-form-page">
+  <a routerLink="/complaints" class="back-link">Back to complaints</a>
+
+  <div class="form-card">
+    <header>
+      <p class="kicker">Support</p>
+      <h1>{{isEditMode ? 'Edit Complaint' : 'Create Complaint'}}</h1>
+      <p>{{isEditMode ? 'Update your complaint details and status.' : 'Describe the issue so support can review it.'}}</p>
+    </header>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading complaint...</p>
+    </div>
+
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="save()">
+      <label>
+        <span>Subject</span>
+        <input class="input" type="text" formControlName="subject" placeholder="Short subject">
+        <small *ngIf="isInvalid('subject')">Subject is required.</small>
+      </label>
+
+      <label>
+        <span>Description</span>
+        <textarea class="input" rows="6" formControlName="description" placeholder="Explain what happened"></textarea>
+        <small *ngIf="isInvalid('description')">Description must be at least 10 characters.</small>
+      </label>
+
+      <div class="form-grid">
+        <label>
+          <span>Category</span>
+          <select class="input" formControlName="category">
+            <option value="Technical">Technical</option>
+            <option value="Billing">Billing</option>
+            <option value="Specialist">Specialist</option>
+            <option value="Project">Project</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+
+        <label>
+          <span>Priority</span>
+          <select class="input" formControlName="priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+        </label>
+
+        <label *ngIf="isEditMode">
+          <span>Status</span>
+          <select class="input" formControlName="status">
+            <option value="Pending">Pending</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Resolved">Resolved</option>
+            <option value="Dismissed">Dismissed</option>
+            <option value="Escalated">Escalated</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        <span>AI suggested response</span>
+        <textarea class="input" rows="3" formControlName="aiSuggestedResponse" placeholder="Empty until backend AI response exists"></textarea>
+      </label>
+
+      <div class="actions">
+        <a routerLink="/complaints" class="btn btn-secondary">Cancel</a>
+        <button class="btn btn-indigo" type="submit" [disabled]="isSaving">
+          {{isSaving ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Create Complaint')}}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

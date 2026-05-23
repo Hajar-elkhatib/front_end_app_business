@@ -1,0 +1,68 @@
+<section class="crud-page">
+  <header class="crud-header">
+    <div>
+      <p class="kicker">AI Analysis</p>
+      <h1>Business Idea Analysis</h1>
+      <p>Create, update, and review business idea analysis records.</p>
+    </div>
+    <a [routerLink]="['/analysis/business-idea/new']" [queryParams]="projectId ? { projectId: projectId } : null" class="btn btn-indigo">New Analysis</a>
+  </header>
+
+  <div class="crud-toolbar">
+    <label>
+      <span>Label</span>
+      <select [(ngModel)]="labelFilter" (ngModelChange)="applyFilters()" class="input">
+        <option value="all">All labels</option>
+        <option value="Promising">Promising</option>
+        <option value="Needs Review">Needs Review</option>
+        <option value="High Risk">High Risk</option>
+        <option value="Unknown">Unknown</option>
+      </select>
+    </label>
+    <button class="btn btn-secondary" type="button" (click)="loadAnalyses()">Refresh</button>
+  </div>
+
+  <div *ngIf="isLoading" class="state-card">
+    <div class="spinner"></div>
+    <p>Loading business idea analyses...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredAnalyses.length === 0" class="state-card">
+    <h2>{{query ? 'No analyses match your search' : 'No business idea analyses yet'}}</h2>
+    <p>{{query ? 'Try another search term or clear the search bar.' : 'Create an analysis record or generate one later when the AI backend endpoint is available.'}}</p>
+    <a [routerLink]="['/analysis/business-idea/new']" [queryParams]="projectId ? { projectId: projectId } : null" class="btn btn-indigo">Create Analysis</a>
+  </div>
+
+  <div *ngIf="!isLoading && filteredAnalyses.length > 0" class="crud-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Final label</th>
+          <th>Score</th>
+          <th>Confidence</th>
+          <th>Model</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let analysis of filteredAnalyses">
+          <td>
+            <strong>{{analysis.projectId}}</strong>
+            <span>{{analysis.recommendationsSummary || 'No recommendation summary available'}}</span>
+          </td>
+          <td><span class="status-pill">{{analysis.finalLabel || analysis.predictionLabel || 'Unknown'}}</span></td>
+          <td>{{analysis.finalScore || 0}}</td>
+          <td>{{analysis.confidenceScore || 0}}</td>
+          <td>{{analysis.modelName || 'Not provided'}}</td>
+          <td>{{analysis.createdAt | date:'mediumDate'}}</td>
+          <td class="actions">
+            <a [routerLink]="['/analysis/business-idea', analysis.id, 'edit']" class="btn btn-secondary text-xs">Edit</a>
+            <button type="button" class="btn btn-secondary text-xs danger" (click)="deleteAnalysis(analysis)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
@@ -20,7 +20,8 @@ export class SpecialistForm implements OnInit {
     private fb: FormBuilder,
     private specialistService: SpecialistService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {
     this.specForm = this.fb.group({
       fullName: ['', Validators.required],
@@ -45,6 +46,7 @@ export class SpecialistForm implements OnInit {
             skills: spec.skills.join(', '),
             languages: spec.languages.join(', ')
           });
+          this.cdr.markForCheck();
         }
       });
     }
@@ -66,11 +68,13 @@ export class SpecialistForm implements OnInit {
     if (this.isEditMode && this.specId) {
       this.specialistService.updateSpecialist(this.specId, specialistData).subscribe(() => {
         this.isLoading = false;
+        this.cdr.markForCheck();
         this.router.navigate(['/specialists', this.specId]);
       });
     } else {
       this.specialistService.createSpecialist(specialistData).subscribe(newSpec => {
         this.isLoading = false;
+        this.cdr.markForCheck();
         this.router.navigate(['/specialists', newSpec.id]);
       });
     }

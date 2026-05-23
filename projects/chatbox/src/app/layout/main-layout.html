@@ -3,41 +3,59 @@
   <aside class="sidebar flex-col justify-between">
     <div>
       <div class="sidebar-header flex items-center gap-3 mb-10">
-        <div class="logo-icon shadow-sm"></div>
+        <div class="logo-icon shadow-sm" style="background: none; border-radius: 0; box-shadow: none; display: flex; align-items: center; justify-content: center; height: auto; width: auto;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-indigo-600" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
         <span class="font-bold text-xl tracking-tight">NexusAI</span>
       </div>
       
       <div class="sidebar-group mb-6">
         <div class="text-xs font-semibold text-muted mb-3 uppercase tracking-widest px-3">Menu</div>
         <nav class="sidebar-nav flex-col gap-1">
-          <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
+          <a [routerLink]="dashboardRoute" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
             Dashboard
           </a>
-          <a routerLink="/specialists" routerLinkActive="active" class="nav-item">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-            Specialists
+          <a *ngIf="isAdmin" routerLink="/admin" routerLinkActive="active" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/><path d="M9 12l2 2 4-5"/></svg>
+            Admin Workspace
           </a>
-          <a routerLink="/marketplace" routerLinkActive="active" class="nav-item">
-            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-            Marketplace
-          </a>
-          <a routerLink="/projects" routerLinkActive="active" class="nav-item">
+          <a *ngIf="isAdmin" routerLink="/admin/users" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Users</a>
+          <a *ngIf="isAdmin" routerLink="/admin/entrepreneurs" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>Entrepreneurs</a>
+          <a *ngIf="isAdmin" routerLink="/admin/specialists" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4h-2"/><circle cx="10" cy="7" r="4"/></svg>Specialists</a>
+          <a *ngIf="isAdmin" routerLink="/admin/projects" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg>Project Monitoring</a>
+          <a *ngIf="isAdmin" routerLink="/admin/complaints" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Complaints</a>
+          <a *ngIf="isAdmin" routerLink="/admin/reports" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Reports</a>
+          <a *ngIf="isAdmin" routerLink="/admin/ai-models" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/></svg>AI Models</a>
+
+          <a *ngIf="isEntrepreneur" routerLink="/projects" routerLinkActive="active" class="nav-item">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
             Projects
           </a>
-          <a routerLink="/chat" routerLinkActive="active" class="nav-item">
+          <a *ngIf="isEntrepreneur" routerLink="/analysis/business-idea" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 7h7l-5.5 4.5L18 21l-6-4-6 4 1.5-7.5L2 9h7z"/></svg>AI Analysis</a>
+          <a *ngIf="isEntrepreneur" routerLink="/reports" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>Reports</a>
+          <a *ngIf="isEntrepreneur" routerLink="/chatbot" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8V4"/><path d="M9 13h.01M15 13h.01"/></svg>AI Assistant</a>
+          <a *ngIf="isEntrepreneur" routerLink="/specialist-recommendations" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5"/></svg>Specialist Recommendations</a>
+          <a *ngIf="isEntrepreneur" routerLink="/specialists" routerLinkActive="active" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Specialists
+          </a>
+
+          <a *ngIf="isSpecialist" routerLink="/specialist/assigned-projects" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>Assigned Projects</a>
+          <a *ngIf="isSpecialist" routerLink="/specialist/availability" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Availability</a>
+          <a *ngIf="isSpecialist" routerLink="/specialist/evaluations" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 9 16.5 13.5 18.5 21 12 17 5.5 21 7.5 13.5 2 9 9 9"/></svg>Evaluations</a>
+
+          <a *ngIf="isEntrepreneur || isSpecialist" routerLink="/conversations" routerLinkActive="active" class="nav-item">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Chat
+            Conversations
             <span class="badge ml-auto bg-indigo text-white badge-count" *ngIf="unreadCount > 0">{{unreadCount}}</span>
           </a>
+          <a *ngIf="isEntrepreneur" routerLink="/complaints" routerLinkActive="active" class="nav-item"><svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>Complaints</a>
         </nav>
       </div>
 
       <div class="sidebar-group mb-6">
         <div class="text-xs font-semibold text-muted mb-3 uppercase tracking-widest px-3">Account</div>
         <nav class="sidebar-nav flex-col gap-1">
-          <a routerLink="/profile/entrepreneur" routerLinkActive="active" class="nav-item">
+          <a [routerLink]="profileRoute" routerLinkActive="active" class="nav-item">
             <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
             My Profile
           </a>
@@ -46,21 +64,21 @@
     </div>
 
     <div class="sidebar-footer">
-      <div class="user-card flex items-center gap-3 p-2 rounded-lg hover-bg cursor-pointer transition-all" (click)="toggleUserMenu(); $event.stopPropagation()">
-        <div class="avatar shadow-sm">J</div>
+      <button type="button" class="user-card flex items-center gap-3 p-2 rounded-lg hover-bg cursor-pointer transition-all" (click)="toggleUserMenu(); $event.stopPropagation()">
+        <div class="avatar shadow-sm">{{avatarInitial}}</div>
         <div class="overflow-hidden">
-          <div class="text-sm font-semibold truncate">Jane Doe</div>
-          <div class="text-xs text-muted truncate">jane.doe@acme.com</div>
+          <div class="text-sm font-semibold truncate">{{currentUser?.fullName || 'Nexus User'}}</div>
+          <div class="text-xs text-muted truncate">{{currentUser?.email || 'user@nexusai.local'}}</div>
         </div>
         <svg class="ml-auto text-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
+      </button>
       <!-- User dropdown menu -->
       <div *ngIf="showUserMenu" class="user-dropdown" (click)="$event.stopPropagation()">
-        <a routerLink="/profile/entrepreneur" class="dropdown-item" (click)="showUserMenu = false">
+        <a [routerLink]="profileRoute" class="dropdown-item" (click)="showUserMenu = false">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           My Profile
         </a>
-        <a routerLink="/dashboard" class="dropdown-item" (click)="showUserMenu = false">
+        <a [routerLink]="dashboardRoute" class="dropdown-item" (click)="showUserMenu = false">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           Settings
         </a>
@@ -77,34 +95,65 @@
   <div class="main-content flex-1 flex-col">
     <!-- Topbar -->
     <header class="topbar flex items-center justify-between">
+      <div class="search-shell" (click)="$event.stopPropagation()">
       <div class="search-wrapper flex items-center gap-2">
         <svg class="text-muted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="search-input" placeholder="Search commands, projects..." [(ngModel)]="searchQuery" (keyup.enter)="onSearch()">
+        <input type="text" class="search-input" placeholder="Search pages, projects, users..." [(ngModel)]="searchQuery" (focus)="onSearchFocus()" (ngModelChange)="onSearchChange()" (keyup.enter)="onSearch()">
+        <button *ngIf="searchQuery" type="button" class="search-clear" title="Clear search" (click)="clearSearch(); $event.stopPropagation()">x</button>
         <div class="flex gap-1 ml-4"><kbd>Ctrl</kbd><kbd>K</kbd></div>
+      </div>
+      <div *ngIf="showSearchSuggestions" class="search-dropdown">
+        <button *ngFor="let suggestion of searchSuggestions" type="button" class="search-suggestion" (click)="selectSuggestion(suggestion)">
+          <span class="suggestion-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <span>
+            <strong>{{suggestion.label}}</strong>
+            <small>{{suggestion.description}}</small>
+          </span>
+        </button>
+        <div *ngIf="searchSuggestions.length === 0" class="search-empty">No matching page. Try Projects, Complaints, Reports, or Specialists.</div>
+      </div>
       </div>
       <div class="topbar-actions flex items-center gap-4">
         <div style="position: relative;">
-          <button class="icon-btn relative" (click)="toggleNotifications(); $event.stopPropagation()">
+          
+  <button class="icon-btn relative" (click)="toggleTheme(); $event.stopPropagation()" title="Toggle Dark/Light Mode">
+    <svg *ngIf="isDarkMode" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+    <svg *ngIf="!isDarkMode" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+
+          <button class="icon-btn relative" (click)="toggleNotifications(); $event.stopPropagation()" title="Notifications">
              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
              <span class="notification-dot" *ngIf="unreadCount > 0"></span>
           </button>
           <!-- Notifications dropdown -->
           <div *ngIf="showNotifications" class="notif-dropdown" (click)="$event.stopPropagation()">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color);">
-              <span style="font-weight: 600; font-size: 0.875rem;">Notifications</span>
-              <button style="font-size: 0.75rem; color: var(--indigo-600); cursor: pointer; background: none; border: none;" (click)="markAllRead()">Mark all read</button>
-            </div>
-            <div *ngFor="let n of notifications" class="notif-item" [style.background]="n.read ? 'transparent' : 'rgba(99,102,241,0.04)'">
-              <div style="width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;" [style.background]="n.read ? 'transparent' : 'var(--indigo-600)'"></div>
+            <div class="notif-header">
               <div>
-                <div style="font-size: 0.8rem; color: var(--text-primary);">{{n.text}}</div>
-                <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">{{n.time}}</div>
+                <div class="notif-title">Notifications</div>
+                <div class="notif-subtitle">{{notifications.length}} item{{notifications.length === 1 ? '' : 's'}}</div>
+              </div>
+              <button class="notif-action" (click)="markAllRead()" [disabled]="notifications.length === 0">Mark all read</button>
+            </div>
+            <div *ngIf="notifications.length === 0" class="notif-empty">
+              <div class="notif-empty-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              </div>
+              <div class="notif-empty-title">No notifications</div>
+              <p>Backend notifications will appear here when they are available.</p>
+            </div>
+            <div *ngFor="let n of notifications" class="notif-item" [class.unread]="!n.read">
+              <div class="notif-read-dot"></div>
+              <div>
+                <div class="notif-text">{{n.text}}</div>
+                <div class="notif-time">{{n.time}}</div>
               </div>
             </div>
           </div>
         </div>
         <div class="v-divider"></div>
-        <button class="btn btn-primary shadow-sm text-sm" (click)="deployProject()">Deploy Project</button>
+        <button class="btn btn-primary shadow-sm text-sm" (click)="deployProject()">{{isAdmin ? 'Open Admin' : 'New Project'}}</button>
       </div>
     </header>
 

@@ -1,6 +1,6 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ProjectService } from '../../../services/project.service';
 import { Project } from '../../../models/project.model';
@@ -16,6 +16,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class ProjectList implements OnInit {
   private projectService = inject(ProjectService);
+  private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
 
   projects: Project[] = [];
   filteredProjects: Project[] = [];
@@ -23,10 +25,9 @@ export class ProjectList implements OnInit {
 
   // Stats
   totalProjects = 0;
-  activeProjects = 0;
-  totalBudget = 0;
-  completedProjects = 0;
-  pendingProjects = 0;
+  submittedProjects = 0;
+  draftProjects = 0;
+  emptyReason = 'Create your first project to start validation.';
 
   // Delete modal state
   showDeleteModal = false;
@@ -40,7 +41,7 @@ export class ProjectList implements OnInit {
   statusFilter = new FormControl('all');
   sortControl = new FormControl('newest');
 
-  categories = ['All', 'AI Engineering', 'Frontend Architecture', 'Cloud DevOps', 'Backend Development', 'UI/UX Design'];
+  categories = ['All'];
 
   ngOnInit() {
     this.loadProjects();
@@ -53,6 +54,13 @@ export class ProjectList implements OnInit {
     this.categoryFilter.valueChanges.subscribe(() => this.applyFiltersAndSort());
     this.statusFilter.valueChanges.subscribe(() => this.applyFiltersAndSort());
     this.sortControl.valueChanges.subscribe(() => this.applyFiltersAndSort());
+    this.route.queryParamMap.subscribe(params => {
+      const query = params.get('search') || '';
+      if (query !== this.searchControl.value) {
+        this.searchControl.setValue(query, { emitEvent: false });
+        this.applyFiltersAndSort();
+      }
+    });
   }
 
   loadProjects() {
@@ -60,18 +68,18 @@ export class ProjectList implements OnInit {
     this.projectService.getProjects().subscribe(data => {
       this.projects = data;
       this.filteredProjects = data;
+      this.categories = ['All', ...new Set(data.map(project => project.sector).filter(Boolean))];
       this.calculateStats();
       this.applyFiltersAndSort();
       this.isLoading = false;
+      this.cdr.markForCheck();
     });
   }
 
   calculateStats() {
     this.totalProjects = this.projects.length;
-    this.activeProjects = this.projects.filter(p => p.status === 'active').length;
-    this.completedProjects = this.projects.filter(p => p.status === 'completed').length;
-    this.pendingProjects = this.projects.filter(p => p.status === 'pending').length;
-    this.totalBudget = this.projects.reduce((sum, p) => sum + p.budget, 0);
+    this.submittedProjects = this.projects.filter(p => p.projectStatus === 'SUBMITTED').length;
+    this.draftProjects = this.projects.filter(p => p.projectStatus !== 'SUBMITTED').length;
   }
 
   applyFiltersAndSort() {
@@ -86,35 +94,41 @@ export class ProjectList implements OnInit {
       results = results.filter(p =>
         p.title.toLowerCase().includes(query) ||
         p.description.toLowerCase().includes(query) ||
-        (p.assignedSpecialist && p.assignedSpecialist.fullName.toLowerCase().includes(query))
+        (p.sector || '').toLowerCase().includes(query) ||
+        (p.keyword || '').toLowerCase().includes(query) ||
+        (p.country || '').toLowerCase().includes(query)
       );
     }
 
     if (category !== 'All') {
-      results = results.filter(p => p.category === category);
+      results = results.filter(p => p.sector === category);
     }
 
     if (status !== 'all') {
-      results = results.filter(p => p.status === status);
+      results = results.filter(p => p.projectStatus === status);
     }
 
     // Sorting
     results.sort((a, b) => {
       if (sortBy === 'newest') {
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        const dateA = new Date(a.createdAt ?? new Date().toISOString()).getTime();
+        const dateB = new Date(b.createdAt ?? new Date().toISOString()).getTime();
+        return dateB - dateA;
       } else if (sortBy === 'oldest') {
-        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
-      } else if (sortBy === 'budget-high') {
-        return b.budget - a.budget;
-      } else if (sortBy === 'budget-low') {
-        return a.budget - b.budget;
-      } else if (sortBy === 'deadline') {
-        return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
+        const dateA = new Date(a.createdAt ?? new Date().toISOString()).getTime();
+        const dateB = new Date(b.createdAt ?? new Date().toISOString()).getTime();
+        return dateA - dateB;
+      } else if (sortBy === 'market-size-high') {
+        return (b.marketSizeBillion ?? 0) - (a.marketSizeBillion ?? 0);
+      } else if (sortBy === 'market-size-low') {
+        return (a.marketSizeBillion ?? 0) - (b.marketSizeBillion ?? 0);
       }
       return 0;
     });
 
     this.filteredProjects = results;
+    this.emptyReason = query ? 'No projects match this search.' : 'Create your first project to start validation.';
+    this.cdr.markForCheck();
   }
 
   // Delete modal flows
@@ -140,6 +154,7 @@ export class ProjectList implements OnInit {
       this.isDeleting = false;
       this.closeDeleteModal();
       this.loadProjects(); // Reload and recalculate stats
+      this.cdr.markForCheck();
     });
   }
 }

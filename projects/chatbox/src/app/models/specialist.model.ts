@@ -1,18 +1,52 @@
-export interface Specialist {
-  id: string;
-  fullName: string;
+import { User } from './user.model';
+
+export interface Specialist extends User {
+  profession: string;
   expertiseDomain: string;
+
   skills: string[];
+  sectors: string[];
+
+  industryExperience: number;
   hourlyRate: number;
-  location: string;
+
   languages: string[];
-  bio: string;
-  yearsExperience: number;
+
+  location: string;
   averageRating: number;
-  avatarUrl?: string;
+  reviewsCount: number;
+
+  availabilityStatus: string;
   available?: boolean;
-  completedProjects?: number;
+
+  bio: string;
+  completedProjects: number;
+
+  avatarUrl?: string;
+  yearsExperience?: number;
   responseRate?: number;
+}
+
+export interface Availability {
+  id: string;
+  specialistId: string;
+  availableDate: Date | string;
+  startTime: string;
+  endTime: string;
+  status: string;
+  maxSessions: number;
+  currentSessions: number;
+}
+
+export interface SpecialistRecommendation {
+  id: string;
+  projectId: string;
+  specialistId: string;
+  recommendedScore: number;
+  rank: number;
+  reason: string;
+  scoreDetails: string;
+  createdAt: Date | string;
 }
 
 export interface SpecialistReview {

@@ -1,0 +1,226 @@
+.admin-page {
+  color: var(--text-primary);
+}
+
+.admin-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-kicker {
+  color: var(--indigo-600);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.admin-header h1 {
+  font-size: 2rem;
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+.admin-copy {
+  max-width: 680px;
+  color: var(--text-secondary);
+  margin-top: 0.45rem;
+}
+
+.admin-refresh {
+  min-height: 40px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--r-md);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  box-shadow: var(--sh-sm);
+  font-weight: 600;
+}
+
+.admin-refresh:hover:not(:disabled) {
+  background: var(--bg-tertiary);
+}
+
+.admin-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.admin-links a {
+  border: 1px solid var(--border-color);
+  border-radius: var(--r-md);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  padding: 0.45rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.admin-links a:hover {
+  border-color: var(--indigo-500);
+  color: var(--text-primary);
+}
+
+.admin-error {
+  border: 1px solid rgba(239, 68, 68, 0.24);
+  border-radius: var(--r-md);
+  background: var(--danger-bg);
+  color: var(--danger);
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+}
+
+.admin-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.collection-panel,
+.document-panel {
+  min-width: 0;
+  border: 1px solid var(--border-color);
+  border-radius: var(--r-xl);
+  background: var(--bg-primary);
+  box-shadow: var(--sh-sm);
+}
+
+.collection-panel {
+  padding: 1rem;
+}
+
+.panel-title {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.panel-empty,
+.table-empty,
+.panel-meta {
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.panel-empty {
+  padding: 1rem 0;
+}
+
+.collection-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 42px;
+  margin-top: 0.45rem;
+  padding: 0.55rem 0.7rem;
+  border: 1px solid transparent;
+  border-radius: var(--r-md);
+  color: var(--text-secondary);
+  text-align: left;
+}
+
+.collection-row strong,
+.record-count {
+  border-radius: var(--r-full);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  padding: 0.15rem 0.55rem;
+  font-size: 0.78rem;
+}
+
+.collection-row:hover,
+.collection-row.active {
+  border-color: rgba(99, 102, 241, 0.3);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+}
+
+.document-panel {
+  overflow: hidden;
+}
+
+.document-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table-empty {
+  padding: 2rem 1.25rem;
+}
+
+.table-scroll {
+  overflow: auto;
+  max-height: min(68vh, 760px);
+}
+
+table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  table-layout: auto;
+}
+
+th,
+td {
+  max-width: 260px;
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.82rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+td {
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+tbody tr:hover td {
+  background: var(--surface-hover);
+}
+
+.delete-btn {
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  border-radius: var(--r-sm);
+  color: var(--danger);
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.delete-btn:hover:not(:disabled) {
+  background: var(--danger-bg);
+}
+
+@media (max-width: 860px) {
+  .admin-header {
+    flex-direction: column;
+  }
+
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+}

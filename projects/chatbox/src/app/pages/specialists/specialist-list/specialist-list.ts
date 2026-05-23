@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SpecialistService } from '../../../services/specialist.service';
 import { Specialist } from '../../../models/specialist.model';
@@ -14,14 +14,18 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
   styleUrls: ['./specialist-list.css']
 })
 export class SpecialistList implements OnInit {
+  private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
+
   specialists: Specialist[] = [];
   filteredSpecialists: Specialist[] = [];
   searchControl = new FormControl('');
   expertiseFilter = new FormControl('All');
   availabilityFilter = new FormControl('all');
   isLoading = true;
+  loadError = false;
 
-  expertiseOptions = ['All', 'AI Engineering', 'Frontend Architecture', 'Cloud DevOps', 'Backend Development', 'UI/UX Design'];
+  expertiseOptions = ['All'];
 
   constructor(private specialistService: SpecialistService) {}
 
@@ -35,14 +39,34 @@ export class SpecialistList implements OnInit {
 
     this.expertiseFilter.valueChanges.subscribe(() => this.applyFilters());
     this.availabilityFilter.valueChanges.subscribe(() => this.applyFilters());
+    this.route.queryParamMap.subscribe(params => {
+      const query = params.get('search') || '';
+      if (query !== this.searchControl.value) {
+        this.searchControl.setValue(query, { emitEvent: false });
+        this.applyFilters();
+      }
+    });
   }
 
   loadSpecialists() {
     this.isLoading = true;
-    this.specialistService.getSpecialists().subscribe(data => {
-      this.specialists = data;
-      this.filteredSpecialists = data;
-      this.isLoading = false;
+    this.loadError = false;
+    this.specialistService.getSpecialists().subscribe({
+      next: (data) => {
+        this.specialists = data;
+        this.filteredSpecialists = data;
+        this.expertiseOptions = [
+          'All',
+          ...new Set(data.map(specialist => specialist.expertiseDomain).filter(Boolean))
+        ];
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.loadError = true;
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
     });
   }
 
@@ -68,6 +92,7 @@ export class SpecialistList implements OnInit {
       results = results.filter(s => !s.available);
     }
     this.filteredSpecialists = results;
+    this.cdr.markForCheck();
   }
 
   getRatingStars(rating: number): number[] {

@@ -17,18 +17,18 @@
       <div *ngIf="isLoading" class="p-4 text-center text-sm text-muted">Loading conversations...</div>
       <div *ngIf="!isLoading && conversations.length === 0" class="p-4 text-center text-sm text-muted">No conversations found.</div>
       
-       <div *ngFor="let convo of conversations" class="convo-item flex items-start gap-3 p-4 border-b border-color cursor-pointer transition-colors" [ngClass]="{'active bg-white border-l-2 border-l-indigo-500': activeConversation?.id === convo.id, 'hover-bg-white': activeConversation?.id !== convo.id}" (click)="selectConversation(convo)">
-         <div class="avatar relative mt-1 shrink-0 bg-indigo-50 text-indigo-700">
-           {{ convo.avatarUrl }}
-           <span *ngIf="convo.unreadCount > 0" class="unread-dot relative"></span>
-           <span *ngIf="convo.isOnline" class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-success rounded-full border border-white"></span>
+       <div *ngFor="let convo of conversations" class="convo-item flex items-start gap-3 p-4 border-b border-color cursor-pointer transition-colors" [ngClass]="{'active bg-white border-l-2 border-l-indigo-500': activeConversation?.id === convo?.id, 'hover-bg-white': activeConversation?.id !== convo?.id}" (click)="selectConversation(convo)">
+          <div class="avatar relative mt-1 shrink-0 bg-indigo-50 text-indigo-700">
+           {{ convo?.avatarUrl }}
+           <span *ngIf="(convo?.unreadCount ?? 0) > 0" class="unread-dot relative"></span>
+           <span *ngIf="convo?.isOnline" class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-success rounded-full border border-white"></span>
          </div>
          <div class="flex-1 min-w-0">
            <div class="flex justify-between items-center mb-1">
-             <h4 class="font-medium text-sm truncate" [ngClass]="{'text-primary': convo.unreadCount > 0, 'text-secondary': convo.unreadCount === 0}">{{ convo.name }}</h4>
-             <span class="text-xs" [ngClass]="convo.unreadCount > 0 ? 'text-indigo font-medium' : 'text-muted'">{{ convo.lastMessage?.timestamp | date:'shortTime' }}</span>
+             <h4 class="font-medium text-sm truncate" [ngClass]="{'text-primary': (convo?.unreadCount ?? 0) > 0, 'text-secondary': (convo?.unreadCount ?? 0) === 0}">{{ convo?.name }}</h4>
+             <span class="text-xs" [ngClass]="(convo?.unreadCount ?? 0) > 0 ? 'text-indigo font-medium' : 'text-muted'">{{ convo?.lastMessage?.timestamp | date:'shortTime' }}</span>
            </div>
-           <p class="text-xs truncate" [ngClass]="convo.unreadCount > 0 ? 'text-primary font-medium' : 'text-muted'">{{ convo.lastMessage?.text || 'No messages yet' }}</p>
+           <p class="text-xs truncate" [ngClass]="(convo?.unreadCount ?? 0) > 0 ? 'text-primary font-medium' : 'text-muted'">{{ convo?.lastMessage?.text || 'No messages yet' }}</p>
          </div>
        </div>
     </div>

@@ -1,0 +1,63 @@
+<section class="form-page">
+  <a routerLink="/chatbot" class="back-link">Back to AI assistant</a>
+
+  <div class="form-card">
+    <header>
+      <p class="kicker">Chatbot / RAG</p>
+      <h1>{{isEditMode ? 'Edit AI Chat' : 'Create AI Chat'}}</h1>
+      <p>{{isEditMode ? 'Update the chat shell and project context.' : 'Create a chat shell. Backend AI responses will appear when endpoints are available.'}}</p>
+    </header>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="spinner"></div>
+      <p>Loading AI chat...</p>
+    </div>
+
+    <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="save()">
+      <label>
+        <span>Title</span>
+        <input class="input" type="text" formControlName="title" placeholder="Chat title">
+        <small *ngIf="isInvalid('title')">Title is required.</small>
+      </label>
+
+      <div class="form-grid">
+        <label>
+          <span>Project ID</span>
+          <input class="input" type="text" formControlName="projectId" placeholder="Project id">
+          <small *ngIf="isInvalid('projectId')">Project ID is required.</small>
+        </label>
+
+        <label>
+          <span>Chat type</span>
+          <select class="input" formControlName="chatType">
+            <option value="General">General</option>
+            <option value="RAG">RAG</option>
+            <option value="Project">Project</option>
+            <option value="Analysis">Analysis</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        <span>Context type</span>
+        <select class="input" formControlName="contextType">
+          <option value="Project">Project</option>
+          <option value="KnowledgeDocument">Knowledge document</option>
+          <option value="Market">Market</option>
+          <option value="BusinessIdea">Business idea</option>
+        </select>
+      </label>
+
+      <div class="note-card">
+        This screen stores the chat container only. Prompts and AI responses should come from backend Chat, AIRequest, and AIResponse endpoints.
+      </div>
+
+      <div class="actions">
+        <a routerLink="/chatbot" class="btn btn-secondary">Cancel</a>
+        <button class="btn btn-indigo" type="submit" [disabled]="isSaving">
+          {{isSaving ? 'Saving...' : (isEditMode ? 'Save Changes' : 'Create AI Chat')}}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>

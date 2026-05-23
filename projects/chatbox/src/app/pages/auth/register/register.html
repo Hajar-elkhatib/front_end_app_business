@@ -6,13 +6,14 @@
     Back to Welcome
   </a>
 
-  <div class="auth-card-wrapper">
-    <div class="auth-card">
+  <div class="auth-card-wrapper" style="max-width: 600px; margin: 4rem auto;">
+    <div class="auth-card" style="width: 100%;">
       <h1 class="auth-title">Create your account</h1>
       <p class="auth-subtitle">Join the NexusAI global network</p>
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         
+        <!-- Role Selector -->
         <div class="form-group">
           <label class="form-label">I am a...</label>
           <div class="role-selector">
@@ -29,41 +30,148 @@
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Full Name</label>
-          <div class="form-input-wrap">
-            <input type="text" formControlName="fullName" class="form-input" placeholder="Enter your full name">
+        <!-- Core Fields (Common) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <div class="form-input-wrap">
+              <input type="text" formControlName="fullName" class="form-input" placeholder="e.g. Sarah Jenkins">
+            </div>
+            <div *ngIf="isFieldInvalid('fullName')" class="form-error">Full name is required.</div>
           </div>
-          <div *ngIf="registerForm.get('fullName')?.touched && registerForm.get('fullName')?.invalid" class="form-error">
-            Full name is required.
+
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <div class="form-input-wrap">
+              <input type="text" formControlName="phone" class="form-input" placeholder="e.g. +1 555-0199">
+            </div>
+            <div *ngIf="isFieldInvalid('phone')" class="form-error">Phone number is required.</div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <div class="form-input-wrap">
-            <input type="email" formControlName="email" class="form-input" placeholder="Enter your email">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <div class="form-input-wrap">
+              <input type="email" formControlName="email" class="form-input" placeholder="e.g. sarah@nexus.ai">
+            </div>
+            <div *ngIf="isFieldInvalid('email')" class="form-error">Please enter a valid email.</div>
           </div>
-          <div *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.invalid" class="form-error">
-            Please enter a valid email address.
+
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <div class="form-input-wrap">
+              <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-input" placeholder="At least 6 chars">
+              <button type="button" class="pwd-toggle" (click)="togglePassword()">
+                <svg *ngIf="!showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg *ngIf="showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+              </button>
+            </div>
+            <div *ngIf="isFieldInvalid('password')" class="form-error">Password must be at least 6 characters.</div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <div class="form-input-wrap">
-            <input [type]="showPassword ? 'text' : 'password'" formControlName="password" class="form-input" placeholder="Create a password">
-            <button type="button" class="pwd-toggle" (click)="togglePassword()">
-              <svg *ngIf="!showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-              <svg *ngIf="showPassword" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-            </button>
-          </div>
-          <div *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.invalid" class="form-error">
-            Password must be at least 6 characters.
+        <!-- Entrepreneur Specific Fields -->
+        <div *ngIf="registerForm.get('role')?.value === 'entrepreneur'" class="role-specific-section">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Company Name</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="companyName" class="form-input" placeholder="e.g. TechNova Inc.">
+              </div>
+              <div *ngIf="isFieldInvalid('companyName')" class="form-error">Company name is required.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Business Type</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="businessType" class="form-input" placeholder="e.g. SaaS, Fintech, Web3">
+              </div>
+              <div *ngIf="isFieldInvalid('businessType')" class="form-error">Business type is required.</div>
+            </div>
           </div>
         </div>
 
-        <button type="submit" class="auth-btn" [disabled]="registerForm.invalid || isLoading">
+        <!-- Specialist Specific Fields -->
+        <div *ngIf="registerForm.get('role')?.value === 'specialist'" class="role-specific-section">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Profession / Title</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="profession" class="form-input" placeholder="e.g. Senior AI Engineer">
+              </div>
+              <div *ngIf="isFieldInvalid('profession')" class="form-error">Profession is required.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Expertise Domain</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="expertiseDomain" class="form-input" placeholder="e.g. Machine Learning, Cloud DevOps">
+              </div>
+              <div *ngIf="isFieldInvalid('expertiseDomain')" class="form-error">Expertise domain is required.</div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Skills (comma-separated)</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="skillsInput" class="form-input" placeholder="Python, TensorFlow, RAG, NLP">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Target Sectors (comma-separated)</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="sectorsInput" class="form-input" placeholder="Fintech, Healthcare, E-commerce">
+              </div>
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Location</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="location" class="form-input" placeholder="Austin, TX / Remote">
+              </div>
+              <div *ngIf="isFieldInvalid('location')" class="form-error">Location is required.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Languages</label>
+              <div class="form-input-wrap">
+                <input type="text" formControlName="languages" class="form-input" placeholder="English, French">
+              </div>
+              <div *ngIf="isFieldInvalid('languages')" class="form-error">Languages are required.</div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Hourly Rate ($)</label>
+              <div class="form-input-wrap">
+                <input type="number" formControlName="hourlyRate" class="form-input">
+              </div>
+              <div *ngIf="isFieldInvalid('hourlyRate')" class="form-error">Hourly rate is required.</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Years of Industry Experience</label>
+            <div class="form-input-wrap">
+              <input type="number" formControlName="industryExperience" class="form-input">
+            </div>
+            <div *ngIf="isFieldInvalid('industryExperience')" class="form-error">Experience is required.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Professional Biography</label>
+            <div class="form-input-wrap">
+              <textarea formControlName="bio" class="form-input" style="min-height: 80px;" placeholder="Tell us about your background..."></textarea>
+            </div>
+            <div *ngIf="isFieldInvalid('bio')" class="form-error">Biography is required.</div>
+          </div>
+        </div>
+
+        <button type="submit" class="auth-btn" style="margin-top: 1.5rem;" [disabled]="registerForm.invalid || isLoading">
           <span *ngIf="!isLoading">Create Account</span>
           <span *ngIf="isLoading" style="display: flex; align-items: center; gap: 0.5rem;">
             <svg style="animation: spin 1s linear infinite;" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path></svg>
@@ -72,7 +180,7 @@
         </button>
       </form>
 
-      <div class="auth-footer">
+      <div class="auth-footer" style="margin-top: 1.5rem;">
         Already have an account? <a routerLink="/login" class="auth-link">Sign in</a>
       </div>
     </div>

@@ -1,28 +1,33 @@
 <div class="container py-8 max-w-4xl">
   <div class="flex justify-between items-center mb-8">
     <h1 class="text-3xl font-bold">My Specialist Profile</h1>
-    <button class="btn btn-primary text-sm">Save Changes</button>
+    <button class="btn btn-primary text-sm" (click)="saveChanges()" [disabled]="isSaving">
+      <span *ngIf="!isSaving">Save Changes</span>
+      <span *ngIf="isSaving">Saving...</span>
+    </button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div *ngIf="isLoading" style="display: flex; justify-content: center; align-items: center; min-height: 300px;">
+    <svg style="animation: spin 1s linear infinite; color: var(--indigo-600);" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle><path d="M12 2a10 10 0 0 1 10 10" stroke-linecap="round"></path></svg>
+  </div>
+
+  <div *ngIf="!isLoading" class="grid grid-cols-1 md:grid-cols-3 gap-8">
 
     <!-- Sidebar -->
     <div class="flex flex-col gap-6">
-      <div class="card text-center relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-16 bg-gradient-to-r from-purple-500 to-indigo-600 opacity-80"></div>
-        <div class="relative pt-6">
+      <div class="card text-center relative overflow-hidden" style="padding-top: 2rem;">
+        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 64px; background: linear-gradient(to right, var(--indigo-500), #8b5cf6); opacity: 0.8; z-index: 1;"></div>
+        <div class="relative pt-6" style="z-index: 2;">
           <div class="avatar shadow-lg border-4 border-white m-auto mb-4"
-            style="width: 80px; height: 80px; font-size: 2rem;">{{user.avatarUrl}}</div>
+            style="width: 80px; height: 80px; font-size: 2rem; background: var(--indigo-50); color: var(--indigo-700);">{{user.avatarUrl}}</div>
           <h2 class="text-xl font-bold">{{user.fullName}}</h2>
-          <p class="text-sm text-secondary mb-4">{{user.expertiseDomain}}</p>
-          <button class="btn btn-secondary w-full justify-center text-sm">Upload Photo</button>
+          <p class="text-sm text-secondary mb-4">{{user.profession}}</p>
         </div>
       </div>
 
       <div class="card p-0 overflow-hidden">
         <div class="flex flex-col">
-          <a
-            class="p-4 border-b border-color hover-bg-gray font-medium flex items-center gap-3 text-indigo bg-indigo-50">
+          <a class="p-4 border-b border-color hover-bg-gray font-medium flex items-center gap-3 text-indigo bg-indigo-50">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
               <circle cx="12" cy="7" r="4" />
@@ -37,12 +42,6 @@
             </svg>
             Skills & Expertise
           </a>
-          <a class="p-4 border-b border-color hover-bg-gray font-medium text-secondary flex items-center gap-3">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            Security
-          </a>
         </div>
       </div>
     </div>
@@ -52,57 +51,62 @@
       <div class="card">
         <h3 class="text-xl font-bold mb-6">Personal Information</h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
           <div class="flex flex-col gap-2">
             <label class="text-sm font-medium">Full Name</label>
-            <input type="text" class="input" [value]="user.fullName">
+            <input type="text" class="input" [(ngModel)]="user.fullName">
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-sm font-medium">Email Address</label>
             <input type="email" class="input text-muted" [value]="user.email" disabled>
           </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Profession / Title</label>
+            <input type="text" class="input" [(ngModel)]="user.profession">
+          </div>
           <div class="flex flex-col gap-2">
             <label class="text-sm font-medium">Location</label>
-            <input type="text" class="input" [value]="user.location">
+            <input type="text" class="input" [(ngModel)]="user.location">
           </div>
         </div>
 
         <div class="flex flex-col gap-2">
           <label class="text-sm font-medium">Bio</label>
-          <textarea class="input" rows="4">{{user.bio}}</textarea>
+          <textarea class="input" rows="4" [(ngModel)]="user.bio"></textarea>
         </div>
       </div>
 
       <div class="card glass">
         <h3 class="text-xl font-bold mb-6">Skills & Expertise</h3>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
           <div class="flex flex-col gap-2">
             <label class="text-sm font-medium">Expertise Domain</label>
-            <select class="input">
-              <option selected>{{user.expertiseDomain}}</option>
-              <option>Frontend Architecture</option>
-              <option>Cloud DevOps</option>
-            </select>
+            <input type="text" class="input" [(ngModel)]="user.expertiseDomain" placeholder="e.g. AI Engineering">
           </div>
           <div class="flex flex-col gap-2">
             <label class="text-sm font-medium">Years of Experience</label>
-            <input type="number" class="input" [value]="user.yearsExperience">
+            <input type="number" class="input" [(ngModel)]="user.yearsExperience">
           </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
           <div class="flex flex-col gap-2">
             <label class="text-sm font-medium">Hourly Rate ($)</label>
-            <input type="number" class="input" [value]="user.hourlyRate">
+            <input type="number" class="input" [(ngModel)]="user.hourlyRate">
+          </div>
+          <div class="flex flex-col gap-2">
+            <label class="text-sm font-medium">Languages (comma separated)</label>
+            <input type="text" class="input" [(ngModel)]="languagesString">
           </div>
         </div>
 
         <div class="flex flex-col gap-2 mb-4">
           <label class="text-sm font-medium">Skills (comma separated)</label>
-          <input type="text" class="input" [value]="user.skills.join(', ')">
-        </div>
-
-        <div class="flex flex-col gap-2">
-          <label class="text-sm font-medium">Languages</label>
-          <input type="text" class="input" [value]="user.languages.join(', ')">
+          <input type="text" class="input" [(ngModel)]="skillsString">
         </div>
       </div>
     </div>

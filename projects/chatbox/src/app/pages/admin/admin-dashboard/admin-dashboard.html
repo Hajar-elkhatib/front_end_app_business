@@ -1,0 +1,79 @@
+<section class="admin-page">
+  <header class="admin-header">
+    <div>
+      <p class="admin-kicker">Admin</p>
+      <h1>Database workspace</h1>
+      <p class="admin-copy">Browse the MongoDB collections exposed by the backend and remove test records while you verify flows.</p>
+    </div>
+    <button type="button" class="admin-refresh" (click)="loadCollections()" [disabled]="isLoadingCollections">
+      Refresh
+    </button>
+  </header>
+
+  <div class="admin-links">
+    <a routerLink="/admin/users">Users</a>
+    <a routerLink="/admin/projects">Projects</a>
+    <a routerLink="/admin/specialists">Specialists</a>
+    <a routerLink="/admin/complaints">Complaints</a>
+  </div>
+
+  <p *ngIf="errorMessage" class="admin-error">{{errorMessage}}</p>
+
+  <div class="admin-grid">
+    <aside class="collection-panel">
+      <div class="panel-title">Collections</div>
+      <div *ngIf="isLoadingCollections" class="panel-empty">Loading collections...</div>
+      <button
+        *ngFor="let collection of collections"
+        type="button"
+        class="collection-row"
+        [class.active]="collection.name === selectedCollection"
+        (click)="openCollection(collection.name)">
+        <span>{{collection.name}}</span>
+        <strong>{{collection.documentCount}}</strong>
+      </button>
+    </aside>
+
+    <div class="document-panel">
+      <div class="document-bar">
+        <div>
+          <div class="panel-title">{{selectedCollection || 'Documents'}}</div>
+          <div class="panel-meta">Showing up to 100 newest records.</div>
+        </div>
+        <span class="record-count">{{documents.length}} loaded</span>
+      </div>
+
+      <div *ngIf="isLoadingDocuments" class="table-empty">Loading records...</div>
+      <div *ngIf="!isLoadingDocuments && !documents.length" class="table-empty">
+        {{searchQuery ? 'No records match this search.' : 'No records in this collection.'}}
+      </div>
+
+      <div *ngIf="!isLoadingDocuments && documents.length" class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th *ngFor="let field of fieldNames">{{field}}</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let document of documents">
+              <td *ngFor="let field of fieldNames" [title]="getValue(document, field)">
+                {{getValue(document, field)}}
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="delete-btn"
+                  [disabled]="isDeletingId === getId(document)"
+                  (click)="deleteDocument(document)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

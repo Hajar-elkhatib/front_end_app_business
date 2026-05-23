@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { SpecialistService } from '../../../services/specialist.service';
@@ -20,7 +20,8 @@ export class SpecialistDetails implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private specialistService: SpecialistService
+    private specialistService: SpecialistService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
@@ -29,11 +30,15 @@ export class SpecialistDetails implements OnInit {
       this.specialistService.getSpecialistById(id).subscribe(data => {
         this.specialist = data;
         this.isLoading = false;
+        this.cdr.markForCheck();
         if (!data) {
           this.router.navigate(['/specialists']);
         }
       });
-      this.specialistService.getReviews(id).subscribe(r => this.reviews = r);
+      this.specialistService.getReviews(id).subscribe(r => {
+        this.reviews = r;
+        this.cdr.markForCheck();
+      });
     }
   }
 
@@ -48,6 +53,7 @@ export class SpecialistDetails implements OnInit {
   deleteSpecialist() {
     if (this.specialist) {
       this.specialistService.deleteSpecialist(this.specialist.id).subscribe(() => {
+        this.cdr.markForCheck();
         this.router.navigate(['/specialists']);
       });
     }

@@ -1,113 +1,164 @@
-<div class="mb-10">
-  <h1 class="text-3xl font-semibold mb-2 tracking-tight">Overview</h1>
-  <p class="text-secondary text-sm">Welcome back. Here is the latest from your infrastructure.</p>
-</div>
-
-<div class="grid grid-cols-3 gap-6 mb-10">
-  <!-- Insight Card -->
-  <div class="card premium-glow glow-indigo col-span-2 relative overflow-hidden flex flex-col justify-between p-8" *ngIf="showInsight">
-    <div class="glow-bg"></div>
-    <div class="relative z-10 flex-col h-full bg-blur-layer">
-      <div class="flex items-center gap-2 mb-6">
-        <div class="magic-icon shadow-sm"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
-        <h2 class="font-semibold text-lg text-indigo">Revenue Intelligence</h2>
-      </div>
-      <p class="mb-8 max-w-lg text-muted-premium">Your checkout conversion rate dropped by 2.4% over the last 24h. Our model suggests optimizing the payment gateway latency.</p>
-      
-      <div class="flex gap-3 mt-auto">
-        <button class="btn btn-indigo shadow-md" (click)="analyzeIssue()">Analyze Issue</button>
-        <button class="btn btn-secondary" (click)="dismissInsight()">Dismiss</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Dismissed placeholder -->
-  <div class="card col-span-2 flex items-center justify-center p-8 text-muted text-sm" *ngIf="!showInsight">
-    <p>No new insights. Everything looks good! ✓</p>
-  </div>
-
-  <!-- Quick Actions Card -->
-  <div class="card flex flex-col justify-between p-6">
+<div class="dashboard-page">
+  <header class="dash-header">
     <div>
-       <h2 class="font-semibold text-sm text-secondary uppercase tracking-widest mb-6">Quick Links</h2>
-       <div class="flex flex-col gap-2">
-         <button class="action-btn flex items-center gap-3" (click)="openCreateProject()">
-            <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
-            <div class="text-sm font-medium">Create Project</div>
-         </button>
-         <button class="action-btn flex items-center gap-3" (click)="goToDomains()">
-            <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-            <div class="text-sm font-medium">Domains Setup</div>
-         </button>
-         <button class="action-btn flex items-center gap-3" (click)="goToInviteTeam()">
-            <div class="action-icon bg-gray-100"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
-            <div class="text-sm font-medium">Invite Team</div>
-         </button>
-       </div>
+      <div class="dash-kicker">Founder workspace</div>
+      <h1>Project pipeline</h1>
+      <p>Review the projects coming from your backend, move drafts forward, and bring specialists into the work when a brief is ready.</p>
     </div>
-  </div>
-</div>
+    <div class="dash-header-actions">
+      <a routerLink="/projects/create" class="btn btn-indigo">New Project</a>
+      <a routerLink="/specialists" class="btn btn-secondary">Find Specialists</a>
+    </div>
+  </header>
 
-<!-- Table Section -->
-<div class="projects-section">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-lg font-semibold tracking-tight">Recent Projects</h2>
-  </div>
-  
-  <div class="card p-0 overflow-hidden border-subtle">
-    <table class="w-full text-left border-collapse table-auto">
-      <thead>
-        <tr class="bg-gray-50 border-b border-gray">
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Project Name</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Environment</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Status</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Last Deployed</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted text-right"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let p of projects" class="border-b border-gray hover-bg-gray transition-colors group">
-          <td class="py-4 px-6">
-             <div class="flex items-center gap-3">
-               <div class="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center font-bold text-xs text-gray-600">{{ p.title.substring(0,1) }}</div>
-               <span class="font-medium text-sm">{{ p.title }}</span>
-             </div>
-          </td>
-          <td class="py-4 px-6 text-secondary text-sm">{{ p.type }}</td>
-          <td class="py-4 px-6">
-            <span class="badge shadow-sm" [ngClass]="p.statusClass">{{ p.status }}</span>
-          </td>
-          <td class="py-4 px-6 text-muted text-sm tabular-nums">{{ p.lastUpdated }}</td>
-          <td class="py-4 px-6 text-right">
-             <button class="icon-btn opacity-0 group-hover-opacity-100"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg></button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+  <section class="dash-metrics" aria-label="Project metrics">
+    <article class="dash-metric">
+      <span>Projects</span>
+      <strong>{{totalProjects}}</strong>
+      <small>Tracked in your workspace</small>
+    </article>
+    <article class="dash-metric">
+      <span>Submitted</span>
+      <strong>{{submittedProjects}}</strong>
+      <small>Ready for next steps</small>
+    </article>
+    <article class="dash-metric">
+      <span>Drafts</span>
+      <strong>{{draftProjects}}</strong>
+      <small>Still being shaped</small>
+    </article>
+    <article class="dash-metric accent">
+      <span>Average growth</span>
+      <strong>{{averageGrowth}}%</strong>
+      <small>Across {{sectorsTracked}} sector{{sectorsTracked !== 1 ? 's' : ''}}</small>
+    </article>
+  </section>
 
-<!-- Create Project Modal -->
-<div *ngIf="showCreateModal" style="position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);" (click)="closeCreateProject()">
-  <div class="card" style="max-width: 440px; width: 100%; margin: 1rem; padding: 2rem;" (click)="$event.stopPropagation()">
-    <h3 class="text-lg font-semibold mb-6">Create New Project</h3>
-    <div style="margin-bottom: 1rem;">
-      <label class="text-sm font-medium" style="display: block; margin-bottom: 0.5rem;">Project Name</label>
-      <input type="text" class="input w-full" [(ngModel)]="newProjectName" placeholder="Enter project name">
+  <section class="dash-workbench">
+    <article class="dash-focus" *ngIf="spotlightProject as project; else emptyFocus">
+      <div class="dash-panel-head">
+        <div>
+          <span class="dash-panel-label">Spotlight project</span>
+          <h2>{{project.title}}</h2>
+        </div>
+        <span class="badge" [ngClass]="getStatusClass(project.status)">{{getStatusLabel(project.status)}}</span>
+      </div>
+
+      <p class="dash-focus-description">{{project.description}}</p>
+
+      <div class="dash-focus-facts">
+        <div>
+          <span>Sector</span>
+          <strong>{{project.sector}}</strong>
+        </div>
+        <div>
+          <span>Growth</span>
+          <strong>{{project.marketGrowthRatePercent}}%</strong>
+        </div>
+        <div>
+          <span>Search trend</span>
+          <strong>{{project.searchTrendScore}}</strong>
+        </div>
+        <div>
+          <span>Team</span>
+          <strong>{{project.teamSize}}</strong>
+        </div>
+      </div>
+
+      <div class="dash-focus-actions">
+        <a [routerLink]="['/projects', project.id]" class="btn btn-indigo">Open Project</a>
+        <a routerLink="/projects" class="btn btn-secondary">All Projects</a>
+      </div>
+    </article>
+
+    <ng-template #emptyFocus>
+      <article class="dash-focus empty">
+        <span class="dash-panel-label">Start here</span>
+        <h2>Create your first project brief</h2>
+        <p>Projects you create in the backend will appear here with their status, sector, and market inputs.</p>
+        <a routerLink="/projects/create" class="btn btn-indigo">Create Project</a>
+      </article>
+    </ng-template>
+
+    <aside class="dash-side">
+      <div class="dash-panel-head compact">
+        <div>
+          <span class="dash-panel-label">Pipeline health</span>
+          <h2>Keep momentum</h2>
+        </div>
+      </div>
+
+      <div class="dash-steps">
+        <div class="dash-step">
+          <strong>{{draftProjects}}</strong>
+          <div>
+            <span>Draft briefs</span>
+            <p>Fill in business inputs before submission.</p>
+          </div>
+        </div>
+        <div class="dash-step">
+          <strong>{{submittedProjects}}</strong>
+          <div>
+            <span>Submitted projects</span>
+            <p>Ready for review and specialist matching.</p>
+          </div>
+        </div>
+      </div>
+
+      <nav class="dash-links" aria-label="Dashboard shortcuts">
+        <a routerLink="/projects/create">Create a project</a>
+        <a routerLink="/projects">Review all projects</a>
+        <a routerLink="/specialists">Browse specialists</a>
+      </nav>
+    </aside>
+  </section>
+
+  <section class="dash-recent">
+    <div class="dash-section-head">
+      <div>
+        <span class="dash-panel-label">Latest records</span>
+        <h2>Recent projects</h2>
+      </div>
+      <a routerLink="/projects" class="btn btn-secondary text-xs">View all</a>
     </div>
-    <div style="margin-bottom: 1.5rem;">
-      <label class="text-sm font-medium" style="display: block; margin-bottom: 0.5rem;">Project Type</label>
-      <select class="input w-full" [(ngModel)]="newProjectType">
-        <option>Web App</option>
-        <option>Mobile App</option>
-        <option>SaaS Tool</option>
-        <option>Fintech</option>
-        <option>E-commerce</option>
-      </select>
+
+    <div *ngIf="isLoading" class="dash-state">
+      <div class="spinner"></div>
+      <span>Loading project data...</span>
     </div>
-    <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
-      <button class="btn btn-secondary" (click)="closeCreateProject()">Cancel</button>
-      <button class="btn btn-primary" (click)="createProject()" [disabled]="!newProjectName.trim()">Create Project</button>
+
+    <div *ngIf="!isLoading && recentProjects.length === 0" class="dash-state">
+      <h3>No projects yet</h3>
+      <p>Create a project to populate the workspace.</p>
+      <a routerLink="/projects/create" class="btn btn-indigo">Create Project</a>
     </div>
-  </div>
+
+    <div class="dash-table-wrap" *ngIf="!isLoading && recentProjects.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Sector</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of recentProjects">
+            <td>
+              <div class="dash-project-cell">
+                <span>{{p.title.substring(0, 1)}}</span>
+                <a [routerLink]="['/projects', p.id]">{{p.title}}</a>
+              </div>
+            </td>
+            <td>{{p.sector}}</td>
+            <td><span class="badge" [ngClass]="getStatusClass(p.status)">{{getStatusLabel(p.status)}}</span></td>
+            <td class="dash-muted">{{p.createdAt | date:'mediumDate'}}</td>
+            <td class="dash-row-action"><a [routerLink]="['/projects', p.id]">Details</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 </div>

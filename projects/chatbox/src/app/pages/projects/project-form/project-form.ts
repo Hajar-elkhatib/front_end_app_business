@@ -1,10 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ProjectService } from '../../../services/project.service';
-import { SpecialistService } from '../../../services/specialist.service';
-import { Specialist } from '../../../models/specialist.model';
 
 @Component({
   selector: 'app-project-form',
@@ -18,21 +16,19 @@ export class ProjectForm implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private projectService = inject(ProjectService);
-  private specialistService = inject(SpecialistService);
+  private cdr = inject(ChangeDetectorRef);
 
   projectForm!: FormGroup;
   isEditMode = false;
   projectId: string | null = null;
   isLoading = false;
   isSubmitting = false;
-  specialists: Specialist[] = [];
 
-  categories = ['AI Engineering', 'Frontend Architecture', 'Cloud DevOps', 'Backend Development', 'UI/UX Design'];
-  statuses = ['planning', 'active', 'completed', 'on-hold'];
+  sectors = ['Technology', 'Finance', 'Health', 'Education', 'Retail', 'Energy', 'Other'];
+  competitionLevels = ['Low', 'Medium', 'High'];
 
   ngOnInit() {
     this.initForm();
-    this.loadSpecialists();
     this.checkMode();
   }
 
@@ -40,17 +36,25 @@ export class ProjectForm implements OnInit {
     this.projectForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
       description: ['', [Validators.required, Validators.minLength(20)]],
-      budget: ['', [Validators.required, Validators.min(100)]],
-      deadline: ['', Validators.required],
-      category: ['AI Engineering', Validators.required],
-      status: ['planning', Validators.required],
-      assignedSpecialistId: ['']
-    });
-  }
-
-  loadSpecialists() {
-    this.specialistService.getSpecialists().subscribe(specs => {
-      this.specialists = specs;
+      sector: ['', Validators.required],
+      country: [''],
+      countryCode: [''],
+      region: [''],
+      keyword: [''],
+      founderExperienceYears: [0],
+      fundingRounds: [0],
+      teamSize: [0],
+      marketSizeBillion: [0],
+      marketGrowthRatePercent: [0],
+      productTractionUsers: [0],
+      burnRateMillion: [0],
+      revenueMillion: [0],
+      runwayMonths: [0],
+      founderBackground: [''],
+      competitionLevel: [''],
+      searchTrendScore: [0],
+      viewsWorldRank: [0],
+      opinions: ['']
     });
   }
 
@@ -72,16 +76,31 @@ export class ProjectForm implements OnInit {
         this.projectForm.patchValue({
           title: project.title,
           description: project.description,
-          budget: project.budget,
-          deadline: project.deadline,
-          category: project.category,
-          status: project.status,
-          assignedSpecialistId: project.assignedSpecialistId || ''
+          sector: project.sector,
+          country: project.country,
+          countryCode: project.countryCode,
+          region: project.region,
+          keyword: project.keyword,
+          founderExperienceYears: project.founderExperienceYears,
+          fundingRounds: project.fundingRounds,
+          teamSize: project.teamSize,
+          marketSizeBillion: project.marketSizeBillion,
+          marketGrowthRatePercent: project.marketGrowthRatePercent,
+          productTractionUsers: project.productTractionUsers,
+          burnRateMillion: project.burnRateMillion,
+          revenueMillion: project.revenueMillion,
+          runwayMonths: project.runwayMonths,
+          founderBackground: project.founderBackground,
+          competitionLevel: project.competitionLevel,
+          searchTrendScore: project.searchTrendScore,
+          viewsWorldRank: project.viewsWorldRank,
+          opinions: project.opinions
         });
       } else {
         this.router.navigate(['/projects']);
       }
       this.isLoading = false;
+      this.cdr.markForCheck();
     });
   }
 

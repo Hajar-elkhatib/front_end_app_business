@@ -1,9 +1,9 @@
 <div class="pr-card">
   <!-- Card Header -->
   <div class="pr-card-header">
-    <span class="pr-category">{{project.category}}</span>
-    <span class="pr-badge" [ngClass]="getStatusClass(project.status)">
-      {{getStatusLabel(project.status)}}
+    <span class="pr-category">{{project.sector || 'No sector'}}</span>
+    <span class="pr-badge" [ngClass]="getStatusClass(project.projectStatus)">
+      {{getStatusLabel(project.projectStatus)}}
     </span>
   </div>
 
@@ -16,48 +16,26 @@
     <span>Created: {{project.createdAt | date:'mediumDate'}}</span>
   </div>
 
-  <!-- Progress Bar -->
-  <div class="pr-progress-wrap">
-    <div class="pr-progress-label">
-      <span>Progress</span>
-      <span>{{project.progress}}%</span>
-    </div>
-    <div class="pr-progress-bar-bg">
-      <div class="pr-progress-bar-fill" [style.width.%]="project.progress"></div>
-    </div>
-  </div>
-
-  <!-- Specs Grid -->
   <div class="pr-details">
     <div class="pr-detail-item">
-      <span class="pr-label">Budget</span>
-      <span class="pr-value font-bold text-indigo">${{project.budget | number}}</span>
+      <span class="pr-label">Market size</span>
+      <span class="pr-value font-bold text-indigo">{{project.marketSizeBillion || 0}}B</span>
     </div>
     <div class="pr-detail-item">
-      <span class="pr-label">Deadline</span>
-      <span class="pr-value">{{project.deadline | date:'mediumDate'}}</span>
+      <span class="pr-label">Team size</span>
+      <span class="pr-value">{{project.teamSize || 0}}</span>
     </div>
   </div>
 
   <!-- Card Footer -->
   <div class="pr-footer">
-    <div class="pr-specialist" *ngIf="project.assignedSpecialist">
-      <div class="pr-avatar">{{project.assignedSpecialist.avatarUrl}}</div>
-      <div>
-        <div class="pr-spec-name">{{project.assignedSpecialist.fullName}}</div>
-        <div class="pr-spec-role">Assigned Specialist</div>
-      </div>
-    </div>
-    <div class="pr-specialist empty" *ngIf="!project.assignedSpecialist">
+    <div class="pr-specialist empty">
       <div class="pr-avatar-placeholder">?</div>
-      <span class="pr-spec-unassigned">Unassigned</span>
+      <span class="pr-spec-unassigned">Specialist matching pending</span>
     </div>
 
     <!-- Actions -->
     <div class="pr-card-actions">
-      <a routerLink="/chat" class="pr-action-btn chat-btn" title="Contact Specialist" *ngIf="project.assignedSpecialist">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      </a>
       <a [routerLink]="['/projects', project.id, 'edit']" class="pr-action-btn edit-btn" title="Edit Project">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 1 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
       </a>

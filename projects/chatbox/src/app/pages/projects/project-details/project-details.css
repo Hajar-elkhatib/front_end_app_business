@@ -209,6 +209,79 @@
 /* Loading */
 .pd-loading { text-align: center; padding: 6rem; color: #818cf8; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 1rem; }
 
+/* Theme surfaces */
+.pd-back { color: var(--text-secondary); }
+.pd-back:hover { color: var(--text-primary); }
+.pd-hero-banner {
+  background: linear-gradient(135deg, rgba(99,102,241,0.12), rgba(20,184,166,0.08)), var(--bg-primary);
+  border-color: var(--border-color);
+}
+.pd-hero-progress,
+.pd-card,
+.pd-ai-card,
+.pd-avatar-placeholder,
+.modal-card {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+.pd-progress-bar-bg,
+.pd-ai-bar {
+  background: var(--bg-tertiary);
+}
+.pd-hero-title,
+.pd-card h3,
+.pd-spec-val,
+.pd-ai-value,
+.pd-spec-name,
+.pd-spec-meta-item strong,
+.pd-spec-unassigned h4,
+.modal-card h2 {
+  color: var(--text-primary);
+  letter-spacing: 0;
+}
+.pd-hero-category,
+.pd-description,
+.pd-analysis-text,
+.pd-progress-header,
+.pd-timeline-content h5 {
+  color: var(--text-secondary);
+}
+.pd-timestamp,
+.pd-tags-section h4,
+.pd-spec-lbl,
+.pd-ai-label,
+.pd-ai-helper,
+.pd-spec-role,
+.pd-spec-meta-item span,
+.pd-spec-unassigned p,
+.pd-timeline-content p {
+  color: var(--text-muted);
+}
+.pd-tag {
+  background: var(--bg-tertiary);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+.pd-tag:hover {
+  background: var(--indigo-50);
+  border-color: var(--indigo-100);
+  color: var(--indigo-600);
+}
+.pd-specs-block,
+.pd-spec-meta { border-color: var(--border-color); }
+.pd-timeline-container::before { background: var(--border-color); }
+.pd-timeline-marker {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+}
+.pd-timeline-step.completed .pd-timeline-content h5 { color: var(--text-primary); }
+.pd-timeline-step.active .pd-timeline-marker { background: var(--bg-primary); }
+.pd-timeline-step.active .pd-timeline-content p { color: var(--text-secondary); }
+.modal-card {
+  box-shadow: var(--sh-xl);
+}
+.modal-card p { color: var(--text-secondary); }
+
 @media (max-width: 1024px) {
   .pd-grid { grid-template-columns: 1fr; }
 }

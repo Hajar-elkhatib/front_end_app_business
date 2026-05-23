@@ -2,7 +2,10 @@
   <!-- Back -->
   <div class="pf-top-nav">
     <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']" class="pf-back">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="19" y1="12" x2="5" y2="12" />
+        <polyline points="12 19 5 12 12 5" />
+      </svg>
       {{isEditMode ? 'Back to Project Details' : 'Back to Projects'}}
     </a>
   </div>
@@ -11,14 +14,15 @@
     <div class="card glass pf-card">
       <div class="pf-card-header">
         <h2>{{isEditMode ? 'Modify Project Parameters' : 'Deploy New Project Container'}}</h2>
-        <p>{{isEditMode ? 'Update technical, financial and resource properties.' : 'Launch a fresh project architecture container on the NexusAI SaaS core.'}}</p>
+        <p>{{isEditMode ? 'Update project fields used by the backend validation models.' : 'Create a project with the business, market, and founder inputs needed for validation.'}}</p>
       </div>
 
       <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="pf-form">
         <!-- Title -->
         <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('title')}">
           <label class="form-label">Project Title</label>
-          <input type="text" class="input pf-input" formControlName="title" placeholder="e.g. Nexus Core API Optimization">
+          <input type="text" class="input pf-input" formControlName="title"
+            placeholder="e.g. Nexus Core API Optimization">
           <div class="error-msg" *ngIf="isFieldInvalid('title')">
             <span *ngIf="projectForm.get('title')?.errors?.['required']">Project title is required.</span>
             <span *ngIf="projectForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters.</span>
@@ -27,69 +31,106 @@
 
         <!-- Description -->
         <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('description')}">
-          <label class="form-label">Architectural Description</label>
-          <textarea rows="5" class="input pf-input" formControlName="description" placeholder="Describe the technical guidelines, deliverables, stack specifications and target milestones..."></textarea>
+          <label class="form-label">Project Description</label>
+          <textarea rows="5" class="input pf-input" formControlName="description"
+            placeholder="Describe the technical guidelines, deliverables, stack specifications and target milestones..."></textarea>
           <div class="error-msg" *ngIf="isFieldInvalid('description')">
             <span *ngIf="projectForm.get('description')?.errors?.['required']">A project description is required.</span>
-            <span *ngIf="projectForm.get('description')?.errors?.['minlength']">Description must be at least 20 characters.</span>
+            <span *ngIf="projectForm.get('description')?.errors?.['minlength']">Description must be at least 20
+              characters.</span>
           </div>
         </div>
 
-        <!-- Grid for Budget, Deadline -->
-        <div class="form-grid">
-          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('budget')}">
-            <label class="form-label">Budget Allocation ($ USD)</label>
-            <input type="number" class="input pf-input" formControlName="budget" placeholder="10000">
-            <div class="error-msg" *ngIf="isFieldInvalid('budget')">
-              <span *ngIf="projectForm.get('budget')?.errors?.['required']">Budget allocation is required.</span>
-              <span *ngIf="projectForm.get('budget')?.errors?.['min']">Minimum budget allocation is $100.</span>
-            </div>
-          </div>
-
-          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('deadline')}">
-            <label class="form-label">Milestone Deadline</label>
-            <input type="date" class="input pf-input" formControlName="deadline">
-            <div class="error-msg" *ngIf="isFieldInvalid('deadline')">
-              <span *ngIf="projectForm.get('deadline')?.errors?.['required']">A target milestone deadline is required.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Grid for Category, Status -->
+        <!-- Grid for core fields -->
         <div class="form-grid">
           <div class="form-group">
-            <label class="form-label">Operational Category</label>
-            <select class="input pf-input pf-select" formControlName="category">
-              <option *ngFor="let cat of categories" [value]="cat">{{cat}}</option>
+            <label class="form-label">Sector</label>
+            <select class="input pf-input pf-select" formControlName="sector">
+              <option value="">Select a sector</option>
+              <option *ngFor="let sec of sectors" [value]="sec">{{sec}}</option>
             </select>
           </div>
-
           <div class="form-group">
-            <label class="form-label">Operational Status</label>
-            <select class="input pf-input pf-select" formControlName="status">
-              <option value="planning">Planning (Draft)</option>
-              <option value="active">Active (Development)</option>
-              <option value="completed">Completed (Archived)</option>
-              <option value="on-hold">On Hold</option>
+            <label class="form-label">Keyword</label>
+            <input type="text" class="input pf-input" formControlName="keyword" placeholder="e.g. fintech lending">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Country</label>
+            <input type="text" class="input pf-input" formControlName="country" placeholder="e.g. Morocco">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Region</label>
+            <input type="text" class="input pf-input" formControlName="region" placeholder="e.g. Casablanca-Settat">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Founder Experience Years</label>
+            <input type="number" class="input pf-input" formControlName="founderExperienceYears" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Funding Rounds</label>
+            <input type="number" class="input pf-input" formControlName="fundingRounds" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Team Size</label>
+            <input type="number" class="input pf-input" formControlName="teamSize" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Market Size (Billion)</label>
+            <input type="number" class="input pf-input" formControlName="marketSizeBillion" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Market Growth Rate %</label>
+            <input type="number" class="input pf-input" formControlName="marketGrowthRatePercent" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Traction Users</label>
+            <input type="number" class="input pf-input" formControlName="productTractionUsers" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Burn Rate (Million)</label>
+            <input type="number" class="input pf-input" formControlName="burnRateMillion" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Revenue (Million)</label>
+            <input type="number" class="input pf-input" formControlName="revenueMillion" min="0" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Runway Months</label>
+            <input type="number" class="input pf-input" formControlName="runwayMonths" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Competition Level</label>
+            <select class="input pf-input pf-select" formControlName="competitionLevel">
+              <option value="">Select a level</option>
+              <option *ngFor="let level of competitionLevels" [value]="level">{{level}}</option>
             </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Search Trend Score</label>
+            <input type="number" class="input pf-input" formControlName="searchTrendScore" min="0" max="100">
+          </div>
+          <div class="form-group">
+            <label class="form-label">World Rank Views</label>
+            <input type="number" class="input pf-input" formControlName="viewsWorldRank" min="0">
           </div>
         </div>
 
-        <!-- Specialist assignment -->
         <div class="form-group">
-          <label class="form-label">Assign Nexus Specialist (Optional)</label>
-          <select class="input pf-input pf-select" formControlName="assignedSpecialistId">
-            <option value="">-- No Specialist Assigned --</option>
-            <option *ngFor="let spec of specialists" [value]="spec.id">{{spec.fullName}} ({{spec.expertiseDomain}} - ${{spec.hourlyRate}}/hr)</option>
-          </select>
-          <p class="form-helper">Assigning a specialist links them directly to project dashboard and enables immediate workspace chats.</p>
+          <label class="form-label">Founder Background</label>
+          <textarea rows="3" class="input pf-input" formControlName="founderBackground" placeholder="Founder background, domain experience, and execution notes"></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Opinions / Public Feedback</label>
+          <textarea rows="3" class="input pf-input" formControlName="opinions" placeholder="Paste real customer opinions or feedback when available"></textarea>
         </div>
 
         <!-- Actions -->
         <div class="pf-actions">
-          <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']" class="btn btn-secondary text-sm">Cancel</a>
+          <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']"
+            class="btn btn-secondary text-sm">Cancel</a>
           <button type="submit" class="btn btn-indigo text-sm" [disabled]="isSubmitting">
-            {{isSubmitting ? 'Processing Workspace...' : (isEditMode ? 'Save Architectural Changes' : 'Initialize Project Container')}}
+            {{isSubmitting ? 'Saving...' : (isEditMode ? 'Save Project' : 'Create Project')}}
           </button>
         </div>
       </form>

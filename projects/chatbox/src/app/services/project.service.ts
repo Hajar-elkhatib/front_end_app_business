@@ -1,186 +1,239 @@
 import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { delay, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Project } from '../models/project.model';
-import { SpecialistService } from './specialist.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectService {
-  private specialistService = inject(SpecialistService);
+  private http = inject(HttpClient);
+  private authService = inject(AuthService);
+  private baseUrl = 'http://localhost:8080/api/projects';
+  private storageKey = 'nexus_local_projects';
 
-  private mockProjects: Project[] = [
-    {
-      id: '1',
-      title: 'Nexus E-commerce Integration',
-      description: 'Next-gen online store platform integration featuring reactive catalog, smooth shopping cart, checkout microservices, and AI-powered product recommendation block.',
-      budget: 15000,
-      deadline: '2026-08-15',
-      category: 'Frontend Architecture',
-      status: 'active',
-      assignedSpecialistId: '2',
-      analysisSummary: 'The project frontend architecture is 80% configured. Redux state setup is pending cart optimization. Core responsive components are active. E-commerce metrics show standard load times under 1.2s.',
-      progress: 75,
-      createdAt: '2026-04-10',
-      updatedAt: '2026-05-14',
-      priority: 'high',
-      tags: ['Angular 21', 'RxJS', 'NgRx', 'TailwindCSS', 'Stripe API'],
-      aiScores: {
-        marketScore: 88,
-        successProbability: 92,
-        competitionLevel: 'Medium',
-        sentimentScore: 84
-      }
-    },
-    {
-      id: '2',
-      title: 'AI Marketing Tool & NLP Parser',
-      description: 'Automated ad campaign generator using custom-trained LLMs, parsing user specifications and outputting high-performing copywriting variants across social networks.',
-      budget: 28000,
-      deadline: '2026-10-30',
-      category: 'AI Engineering',
-      status: 'planning',
-      assignedSpecialistId: '1',
-      analysisSummary: 'System architecture definition in progress. Model fine-tuning parameters selected. Pending initial API keys structure.',
-      progress: 15,
-      createdAt: '2026-05-02',
-      updatedAt: '2026-05-18',
-      priority: 'critical',
-      tags: ['Python', 'OpenAI API', 'FastAPI', 'LangChain', 'PostgreSQL'],
-      aiScores: {
-        marketScore: 95,
-        successProbability: 85,
-        competitionLevel: 'High',
-        sentimentScore: 91
-      }
-    },
-    {
-      id: '3',
-      title: 'Cloud Orchestration & CI/CD pipeline',
-      description: 'High-availability infrastructure setup leveraging AWS Elastic Kubernetes Service (EKS), complete with Terraform scripts, auto-scaling groups, and custom Prometheus dashboards.',
-      budget: 12000,
-      deadline: '2026-06-20',
-      category: 'Cloud DevOps',
-      status: 'completed',
-      assignedSpecialistId: '3',
-      analysisSummary: 'Infrastructure deployed successfully. Pipeline automated. Core alerts configured. Final audit confirms 99.99% simulated uptime.',
-      progress: 100,
-      createdAt: '2026-03-15',
-      updatedAt: '2026-05-05',
-      priority: 'medium',
-      tags: ['AWS EKS', 'Kubernetes', 'Terraform', 'GitHub Actions', 'Prometheus'],
-      aiScores: {
-        marketScore: 78,
-        successProbability: 98,
-        competitionLevel: 'Low',
-        sentimentScore: 80
-      }
-    },
-    {
-      id: '4',
-      title: 'Smart Contract Auditor',
-      description: 'Decentralized finance security analysis protocol that screens Solidity contracts for standard reentrancy vulnerabilities and generates cryptographic audit reports.',
-      budget: 22000,
-      deadline: '2026-09-01',
-      category: 'Backend Development',
-      status: 'pending',
-      analysisSummary: 'Awaiting expert allocation. Initial contract documentation received and compiled.',
-      progress: 0,
-      createdAt: '2026-05-12',
-      updatedAt: '2026-05-12',
-      priority: 'high',
-      tags: ['Solidity', 'Rust', 'Web3.js', 'Ethereum', 'Docker'],
-      aiScores: {
-        marketScore: 82,
-        successProbability: 76,
-        competitionLevel: 'Medium',
-        sentimentScore: 70
-      }
-    }
-  ];
-
-  private projectsSubject = new BehaviorSubject<Project[]>(this.mockProjects);
+  private projectsSubject = new BehaviorSubject<Project[]>([]);
   public projects$ = this.projectsSubject.asObservable();
+  private loadedProjectsUserId: string | null = null;
+
+  private mapResponseToProject(res: any): Project {
+    return {
+      ...res,
+      id: res.id,
+      entrepreneurId: res.entrepreneurId || '',
+      title: res.title || '',
+      description: res.description || '',
+      projectStatus: res.projectStatus || 'DRAFT',
+      sector: res.sector || '',
+      country: res.country || '',
+      countryCode: res.countryCode || '',
+      region: res.region || '',
+      keyword: res.keyword || '',
+      founderExperienceYears: res.founderExperienceYears || 0,
+      fundingRounds: res.fundingRounds || 0,
+      teamSize: res.teamSize || 0,
+      marketSizeBillion: res.marketSizeBillion || 0,
+      marketGrowthRatePercent: res.marketGrowthRatePercent || 0,
+      productTractionUsers: res.productTractionUsers || 0,
+      burnRateMillion: res.burnRateMillion || 0,
+      revenueMillion: res.revenueMillion || 0,
+      runwayMonths: res.runwayMonths || 0,
+      founderBackground: res.founderBackground || '',
+      competitionLevel: res.competitionLevel || '',
+      searchTrendScore: res.searchTrendScore || 0,
+      viewsWorldRank: res.viewsWorldRank || 0,
+      opinions: res.opinions || '',
+      createdAt: res.createdAt || ''
+    };
+  }
 
   getProjects(): Observable<Project[]> {
-    return this.projects$.pipe(
-      map(projects => projects.map(p => this.populateSpecialist(p))),
-      delay(500)
+    const currentUser = this.authService.currentUser;
+    if (!currentUser || !currentUser.id) {
+      return of([]);
+    }
+
+    if (this.loadedProjectsUserId === currentUser.id) {
+      return of(this.projectsSubject.value);
+    }
+
+    if (currentUser.role === 'specialist') {
+      // TODO backend: expose assigned/recommended projects for a specialist.
+      this.loadedProjectsUserId = currentUser.id;
+      this.projectsSubject.next([]);
+      return of([]);
+    }
+
+    return this.http.get<any[]>(`${this.baseUrl}/entrepreneur/${currentUser.id}`).pipe(
+      catchError(() => {
+        // TODO backend: remove local fallback after project endpoints are always available.
+        return of(this.readLocalProjects().filter(project => project.entrepreneurId === currentUser.id));
+      }),
+      map(list => list.map(p => this.mapResponseToProject(p))),
+      tap(projects => {
+        this.loadedProjectsUserId = currentUser.id;
+        this.projectsSubject.next(projects);
+      })
     );
   }
 
   getProjectById(id: string): Observable<Project | undefined> {
-    return this.projects$.pipe(
-      map(projects => {
-        const found = projects.find(p => p.id === id);
-        return found ? this.populateSpecialist(found) : undefined;
+    return this.http.get<any>(`${`${this.baseUrl}/${id}`}`).pipe(
+      catchError(() => {
+        // TODO backend: remove local fallback after project detail endpoint is always available.
+        return of(this.readLocalProjects().find(project => project.id === id));
       }),
-      delay(300)
+      map(res => {
+        if (!res) return undefined;
+        return this.mapResponseToProject(res);
+      })
     );
   }
 
-  createProject(project: Omit<Project, 'id' | 'createdAt' | 'progress' | 'updatedAt' | 'priority' | 'tags' | 'aiScores'>): Observable<Project> {
-    const today = new Date().toISOString().split('T')[0];
-    const newProject: Project = {
-      ...project,
-      id: Date.now().toString(),
-      progress: 0,
-      createdAt: today,
-      updatedAt: today,
-      priority: 'medium',
-      tags: [project.category, 'NexusAI Bootstrapped'],
-      aiScores: {
-        marketScore: 75,
-        successProbability: 80,
-        competitionLevel: 'Medium',
-        sentimentScore: 75
-      },
-      analysisSummary: 'Project container successfully initialized. Awaiting specialist interactions and milestone configurations.'
+  createProject(projectData: any): Observable<Project> {
+    const currentUser = this.authService.currentUser;
+    const entrepreneurId = currentUser?.id || 'unknown';
+
+    // Map standard form controls or default values into CreateProjectRequest
+    const payload = {
+      title: projectData.title,
+      description: projectData.description,
+      sector: projectData.sector,
+      country: projectData.country || '',
+      countryCode: projectData.countryCode || '',
+      region: projectData.region || '',
+      keyword: projectData.keyword || '',
+      founderExperienceYears: Number(projectData.founderExperienceYears || 0),
+      fundingRounds: Number(projectData.fundingRounds || 0),
+      teamSize: Number(projectData.teamSize || 0),
+      marketSizeBillion: Number(projectData.marketSizeBillion || 0),
+      marketGrowthRatePercent: Number(projectData.marketGrowthRatePercent || 0),
+      productTractionUsers: Number(projectData.productTractionUsers || 0),
+      burnRateMillion: Number(projectData.burnRateMillion || 0),
+      revenueMillion: Number(projectData.revenueMillion || 0),
+      runwayMonths: Number(projectData.runwayMonths || 0),
+      founderBackground: projectData.founderBackground || '',
+      competitionLevel: projectData.competitionLevel || '',
+      searchTrendScore: Number(projectData.searchTrendScore || 0),
+      viewsWorldRank: Number(projectData.viewsWorldRank || 0),
+      opinions: projectData.opinions || ''
     };
-    const current = this.projectsSubject.value;
-    this.projectsSubject.next([...current, newProject]);
-    return of(newProject).pipe(delay(600));
+
+    return this.http.post<any>(`${this.baseUrl}/${entrepreneurId}`, payload).pipe(
+      catchError(() => {
+        // TODO backend: remove local fallback after project creation endpoint is always available.
+        const localProject = this.mapResponseToProject({
+          ...payload,
+          id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
+          entrepreneurId,
+          projectStatus: 'DRAFT',
+          createdAt: new Date().toISOString()
+        });
+        this.writeLocalProjects([...this.readLocalProjects(), localProject]);
+        return of(localProject);
+      }),
+      map(res => this.mapResponseToProject(res)),
+      tap(newProj => {
+        const current = this.projectsSubject.value;
+        this.projectsSubject.next([...current, newProj]);
+      })
+    );
   }
 
-  updateProject(id: string, updates: Partial<Project>): Observable<Project | undefined> {
-    let updatedProj: Project | undefined;
-    const current = this.projectsSubject.value.map(p => {
-      if (p.id === id) {
-        updatedProj = { 
-          ...p, 
-          ...updates,
-          updatedAt: new Date().toISOString().split('T')[0]
-        };
-        return updatedProj;
-      }
-      return p;
-    });
-    this.projectsSubject.next(current);
-    return of(updatedProj ? this.populateSpecialist(updatedProj) : undefined).pipe(delay(500));
+  updateProject(id: string, updates: any): Observable<Project | undefined> {
+    const payload = {
+      title: updates.title,
+      description: updates.description,
+      sector: updates.sector,
+      country: updates.country || '',
+      countryCode: updates.countryCode || '',
+      region: updates.region || '',
+      keyword: updates.keyword || '',
+      founderExperienceYears: Number(updates.founderExperienceYears || 0),
+      fundingRounds: Number(updates.fundingRounds || 0),
+      teamSize: Number(updates.teamSize || 0),
+      marketSizeBillion: Number(updates.marketSizeBillion || 0),
+      marketGrowthRatePercent: Number(updates.marketGrowthRatePercent || 0),
+      productTractionUsers: Number(updates.productTractionUsers || 0),
+      burnRateMillion: Number(updates.burnRateMillion || 0),
+      revenueMillion: Number(updates.revenueMillion || 0),
+      runwayMonths: Number(updates.runwayMonths || 0),
+      founderBackground: updates.founderBackground || '',
+      competitionLevel: updates.competitionLevel || '',
+      searchTrendScore: Number(updates.searchTrendScore || 0),
+      viewsWorldRank: Number(updates.viewsWorldRank || 0),
+      opinions: updates.opinions || ''
+    };
+
+    return this.http.put<any>(`${this.baseUrl}/${id}`, payload).pipe(
+      catchError(() => {
+        // TODO backend: remove local fallback after project update endpoint is always available.
+        const projects = this.readLocalProjects();
+        const existing = projects.find(project => project.id === id);
+        if (!existing) {
+          throw new Error('Project not found');
+        }
+        const updated = this.mapResponseToProject({ ...existing, ...payload, id });
+        this.writeLocalProjects(projects.map(project => project.id === id ? updated : project));
+        return of(updated);
+      }),
+      map(res => this.mapResponseToProject(res)),
+      tap(updatedProj => {
+        const current = this.projectsSubject.value.map(p => p.id === id ? updatedProj : p);
+        this.projectsSubject.next(current);
+      })
+    );
+  }
+
+  submitProject(id: string): Observable<Project> {
+    return this.http.put<any>(`${this.baseUrl}/${id}/submit`, {}).pipe(
+      catchError(() => {
+        // TODO backend: remove local fallback after submit endpoint is always available.
+        const projects = this.readLocalProjects();
+        const existing = projects.find(project => project.id === id);
+        if (!existing) {
+          throw new Error('Project not found');
+        }
+        const updated = this.mapResponseToProject({ ...existing, projectStatus: 'SUBMITTED' });
+        this.writeLocalProjects(projects.map(project => project.id === id ? updated : project));
+        return of(updated);
+      }),
+      map(res => this.mapResponseToProject(res)),
+      tap(updatedProj => {
+        const current = this.projectsSubject.value.map(p => p.id === id ? updatedProj : p);
+        this.projectsSubject.next(current);
+      })
+    );
   }
 
   deleteProject(id: string): Observable<boolean> {
-    const current = this.projectsSubject.value;
-    this.projectsSubject.next(current.filter(p => p.id !== id));
-    return of(true).pipe(delay(400));
+    return this.http.delete(`${this.baseUrl}/${id}`, { responseType: 'text' }).pipe(
+      catchError(() => {
+        // TODO backend: remove local fallback after delete endpoint is always available.
+        this.writeLocalProjects(this.readLocalProjects().filter(project => project.id !== id));
+        return of('');
+      }),
+      map(() => true),
+      tap(() => {
+        const current = this.projectsSubject.value;
+        this.projectsSubject.next(current.filter(p => p.id !== id));
+      })
+    );
   }
 
-  private populateSpecialist(project: Project): Project {
-    if (project.assignedSpecialistId) {
-      const specs = [
-        { id: '1', fullName: 'Sarah Jenkins', expertiseDomain: 'AI Engineering', avatarUrl: 'S', hourlyRate: 120, averageRating: 4.9, available: true, skills: [], location: '', languages: [], bio: '', yearsExperience: 5 },
-        { id: '2', fullName: 'David Chen', expertiseDomain: 'Frontend Architecture', avatarUrl: 'D', hourlyRate: 95, averageRating: 4.8, available: true, skills: [], location: '', languages: [], bio: '', yearsExperience: 6 },
-        { id: '3', fullName: 'Elena Rodriguez', expertiseDomain: 'Cloud DevOps', avatarUrl: 'E', hourlyRate: 110, averageRating: 5.0, available: false, skills: [], location: '', languages: [], bio: '', yearsExperience: 7 },
-        { id: '4', fullName: 'Marcus Williams', expertiseDomain: 'Backend Development', avatarUrl: 'M', hourlyRate: 105, averageRating: 4.7, available: true, skills: [], location: '', languages: [], bio: '', yearsExperience: 4 },
-        { id: '5', fullName: 'Yuki Tanaka', expertiseDomain: 'UI/UX Design', avatarUrl: 'Y', hourlyRate: 90, averageRating: 4.9, available: true, skills: [], location: '', languages: [], bio: '', yearsExperience: 5 },
-        { id: '6', fullName: 'Omar Hassan', expertiseDomain: 'AI Engineering', avatarUrl: 'O', hourlyRate: 130, averageRating: 4.9, available: true, skills: [], location: '', languages: [], bio: '', yearsExperience: 8 }
-      ];
-      const found = specs.find(s => s.id === project.assignedSpecialistId);
-      if (found) {
-        project.assignedSpecialist = found as any;
-      }
+  private readLocalProjects(): Project[] {
+    try {
+      return JSON.parse(localStorage.getItem(this.storageKey) || '[]') as Project[];
+    } catch {
+      return [];
     }
-    return project;
   }
+
+  private writeLocalProjects(projects: Project[]) {
+    localStorage.setItem(this.storageKey, JSON.stringify(projects));
+  }
+
 }
+

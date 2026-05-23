@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
+import { authGuard, dashboardRedirectGuard, roleGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadComponent: () => import('./pages/welcome/welcome').then(m => m.Welcome)
+    loadComponent: () => import('./pages/landing/landing').then(m => m.LandingPage)
   },
   {
     path: 'login',
@@ -15,28 +16,73 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/auth/register/register').then(m => m.Register)
   },
   {
+    path: 'forgot-password',
+    loadComponent: () => import('./pages/auth/forgot-password/forgot-password').then(m => m.ForgotPassword)
+  },
+  {
     path: '',
     loadComponent: () => import('./layout/main-layout').then(m => m.MainLayout),
+    canActivate: [authGuard],
     children: [
-      { path: 'dashboard', loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
-      { path: 'dashboard/entrepreneur', loadComponent: () => import('./pages/dashboard/entrepreneur/entrepreneur-dashboard').then(m => m.EntrepreneurDashboard) },
-      { path: 'dashboard/specialist', loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
+      { path: 'dashboard', canActivate: [dashboardRedirectGuard], loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
+      { path: 'dashboard/entrepreneur', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/dashboard/entrepreneur/entrepreneur-dashboard').then(m => m.EntrepreneurDashboard) },
+      { path: 'dashboard/specialist', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
+      { path: 'admin', canActivate: [roleGuard], data: { roles: ['admin'] }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/users', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'users' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/projects', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'projects' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/specialists', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'specialists' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/entrepreneurs', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'entrepreneurs' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/complaints', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'complaints' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/reports', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'reports' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/ai-models', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'ml_models' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
 
-      { path: 'marketplace', loadComponent: () => import('./pages/marketplace/marketplace').then(m => m.Marketplace) },
-      { path: 'chat', loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
+      { path: 'marketplace', redirectTo: 'specialists', pathMatch: 'full' },
+      { path: 'chat', redirectTo: 'conversations', pathMatch: 'full' },
+      { path: 'conversations', canActivate: [roleGuard], data: { roles: ['entrepreneur', 'specialist'] }, loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
 
-      { path: 'specialists', loadComponent: () => import('./pages/specialists/specialist-list/specialist-list').then(m => m.SpecialistList) },
-      { path: 'specialists/new', loadComponent: () => import('./pages/specialists/specialist-form/specialist-form').then(m => m.SpecialistForm) },
-      { path: 'specialists/:id', loadComponent: () => import('./pages/specialists/specialist-details/specialist-details').then(m => m.SpecialistDetails) },
-      { path: 'specialists/:id/edit', loadComponent: () => import('./pages/specialists/specialist-form/specialist-form').then(m => m.SpecialistForm) },
+      { path: 'specialists', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/specialists/specialist-list/specialist-list').then(m => m.SpecialistList) },
+      { path: 'specialists/:id', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/specialists/specialist-details/specialist-details').then(m => m.SpecialistDetails) },
 
-      { path: 'projects', loadComponent: () => import('./pages/projects/project-list/project-list').then(m => m.ProjectList) },
-      { path: 'projects/create', loadComponent: () => import('./pages/projects/project-form/project-form').then(m => m.ProjectForm) },
-      { path: 'projects/:id', loadComponent: () => import('./pages/projects/project-details/project-details').then(m => m.ProjectDetails) },
-      { path: 'projects/:id/edit', loadComponent: () => import('./pages/projects/project-form/project-form').then(m => m.ProjectForm) },
+      { path: 'projects', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/projects/project-list/project-list').then(m => m.ProjectList) },
+      { path: 'projects/create', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/projects/project-form/project-form').then(m => m.ProjectForm) },
+      { path: 'projects/:id', canActivate: [roleGuard], data: { roles: ['entrepreneur', 'specialist'] }, loadComponent: () => import('./pages/projects/project-details/project-details').then(m => m.ProjectDetails) },
+      { path: 'projects/:id/edit', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/projects/project-form/project-form').then(m => m.ProjectForm) },
+      { path: 'projects/:id/reports', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/reports/report-list/report-list').then(m => m.ReportList) },
+      { path: 'projects/:id/specialist-recommendations', canActivate: [roleGuard], data: { roles: ['entrepreneur'], title: 'Specialist Recommendations', kicker: 'Specialists', description: 'Backend-driven specialist matches for this project.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'projects/:id/analysis/business-idea', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/analysis/business-idea-analysis/business-idea-analysis').then(m => m.BusinessIdeaAnalysis) },
 
-      { path: 'profile/entrepreneur', loadComponent: () => import('./pages/profile/entrepreneur-profile/entrepreneur-profile').then(m => m.EntrepreneurProfile) },
-      { path: 'profile/specialist', loadComponent: () => import('./pages/profile/specialist-profile/specialist-profile').then(m => m.SpecialistProfile) }
+      { path: 'analysis/business-idea', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/analysis/business-idea-analysis/business-idea-analysis').then(m => m.BusinessIdeaAnalysis) },
+      { path: 'analysis/business-idea/new', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/analysis/business-idea-analysis-form/business-idea-analysis-form').then(m => m.BusinessIdeaAnalysisForm) },
+      { path: 'analysis/business-idea/:id/edit', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/analysis/business-idea-analysis-form/business-idea-analysis-form').then(m => m.BusinessIdeaAnalysisForm) },
+      { path: 'analysis/market', canActivate: [roleGuard], data: { roles: ['entrepreneur'], title: 'Market Analysis', kicker: 'AI Analysis', description: 'Market size, growth, competition, trend, geographic score, and data-source outputs.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'analysis/competitors', canActivate: [roleGuard], data: { roles: ['entrepreneur'], title: 'Competitor Analysis', kicker: 'AI Analysis', description: 'Competitor strength, weakness, share, and pricing position outputs.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'analysis/sentiment', canActivate: [roleGuard], data: { roles: ['entrepreneur'], title: 'Sentiment Analysis', kicker: 'AI Analysis', description: 'Review sentiment, score, rating count, confidence, and model metadata.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'recommendations', canActivate: [roleGuard], data: { roles: ['entrepreneur'], title: 'Recommendations', kicker: 'AI Recommendations', description: 'AI-generated recommendations and priorities will appear here.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'reports', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/reports/report-list/report-list').then(m => m.ReportList) },
+      { path: 'reports/new', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/reports/report-form/report-form').then(m => m.ReportForm) },
+      { path: 'reports/:id/edit', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/reports/report-form/report-form').then(m => m.ReportForm) },
+      { path: 'chatbot', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/chatbot/ai-chatbot/ai-chatbot').then(m => m.AiChatbot) },
+      { path: 'chatbot/new', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/chatbot/ai-chatbot-form/ai-chatbot-form').then(m => m.AiChatbotForm) },
+      { path: 'chatbot/:id/edit', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/chatbot/ai-chatbot-form/ai-chatbot-form').then(m => m.AiChatbotForm) },
+      { path: 'knowledge-documents', canActivate: [roleGuard], data: { roles: ['entrepreneur'], title: 'Knowledge Documents', kicker: 'RAG', description: 'Knowledge documents for retrieval augmented generation.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'specialist-recommendations', canActivate: [roleGuard], data: { roles: ['entrepreneur'], title: 'Specialist Recommendations', kicker: 'Specialists', description: 'Recommended specialists ranked by project fit will appear here.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'complaints', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/complaints/complaint-list/complaint-list').then(m => m.ComplaintList) },
+      { path: 'complaints/new', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/complaints/complaint-form/complaint-form').then(m => m.ComplaintForm) },
+      { path: 'complaints/:id/edit', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/complaints/complaint-form/complaint-form').then(m => m.ComplaintForm) },
+
+      { path: 'specialist/profile', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/profile/specialist-profile/specialist-profile').then(m => m.SpecialistProfile) },
+      { path: 'specialist/availability', canActivate: [roleGuard], data: { roles: ['specialist'], title: 'Availability Management', kicker: 'Specialist', description: 'Manage available dates, time windows, session limits, and status.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'specialist/assigned-projects', canActivate: [roleGuard], data: { roles: ['specialist'], title: 'Assigned Projects', kicker: 'Specialist', description: 'Assigned and recommended projects will appear when backend specialist assignment endpoints are available.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'specialist/conversations', redirectTo: 'conversations', pathMatch: 'full' },
+      { path: 'specialist/evaluations', canActivate: [roleGuard], data: { roles: ['specialist'], title: 'Evaluations', kicker: 'Specialist', description: 'Entrepreneur evaluations and review history.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+
+      { path: 'profile/entrepreneur', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/profile/entrepreneur-profile/entrepreneur-profile').then(m => m.EntrepreneurProfile) },
+      { path: 'profile/specialist', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/profile/specialist-profile/specialist-profile').then(m => m.SpecialistProfile) },
+      { path: 'profile', data: { title: 'Profile', kicker: 'User', description: 'General profile space for users without a role-specific dashboard.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'settings', data: { title: 'Settings', kicker: 'User', description: 'Account settings will appear here when backend preferences are available.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'notifications', data: { title: 'Notifications', kicker: 'User', description: 'Notifications stay empty until a backend notification source exists.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) }
     ]
-  }
+  },
+  { path: '**', loadComponent: () => import('./pages/errors/not-found').then(m => m.NotFound) }
 ];
+

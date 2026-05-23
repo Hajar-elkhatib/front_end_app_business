@@ -1,0 +1,63 @@
+<section class="crud-page">
+  <header class="crud-header">
+    <div>
+      <p class="kicker">Chatbot / RAG</p>
+      <h1>AI Assistant</h1>
+      <p>Create, update, and manage project-aware AI assistant chats.</p>
+    </div>
+    <a routerLink="/chatbot/new" class="btn btn-indigo">New AI Chat</a>
+  </header>
+
+  <div class="crud-toolbar">
+    <label>
+      <span>Chat type</span>
+      <select [(ngModel)]="typeFilter" (ngModelChange)="applyFilters()" class="input">
+        <option value="all">All types</option>
+        <option value="General">General</option>
+        <option value="RAG">RAG</option>
+        <option value="Project">Project</option>
+        <option value="Analysis">Analysis</option>
+      </select>
+    </label>
+    <button class="btn btn-secondary" type="button" (click)="loadChats()">Refresh</button>
+  </div>
+
+  <div *ngIf="isLoading" class="state-card">
+    <div class="spinner"></div>
+    <p>Loading AI chats...</p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredChats.length === 0" class="state-card">
+    <h2>{{query ? 'No AI chats match your search' : 'No AI chats yet'}}</h2>
+    <p>{{query ? 'Try another search term or clear the search bar.' : 'Create a chat shell now. AI responses stay empty until the backend chat endpoint is available.'}}</p>
+    <a routerLink="/chatbot/new" class="btn btn-indigo">Create AI Chat</a>
+  </div>
+
+  <div *ngIf="!isLoading && filteredChats.length > 0" class="crud-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Chat</th>
+          <th>Project</th>
+          <th>Type</th>
+          <th>Context</th>
+          <th>Created</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let chat of filteredChats">
+          <td><strong>{{chat.title}}</strong><span>AI responses are backend-driven.</span></td>
+          <td>{{chat.projectId || 'Not linked'}}</td>
+          <td><span class="status-pill">{{chat.chatType || 'General'}}</span></td>
+          <td>{{chat.contextType || 'Project'}}</td>
+          <td>{{chat.createdAt | date:'mediumDate'}}</td>
+          <td class="actions">
+            <a [routerLink]="['/chatbot', chat.id, 'edit']" class="btn btn-secondary text-xs">Edit</a>
+            <button type="button" class="btn btn-secondary text-xs danger" (click)="deleteChat(chat)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,16 +1,35 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { Project } from '../../../models/project.model';
+import { ProjectService } from '../../../services/project.service';
 
 @Component({
   selector: 'app-specialist-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './specialist-dashboard.html',
   styleUrls: ['./specialist-dashboard.css']
 })
-export class SpecialistDashboard {
-  activeMissions = [
-    { project: 'Nexus E-commerce', client: 'John Smith', role: 'Frontend Dev', deadline: 'May 30', status: 'Active', statusClass: 'badge-progress' },
-    { project: 'AI Marketing Tool', client: 'Sarah Lee', role: 'ML Engineer', deadline: 'Jun 15', status: 'Review', statusClass: 'badge-improving' },
-  ];
+export class SpecialistDashboard implements OnInit {
+  private projectService = inject(ProjectService);
+  private cdr = inject(ChangeDetectorRef);
+
+  assignedProjects: Project[] = [];
+  isLoading = true;
+
+  ngOnInit() {
+    this.projectService.getProjects().subscribe({
+      next: projects => {
+        this.assignedProjects = projects;
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.assignedProjects = [];
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
 }
