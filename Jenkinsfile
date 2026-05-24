@@ -46,6 +46,11 @@ pipeline {
                 sh "docker tag ${IMAGE}:${TAG} ${IMAGE}:latest"
             }
         }
+        stage('Trivy Scan') {
+            steps {
+               sh "trivy image ${IMAGE}:${TAG}"
+            }
+        }
 
         stage('Push Docker Hub') {
             steps {
