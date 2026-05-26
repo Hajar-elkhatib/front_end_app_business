@@ -50,9 +50,9 @@ export class EmptyWorkspacePage implements OnInit {
 
   title = 'Workspace';
   kicker = 'Workspace';
-  description = 'This page is prepared for backend-driven data.';
+  description = 'This workspace is ready for your data.';
   emptyTitle = 'No data available';
-  emptyMessage = 'The frontend route, layout, and service boundary are ready. Data will appear when the matching backend endpoint is exposed.';
+  emptyMessage = 'Information will appear here when it becomes available.';
   backLink = '';
   searchQuery = '';
 

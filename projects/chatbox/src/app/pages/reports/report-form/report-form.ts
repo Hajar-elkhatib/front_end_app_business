@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ReportService } from '../../../services/report.service';
+import { ProjectService } from '../../../services/project.service';
+import { Project } from '../../../models/project.model';
 
 @Component({
   selector: 'app-report-form',
@@ -16,12 +18,14 @@ export class ReportForm implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private reportService = inject(ReportService);
+  private projectService = inject(ProjectService);
   private cdr = inject(ChangeDetectorRef);
 
   reportId = '';
   isEditMode = false;
   isLoading = false;
   isSaving = false;
+  projects: Project[] = [];
 
   form = this.fb.group({
     projectId: ['', Validators.required],
@@ -35,6 +39,17 @@ export class ReportForm implements OnInit {
   });
 
   ngOnInit() {
+    this.projectService.getProjects().subscribe({
+      next: projects => {
+        this.projects = projects || [];
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.projects = [];
+        this.cdr.markForCheck();
+      }
+    });
+
     const projectId = this.route.snapshot.queryParamMap.get('projectId');
     if (projectId) {
       this.form.patchValue({ projectId });
@@ -105,7 +120,7 @@ export class ReportForm implements OnInit {
       error: () => {
         this.isSaving = false;
         this.cdr.markForCheck();
-        alert('Report could not be saved.');
+        alert('The report could not be saved. Please try again.');
       }
     });
   }

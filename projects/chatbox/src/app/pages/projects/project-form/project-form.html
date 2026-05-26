@@ -6,15 +6,15 @@
         <line x1="19" y1="12" x2="5" y2="12" />
         <polyline points="12 19 5 12 12 5" />
       </svg>
-      {{isEditMode ? 'Back to Project Details' : 'Back to Projects'}}
+      {{isEditMode ? 'Back to Project' : 'Back to Projects'}}
     </a>
   </div>
 
   <div class="pf-container">
     <div class="card glass pf-card">
       <div class="pf-card-header">
-        <h2>{{isEditMode ? 'Modify Project Parameters' : 'Deploy New Project Container'}}</h2>
-        <p>{{isEditMode ? 'Update project fields used by the backend validation models.' : 'Create a project with the business, market, and founder inputs needed for validation.'}}</p>
+        <h2>{{isEditMode ? 'Edit Project' : 'Create New Project'}}</h2>
+        <p>{{isEditMode ? 'Update the information used by your analyses.' : 'Describe your project, market, and traction to prepare validation.'}}</p>
       </div>
 
       <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="pf-form">
@@ -22,7 +22,7 @@
         <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('title')}">
           <label class="form-label">Project Title</label>
           <input type="text" class="input pf-input" formControlName="title"
-            placeholder="e.g. Nexus Core API Optimization">
+            placeholder="ex. SmartRetail AI">
           <div class="error-msg" *ngIf="isFieldInvalid('title')">
             <span *ngIf="projectForm.get('title')?.errors?.['required']">Project title is required.</span>
             <span *ngIf="projectForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters.</span>
@@ -33,7 +33,7 @@
         <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('description')}">
           <label class="form-label">Project Description</label>
           <textarea rows="5" class="input pf-input" formControlName="description"
-            placeholder="Describe the technical guidelines, deliverables, stack specifications and target milestones..."></textarea>
+            placeholder="Describe the problem, solution, target audience, market, and goals..."></textarea>
           <div class="error-msg" *ngIf="isFieldInvalid('description')">
             <span *ngIf="projectForm.get('description')?.errors?.['required']">A project description is required.</span>
             <span *ngIf="projectForm.get('description')?.errors?.['minlength']">Description must be at least 20
@@ -140,5 +140,5 @@
 
 <div *ngIf="isLoading" class="pf-loading">
   <div class="spinner"></div>
-  <p>Synchronizing project repository form parameters...</p>
+  <p>Loading project form...</p>
 </div>

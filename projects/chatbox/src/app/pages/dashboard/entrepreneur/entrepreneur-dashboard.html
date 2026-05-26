@@ -1,6 +1,6 @@
 <div class="mb-10">
   <h1 class="text-3xl font-semibold mb-2 tracking-tight">Entrepreneur Dashboard</h1>
-  <p class="text-secondary text-sm">Manage the projects loaded from your backend and keep each idea moving.</p>
+  <p class="text-secondary text-sm">Track your projects and keep each idea moving.</p>
 </div>
 
 <!-- Stats Row -->
@@ -53,7 +53,7 @@
       </div>
       <h2 class="font-semibold text-lg text-indigo">Project Readiness</h2>
     </div>
-    <p class="mb-6 max-w-lg text-muted-premium">Your dashboard is connected to the project API. Create and submit projects to unlock analysis workflows as backend data becomes available.</p>
+    <p class="mb-6 max-w-lg text-muted-premium">Create and submit projects to unlock analyses, recommendations, and reports.</p>
     <div class="flex gap-3">
       <button class="btn btn-indigo shadow-md" (click)="openProjects()">Review Projects</button>
       <button class="btn btn-secondary" (click)="dismissReadiness()">Dismiss</button>
@@ -74,7 +74,7 @@
 
   <div *ngIf="isLoading" class="card dashboard-state text-center">
     <div class="spinner"></div>
-    <p class="text-muted text-sm">Loading projects from the backend...</p>
+    <p class="text-muted text-sm">Loading your projects...</p>
   </div>
 
   <div *ngIf="!isLoading && recentProjects.length === 0" class="card dashboard-state text-center">

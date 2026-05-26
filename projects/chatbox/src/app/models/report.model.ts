@@ -4,9 +4,10 @@ export interface Report {
   title: string;
   summary: string;
   reportType: string;
-  content: string;
+  content?: string;
   pdfUrl?: string;
-  generatedBy: string;
+  generatedBy?: string;
+  region?: string;
   modelVersion?: string;
   createdAt: Date | string;
 }

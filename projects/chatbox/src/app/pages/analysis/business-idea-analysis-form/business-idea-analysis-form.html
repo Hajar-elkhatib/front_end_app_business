@@ -5,7 +5,7 @@
     <header>
       <p class="kicker">AI Analysis</p>
       <h1>{{isEditMode ? 'Edit Business Idea Analysis' : 'Create Business Idea Analysis'}}</h1>
-      <p>{{isEditMode ? 'Update the stored analysis record.' : 'Create a manual record. Generated predictions should come from the backend model endpoint.'}}</p>
+      <p>{{isEditMode ? 'Update the analysis information.' : 'Prepare a clear summary for your project.'}}</p>
     </header>
 
     <div *ngIf="isLoading" class="loading-state">
@@ -15,9 +15,9 @@
 
     <form *ngIf="!isLoading" [formGroup]="form" (ngSubmit)="save()">
       <label>
-        <span>Project ID</span>
-        <input class="input" type="text" formControlName="projectId" placeholder="Project id">
-        <small *ngIf="isInvalid('projectId')">Project ID is required.</small>
+        <span>Project</span>
+        <input class="input" type="text" formControlName="projectId" placeholder="Selected project">
+        <small *ngIf="isInvalid('projectId')">Select a project.</small>
       </label>
 
       <div class="form-grid">
@@ -51,7 +51,7 @@
         </label>
         <label>
           <span>Model name</span>
-          <input class="input" type="text" formControlName="modelName" placeholder="Empty until backend returns it">
+          <input class="input" type="text" formControlName="modelName" placeholder="Method name">
         </label>
       </div>
 
@@ -77,23 +77,23 @@
         </label>
         <label>
           <span>Model version</span>
-          <input class="input" type="text" formControlName="modelVersion" placeholder="Empty until backend returns it">
+          <input class="input" type="text" formControlName="modelVersion" placeholder="Optional version">
         </label>
       </div>
 
       <label>
         <span>Strengths</span>
-        <textarea class="input" rows="3" formControlName="strengths" placeholder="Strengths returned by backend or entered manually"></textarea>
+        <textarea class="input" rows="3" formControlName="strengths" placeholder="Identified strengths"></textarea>
       </label>
 
       <label>
         <span>Weaknesses</span>
-        <textarea class="input" rows="3" formControlName="weaknesses" placeholder="Weaknesses returned by backend or entered manually"></textarea>
+        <textarea class="input" rows="3" formControlName="weaknesses" placeholder="Identified weaknesses"></textarea>
       </label>
 
       <label>
         <span>Recommendation summary</span>
-        <textarea class="input" rows="3" formControlName="recommendationsSummary" placeholder="No recommendation until backend or user provides it"></textarea>
+        <textarea class="input" rows="3" formControlName="recommendationsSummary" placeholder="Main recommendations"></textarea>
       </label>
 
       <label>

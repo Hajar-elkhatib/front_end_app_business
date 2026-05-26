@@ -5,7 +5,7 @@
     <header>
       <p class="kicker">Chatbot / RAG</p>
       <h1>{{isEditMode ? 'Edit AI Chat' : 'Create AI Chat'}}</h1>
-      <p>{{isEditMode ? 'Update the chat shell and project context.' : 'Create a chat shell. Backend AI responses will appear when endpoints are available.'}}</p>
+      <p>{{isEditMode ? 'Update the conversation.' : 'Create a conversation to chat with the assistant.'}}</p>
     </header>
 
     <div *ngIf="isLoading" class="loading-state">
@@ -22,9 +22,9 @@
 
       <div class="form-grid">
         <label>
-          <span>Project ID</span>
-          <input class="input" type="text" formControlName="projectId" placeholder="Project id">
-          <small *ngIf="isInvalid('projectId')">Project ID is required.</small>
+          <span>Project</span>
+          <input class="input" type="text" formControlName="projectId" placeholder="Selected project">
+          <small *ngIf="isInvalid('projectId')">Select a project.</small>
         </label>
 
         <label>
@@ -49,7 +49,7 @@
       </label>
 
       <div class="note-card">
-        This screen stores the chat container only. Prompts and AI responses should come from backend Chat, AIRequest, and AIResponse endpoints.
+        Messages are available from the AI Assistant.
       </div>
 
       <div class="actions">

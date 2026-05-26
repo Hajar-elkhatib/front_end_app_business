@@ -1,68 +1,134 @@
-<section class="crud-page">
-  <header class="crud-header">
+<section class="ai-page">
+  <header class="ai-header">
     <div>
       <p class="kicker">AI Analysis</p>
-      <h1>Business Idea Analysis</h1>
-      <p>Create, update, and review business idea analysis records.</p>
+      <h1>Project Validation</h1>
+      <p>Get a clear view of your project potential, market attractiveness, and customer signals.</p>
     </div>
-    <a [routerLink]="['/analysis/business-idea/new']" [queryParams]="projectId ? { projectId: projectId } : null" class="btn btn-indigo">New Analysis</a>
+    <div class="header-actions">
+      <a routerLink="/projects" class="btn btn-secondary">My Projects</a>
+      <button class="btn btn-indigo" type="button" (click)="runAll()" [disabled]="!projectId || isBusinessLoading">
+        {{isBusinessLoading ? 'Analyzing...' : 'Run Analysis'}}
+      </button>
+    </div>
   </header>
 
-  <div class="crud-toolbar">
-    <label>
-      <span>Label</span>
-      <select [(ngModel)]="labelFilter" (ngModelChange)="applyFilters()" class="input">
-        <option value="all">All labels</option>
-        <option value="Promising">Promising</option>
-        <option value="Needs Review">Needs Review</option>
-        <option value="High Risk">High Risk</option>
-        <option value="Unknown">Unknown</option>
-      </select>
-    </label>
-    <button class="btn btn-secondary" type="button" (click)="loadAnalyses()">Refresh</button>
-  </div>
+  <section class="state-card" *ngIf="!projectId">
+    <h2>Select a project to run the analysis.</h2>
+    <p>Choose the project you want to validate, then launch the analysis.</p>
+    <select class="input" [(ngModel)]="projectId" (ngModelChange)="onProjectChange()" [disabled]="isProjectsLoading">
+      <option value="">{{isProjectsLoading ? 'Loading projects...' : 'Choose a project'}}</option>
+      <option *ngFor="let project of projects" [value]="project.id">{{project.title}}</option>
+    </select>
+  </section>
 
-  <div *ngIf="isLoading" class="state-card">
-    <div class="spinner"></div>
-    <p>Loading business idea analyses...</p>
-  </div>
+  <div *ngIf="errorMessage" class="alert-card">{{errorMessage}}</div>
 
-  <div *ngIf="!isLoading && filteredAnalyses.length === 0" class="state-card">
-    <h2>{{query ? 'No analyses match your search' : 'No business idea analyses yet'}}</h2>
-    <p>{{query ? 'Try another search term or clear the search bar.' : 'Create an analysis record or generate one later when the AI backend endpoint is available.'}}</p>
-    <a [routerLink]="['/analysis/business-idea/new']" [queryParams]="projectId ? { projectId: projectId } : null" class="btn btn-indigo">Create Analysis</a>
-  </div>
+  <ng-container *ngIf="projectId">
+    <section class="score-shell">
+      <div class="final-score">
+        <span>Final Score</span>
+        <strong>{{displayedFinalScore() | number:'1.0-2'}}</strong>
+        <small>{{displayedFinalLabel()}}</small>
+      </div>
+      <div class="score-breakdown">
+        <h2>Score Composition</h2>
+        <p>The score combines startup potential, market dynamics, customer feedback, and other available AI signals.</p>
+        <div class="score-row" *ngFor="let part of scoreParts()">
+          <span>{{part.label}}</span>
+          <div><i [style.width.%]="part.value"></i></div>
+          <strong>{{part.value | number:'1.0-1'}}</strong>
+        </div>
+        <div class="empty-inline" *ngIf="scoreParts().length === 0">No analysis is available for this project yet. Click Run Analysis.</div>
+      </div>
+      <button class="btn btn-indigo" type="button" (click)="runBusinessValidation()" [disabled]="isBusinessLoading">
+        {{isBusinessLoading ? 'Updating...' : 'Refresh Score'}}
+      </button>
+    </section>
 
-  <div *ngIf="!isLoading && filteredAnalyses.length > 0" class="crud-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Project</th>
-          <th>Final label</th>
-          <th>Score</th>
-          <th>Confidence</th>
-          <th>Model</th>
-          <th>Created</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let analysis of filteredAnalyses">
-          <td>
-            <strong>{{analysis.projectId}}</strong>
-            <span>{{analysis.recommendationsSummary || 'No recommendation summary available'}}</span>
-          </td>
-          <td><span class="status-pill">{{analysis.finalLabel || analysis.predictionLabel || 'Unknown'}}</span></td>
-          <td>{{analysis.finalScore || 0}}</td>
-          <td>{{analysis.confidenceScore || 0}}</td>
-          <td>{{analysis.modelName || 'Not provided'}}</td>
-          <td>{{analysis.createdAt | date:'mediumDate'}}</td>
-          <td class="actions">
-            <a [routerLink]="['/analysis/business-idea', analysis.id, 'edit']" class="btn btn-secondary text-xs">Edit</a>
-            <button type="button" class="btn btn-secondary text-xs danger" (click)="deleteAnalysis(analysis)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <section class="analysis-grid">
+      <article class="analysis-card">
+        <div class="card-head">
+          <div>
+            <p class="kicker">Startup Success</p>
+            <h2>{{startupSuccess?.successProbability || businessValidation?.startupSuccessScore || 0 | number:'1.0-1'}}%</h2>
+          </div>
+          <button class="btn btn-secondary" type="button" (click)="runStartupSuccess()" [disabled]="isStartupLoading">
+            {{isStartupLoading ? 'Analyzing...' : 'Refresh'}}
+          </button>
+        </div>
+        <p>{{startupSuccess?.predictionLabel || businessValidation?.predictionLabel || 'No result is available yet.'}}</p>
+      </article>
+
+      <article class="analysis-card">
+        <div class="card-head">
+          <div>
+            <p class="kicker">Market Analysis</p>
+            <h2>{{marketAnalysis?.priority || 'Pending'}}</h2>
+          </div>
+          <button class="btn btn-secondary" type="button" (click)="runMarketAnalysis()" [disabled]="isMarketLoading">
+            {{isMarketLoading ? 'Analyzing...' : 'Refresh'}}
+          </button>
+        </div>
+        <p>Attractiveness: {{marketScore() | number:'1.0-1'}} | Confidence: {{marketAnalysis?.confidenceScore || 0 | number:'1.0-1'}}</p>
+        <p>Trend: {{marketAnalysis?.trendScore || 0 | number:'1.0-1'}} | Geographic fit: {{marketAnalysis?.geographicFitScore || marketAnalysis?.geographicScore || 0 | number:'1.0-1'}}</p>
+      </article>
+
+      <article class="analysis-card sentiment-card">
+        <div class="card-head">
+          <div>
+            <p class="kicker">Customer Feedback</p>
+            <h2>{{sentimentAnalysis?.sentimentLabel || sentimentAnalysis?.overallLabel || 'Pending'}}</h2>
+          </div>
+          <button class="btn btn-secondary" type="button" (click)="runSentimentAnalysis()" [disabled]="isSentimentLoading">
+            {{isSentimentLoading ? 'Analyzing...' : 'Analyze'}}
+          </button>
+        </div>
+        <textarea class="input" rows="4" [(ngModel)]="feedbackText" placeholder="Paste a real customer review, market comment, or field note."></textarea>
+        <input class="input" [(ngModel)]="feedbackSource" placeholder="Feedback source, e.g. pilot customers">
+        <p>Score: {{sentimentAnalysis?.sentimentScore || sentimentAnalysis?.averageSentimentScore || businessValidation?.sentimentScore || 0 | number:'1.0-1'}}</p>
+      </article>
+
+      <article class="analysis-card recommendations-card">
+        <div class="card-head">
+          <div>
+            <p class="kicker">Recommended Specialists</p>
+            <h2>{{specialistRecommendations.length}}</h2>
+          </div>
+          <button class="btn btn-secondary" type="button" (click)="runSpecialistRecommendations()" [disabled]="isSpecialistsLoading">
+            {{isSpecialistsLoading ? 'Searching...' : 'Find'}}
+          </button>
+        </div>
+        <div class="recommendation-list" *ngIf="specialistRecommendations.length > 0; else noSpecialists">
+          <div *ngFor="let item of specialistRecommendations">
+            <strong>{{item.specialistName || ('Recommended specialist #' + item.rank)}}</strong>
+            <span>{{item.recommendedScore | number:'1.0-1'}}% match</span>
+            <p>{{item.reason || 'This profile matches the project needs.'}}</p>
+          </div>
+        </div>
+        <ng-template #noSpecialists>
+          <p>No recommendation is available yet.</p>
+        </ng-template>
+      </article>
+    </section>
+
+    <section class="text-panels">
+      <article>
+        <h2>Strengths</h2>
+        <p>{{businessValidation?.strengths || 'No strengths identified yet.'}}</p>
+      </article>
+      <article>
+        <h2>Weaknesses</h2>
+        <p>{{businessValidation?.weaknesses || 'No weaknesses identified yet.'}}</p>
+      </article>
+      <article>
+        <h2>Recommendations</h2>
+        <p>{{businessValidation?.recommendationsSummary || businessValidation?.recommendations || 'No recommendation is available yet.'}}</p>
+      </article>
+      <article>
+        <h2>Warnings</h2>
+        <p>{{businessValidation?.warnings || 'No warning reported.'}}</p>
+      </article>
+    </section>
+  </ng-container>
 </section>

@@ -1,17 +1,19 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { Chat, Conversation, ChatMessage } from '../models/chat.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Chat, ChatMessage, Conversation } from '../models/chat.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/chat';
-  private aiAssistantBaseUrl = 'http://localhost:8080/api/chats';
-  private chatStorageKey = 'nexus_local_ai_chats';
+  private chatbotBaseUrl = 'http://localhost:8080/api/chatbot';
+  private conversationBaseUrl = 'http://localhost:8080/api/chat';
+  private aiChatsStorageKey = 'nexus_local_ai_assistant_chats';
+  private aiMessagesStorageKey = 'nexus_local_ai_assistant_messages';
+
   private conversationsSubject = new BehaviorSubject<Conversation[]>([]);
   public conversations$ = this.conversationsSubject.asObservable();
 
@@ -19,145 +21,115 @@ export class ChatService {
   public messages$ = this.messagesSubject.asObservable();
 
   getAiChats(projectId?: string): Observable<Chat[]> {
-    const url = projectId ? `${this.aiAssistantBaseUrl}?projectId=${projectId}` : this.aiAssistantBaseUrl;
-    return this.http.get<Chat[]>(url).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after chatbot/RAG chat list endpoint is available.
-        const chats = this.readLocalChats();
-        return of(projectId ? chats.filter(chat => chat.projectId === projectId) : chats);
-      })
-    );
+    const userId = this.currentUserId();
+    let params = new HttpParams().set('userId', userId);
+    if (projectId) {
+      params = params.set('projectId', projectId);
+    }
+    return this.http.get<Chat[]>(this.chatbotBaseUrl, { params });
   }
 
   getAiChatById(id: string): Observable<Chat> {
-    return this.http.get<Chat>(`${this.aiAssistantBaseUrl}/${id}`).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after chatbot/RAG chat detail endpoint is available.
-        const chat = this.readLocalChats().find(item => item.id === id);
-        if (!chat) {
-          throw new Error('AI chat not found');
-        }
-        return of(chat);
-      })
-    );
+    return this.http.get<Chat>(`${this.chatbotBaseUrl}/chat/${id}`);
   }
 
-  createAiChat(chat: Omit<Chat, 'id' | 'createdAt'>): Observable<Chat> {
-    return this.http.post<Chat>(this.aiAssistantBaseUrl, chat).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after chatbot/RAG chat creation endpoint is available.
-        const newChat: Chat = {
-          ...chat,
-          id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
-          createdAt: new Date().toISOString()
-        };
-        this.writeLocalChats([...this.readLocalChats(), newChat]);
-        return of(newChat);
-      })
-    );
+  createAiChat(chat: Omit<Chat, 'id' | 'createdAt'> & { id?: string }): Observable<Chat> {
+    return this.http.post<Chat>(this.chatbotBaseUrl, chat);
   }
 
   updateAiChat(id: string, data: Partial<Chat>): Observable<Chat> {
-    return this.http.put<Chat>(`${this.aiAssistantBaseUrl}/${id}`, data).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after chatbot/RAG chat update endpoint is available.
-        const chats = this.readLocalChats();
-        const existing = chats.find(chat => chat.id === id);
-        if (!existing) {
-          throw new Error('AI chat not found');
-        }
-        const updated = { ...existing, ...data, id };
-        this.writeLocalChats(chats.map(chat => chat.id === id ? updated : chat));
-        return of(updated);
-      })
-    );
+    return this.http.post<Chat>(this.chatbotBaseUrl, { ...data, id });
   }
 
   deleteAiChat(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.aiAssistantBaseUrl}/${id}`).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after chatbot/RAG chat delete endpoint is available.
-        this.writeLocalChats(this.readLocalChats().filter(chat => chat.id !== id));
-        return of(undefined);
-      })
+    const allMessages = this.readLocalAiMessages();
+    delete allMessages[id];
+    this.writeLocalAiMessages(allMessages);
+    const params = new HttpParams().set('userId', this.currentUserId());
+    return this.http.delete<void>(`${this.chatbotBaseUrl}/${id}`, { params });
+  }
+
+  getAiMessages(chatId: string): Observable<ChatMessage[]> {
+    return this.http.get<ChatMessage[]>(`${this.chatbotBaseUrl}/${chatId}/messages`).pipe(
+      tap(messages => this.messagesSubject.next(messages))
     );
   }
 
+  sendAiMessage(chatId: string, userId: string, message: string): Observable<ChatMessage> {
+    const params = new HttpParams()
+      .set('userId', userId)
+      .set('message', message);
+    return this.http.post<ChatMessage>(`${this.chatbotBaseUrl}/${chatId}/message`, {}, { params });
+  }
+
+  getLocalAiMessages(chatId: string): ChatMessage[] {
+    return this.readLocalAiMessages()[chatId] || [];
+  }
+
+  saveLocalAiMessages(chatId: string, messages: ChatMessage[]) {
+    const allMessages = this.readLocalAiMessages();
+    allMessages[chatId] = messages;
+    this.writeLocalAiMessages(allMessages);
+  }
+
+  checkAiRequestStatus(requestId: string): Observable<string> {
+    return this.http.get(`${this.chatbotBaseUrl}/status/${requestId}`, { responseType: 'text' });
+  }
+
   getConversations(): Observable<Conversation[]> {
-    // TODO backend: expose conversation endpoints for entrepreneurs and specialists.
-    return this.http.get<Conversation[]>(`${this.baseUrl}/conversations`).pipe(
-      catchError(() => of([])),
+    return this.http.get<Conversation[]>(`${this.conversationBaseUrl}/conversations`).pipe(
       tap(conversations => this.conversationsSubject.next(conversations))
     );
   }
 
   getMessages(conversationId: string): Observable<ChatMessage[]> {
-    // TODO backend: expose messages for a conversation.
-    return this.http.get<ChatMessage[]>(`${this.baseUrl}/conversations/${conversationId}/messages`).pipe(
-      catchError(() => of([])),
+    return this.http.get<ChatMessage[]>(`${this.conversationBaseUrl}/conversations/${conversationId}/messages`).pipe(
       tap(messages => this.messagesSubject.next(messages))
     );
   }
 
   sendMessage(conversationId: string, text: string): Observable<ChatMessage> {
-    const payload = { text };
     return this.http.post<ChatMessage>(
-      `${this.baseUrl}/conversations/${conversationId}/messages`,
-      payload
-    ).pipe(
-      tap(message => {
-        const messages = this.messagesSubject.value;
-        this.messagesSubject.next([...messages, message]);
-      })
+      `${this.conversationBaseUrl}/conversations/${conversationId}/messages`,
+      { text }
     );
   }
 
   createConversation(participantIds: string[]): Observable<Conversation> {
-    const payload = { participantIds };
-    return this.http.post<Conversation>(`${this.baseUrl}/conversations`, payload).pipe(
-      tap(conversation => {
-        const conversations = this.conversationsSubject.value;
-        this.conversationsSubject.next([...conversations, conversation]);
-      })
-    );
+    return this.http.post<Conversation>(`${this.conversationBaseUrl}/conversations`, { participantIds });
   }
 
   getConversation(conversationId: string): Observable<Conversation> {
-    return this.http.get<Conversation>(`${this.baseUrl}/conversations/${conversationId}`);
+    return this.http.get<Conversation>(`${this.conversationBaseUrl}/conversations/${conversationId}`);
   }
 
   markAsRead(conversationId: string): Observable<Conversation> {
-    return this.http.post<Conversation>(
-      `${this.baseUrl}/conversations/${conversationId}/mark-read`,
-      {}
-    ).pipe(
-      tap(conversation => {
-        const conversations = this.conversationsSubject.value.map(c =>
-          c.id === conversation.id ? conversation : c
-        );
-        this.conversationsSubject.next(conversations);
-      })
-    );
+    return this.http.post<Conversation>(`${this.conversationBaseUrl}/conversations/${conversationId}/mark-read`, {});
   }
 
   deleteConversation(conversationId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/conversations/${conversationId}`).pipe(
-      tap(() => {
-        const conversations = this.conversationsSubject.value.filter(c => c.id !== conversationId);
-        this.conversationsSubject.next(conversations);
-      })
-    );
+    return this.http.delete<void>(`${this.conversationBaseUrl}/conversations/${conversationId}`);
   }
 
-  private readLocalChats(): Chat[] {
+  private readLocalAiMessages(): Record<string, ChatMessage[]> {
     try {
-      return JSON.parse(localStorage.getItem(this.chatStorageKey) || '[]') as Chat[];
+      return JSON.parse(localStorage.getItem(this.aiMessagesStorageKey) || '{}') as Record<string, ChatMessage[]>;
     } catch {
-      return [];
+      return {};
     }
   }
 
-  private writeLocalChats(chats: Chat[]) {
-    localStorage.setItem(this.chatStorageKey, JSON.stringify(chats));
+  private writeLocalAiMessages(messages: Record<string, ChatMessage[]>) {
+    localStorage.setItem(this.aiMessagesStorageKey, JSON.stringify(messages));
+  }
+
+  private currentUserId(): string {
+    const rawUser = localStorage.getItem('nexus_user');
+    if (!rawUser) return '';
+    try {
+      return JSON.parse(rawUser)?.id || '';
+    } catch {
+      return '';
+    }
   }
 }

@@ -61,8 +61,8 @@ export class ReportList implements OnInit {
         report.title.toLowerCase().includes(this.query) ||
         report.summary.toLowerCase().includes(this.query) ||
         report.reportType.toLowerCase().includes(this.query) ||
-        report.content.toLowerCase().includes(this.query) ||
-        report.generatedBy.toLowerCase().includes(this.query)
+        (report.content || '').toLowerCase().includes(this.query) ||
+        (report.generatedBy || '').toLowerCase().includes(this.query)
       );
     }
     this.filteredReports = results;

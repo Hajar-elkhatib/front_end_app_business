@@ -24,72 +24,72 @@ export class LandingPage {
 
   features = [
     {
-      icon: '🎯',
-      title: 'Prédiction Succès Startup',
-      description: 'Analyse IA de la probabilité de succès de votre projet entrepreneurial'
+      icon: 'AI',
+      title: 'Startup Success Prediction',
+      description: 'AI analysis of your entrepreneurial project success probability'
     },
     {
-      icon: '📊',
-      title: 'Analyse Marché',
-      description: 'Étudiez votre marché, la concurrence et les tendances globales'
+      icon: 'MK',
+      title: 'Market Analysis',
+      description: 'Study your market, competition, and global trends'
     },
     {
-      icon: '💬',
-      title: 'Analyse des Opinions',
-      description: 'Collectez et analysez les feedbacks du marché avec l\'IA'
+      icon: 'FB',
+      title: 'Feedback Analysis',
+      description: 'Collect and analyze market feedback with AI'
     },
     {
-      icon: '🤖',
-      title: 'Chatbot IA',
-      description: 'Discutez avec notre assistant IA spécialisé en entrepreneuriat'
+      icon: 'CH',
+      title: 'AI Chatbot',
+      description: 'Chat with our AI assistant specialized in entrepreneurship'
     },
     {
-      icon: '👥',
-      title: 'Recommandation Spécialistes',
-      description: 'Trouvez les meilleurs spécialistes adaptés à votre projet'
+      icon: 'SP',
+      title: 'Specialist Recommendation',
+      description: 'Find the best specialists for your project'
     },
     {
-      icon: '📄',
-      title: 'Rapports PDF',
-      description: 'Générez des rapports professionnels et téléchargez-les'
+      icon: 'RP',
+      title: 'PDF Reports',
+      description: 'Generate and download professional reports'
     }
   ];
 
   steps = [
     {
       number: 1,
-      title: 'Créez votre projet',
-      description: 'Remplissez les informations de base de votre idée entrepreneuriale'
+      title: 'Create your project',
+      description: 'Fill in the core information about your business idea'
     },
     {
       number: 2,
-      title: 'Lancez l\'analyse IA',
-      description: 'Nos modèles d\'IA analysent votre projet en profondeur'
+      title: 'Run AI analysis',
+      description: 'Our AI models analyze your project in depth'
     },
     {
       number: 3,
-      title: 'Recevez recommandations',
-      description: 'Obtenez des insights, recommandations et rapports détaillés'
+      title: 'Receive recommendations',
+      description: 'Get insights, recommendations, and detailed reports'
     }
   ];
 
   testimonials = [
     {
       name: 'Alice Martin',
-      role: 'Fondatrice - TechStart',
-      text: 'Cette plateforme m\'a aidée à valider mon idée avant d\'investir. Les analyses IA sont précises et actionables.',
+      role: 'Founder - TechStart',
+      text: 'This platform helped me validate my idea before investing. The AI analyses are precise and actionable.',
       rating: 5
     },
     {
       name: 'Jean Dupont',
       role: 'Entrepreneur - InnovateLabs',
-      text: 'L\'accès aux spécialistes recommandés a fait toute la différence. Vraiment recommandé!',
+      text: 'Access to recommended specialists made all the difference. Highly recommended!',
       rating: 5
     },
     {
       name: 'Sophie Bernard',
       role: 'CEO - GrowthHub',
-      text: 'Les rapports générés sont professionnels et complets. Parfait pour les présentations investisseurs.',
+      text: 'The generated reports are professional and complete. Perfect for investor presentations.',
       rating: 5
     }
   ];
@@ -98,42 +98,42 @@ export class LandingPage {
     {
       name: 'Starter',
       price: '29',
-      description: 'Pour commencer',
+      description: 'To get started',
       features: [
-        '5 projets par mois',
-        'Analyses de base',
-        'Chatbot IA limité',
-        'Support email'
+        '5 projects per month',
+        'Basic analyses',
+        'Limited AI chatbot',
+        'Email support'
       ],
-      cta: 'Commencer'
+      cta: 'Get Started'
     },
     {
-      name: 'Professionnel',
+      name: 'Professional',
       price: '99',
-      description: 'Le plus populaire',
+      description: 'Most popular',
       features: [
-        'Projets illimités',
-        'Toutes les analyses',
-        'Chatbot IA illimité',
-        'Recommandations spécialistes',
-        'Rapports premium',
-        'Support prioritaire'
+        'Unlimited projects',
+        'All analyses',
+        'Unlimited AI chatbot',
+        'Specialist recommendations',
+        'Premium reports',
+        'Priority support'
       ],
-      cta: 'Choisir ce plan',
+      cta: 'Choose Plan',
       highlighted: true
     },
     {
       name: 'Enterprise',
       price: 'Custom',
-      description: 'Pour les organisations',
+      description: 'For organizations',
       features: [
-        'Tout de Professionnel',
+        'Everything in Professional',
         'API access',
-        'Intégrations custom',
-        'Compte manager dédié',
-        'Support 24/7'
+        'Custom integrations',
+        'Dedicated account manager',
+        '24/7 support'
       ],
-      cta: 'Contacter'
+      cta: 'Contact Us'
     }
   ];
 }

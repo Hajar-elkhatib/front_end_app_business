@@ -5,7 +5,7 @@
       Back to Projects
     </a>
     <div class="pd-header-actions">
-      <a [routerLink]="['/projects', project.id, 'edit']" class="btn btn-secondary text-sm">Edit Project</a>
+      <a [routerLink]="['/projects', project.id, 'edit']" class="btn btn-secondary text-sm">Edit</a>
       <button (click)="openDeleteModal()" class="btn btn-secondary text-sm btn-delete">Delete</button>
     </div>
   </div>
@@ -22,7 +22,7 @@
       <p class="pd-description">{{project.description}}</p>
       <div class="pd-hero-timestamps">
         <div class="pd-timestamp">
-          <span>Created: {{project.createdAt ? (project.createdAt | date:'mediumDate') : 'No date available'}}</span>
+          <span>Created {{project.createdAt ? (project.createdAt | date:'mediumDate') : 'date unavailable'}}</span>
         </div>
       </div>
     </div>
@@ -31,7 +31,7 @@
   <div class="pd-grid">
     <div class="pd-main-col">
       <div class="pd-card">
-        <h3>Business Inputs</h3>
+        <h3>Project Profile</h3>
         <div class="pd-specs-block">
           <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Country</span><span class="pd-spec-val">{{project.country || '-'}}</span></div>
           <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Region</span><span class="pd-spec-val">{{project.region || '-'}}</span></div>
@@ -43,11 +43,11 @@
       </div>
 
       <div class="pd-card">
-        <h3>Market And Financial Inputs</h3>
+        <h3>Market And Finance</h3>
         <div class="pd-specs-block">
           <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Market size</span><span class="pd-spec-val">{{project.marketSizeBillion || 0}}B</span></div>
-          <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Growth rate</span><span class="pd-spec-val">{{project.marketGrowthRatePercent || 0}}%</span></div>
-          <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Traction users</span><span class="pd-spec-val">{{project.productTractionUsers || 0}}</span></div>
+          <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Growth</span><span class="pd-spec-val">{{project.marketGrowthRatePercent || 0}}%</span></div>
+          <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Users</span><span class="pd-spec-val">{{project.productTractionUsers || 0}}</span></div>
           <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Burn rate</span><span class="pd-spec-val">{{project.burnRateMillion || 0}}M</span></div>
           <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Revenue</span><span class="pd-spec-val">{{project.revenueMillion || 0}}M</span></div>
           <div class="pd-spec-grid-item"><span class="pd-spec-lbl">Runway</span><span class="pd-spec-val">{{project.runwayMonths || 0}} months</span></div>
@@ -55,25 +55,25 @@
       </div>
 
       <div class="pd-card">
-        <h3>Founder Background And Opinions</h3>
+        <h3>Team And Feedback</h3>
         <p class="pd-description">{{project.founderBackground || 'No founder background provided.'}}</p>
-        <p class="pd-description">{{project.opinions || 'No opinions or public feedback provided.'}}</p>
+        <p class="pd-description">{{project.opinions || 'No public or customer feedback provided.'}}</p>
       </div>
     </div>
 
     <div class="pd-side-col">
       <div class="pd-card specialist">
-        <h3>Analysis</h3>
-        <p class="pd-description">AI analysis results are kept on their dedicated pages and stay empty until backend analysis endpoints return data.</p>
+        <h3>AI Analysis</h3>
+        <p class="pd-description">Run a complete validation to see the score, strengths, risks, and recommendations.</p>
         <div class="pd-spec-actions">
-          <a [routerLink]="['/projects', project.id, 'analysis', 'business-idea']" class="btn btn-indigo w-full justify-center text-sm">Business Idea Analysis</a>
-          <a [routerLink]="['/projects', project.id, 'reports']" class="btn btn-secondary w-full justify-center text-sm">Reports</a>
+          <a [routerLink]="['/projects', project.id, 'analysis', 'business-idea']" class="btn btn-indigo w-full justify-center text-sm">Analyze My Project</a>
+          <a [routerLink]="['/projects', project.id, 'reports']" class="btn btn-secondary w-full justify-center text-sm">View Reports</a>
         </div>
       </div>
 
       <div class="pd-card specialist">
-        <h3>Specialist Matching</h3>
-        <p class="pd-description">Specialist recommendation data will appear when the backend matching endpoint is available.</p>
+        <h3>Recommended Specialists</h3>
+        <p class="pd-description">Identify the experts who can help strengthen your project.</p>
         <a [routerLink]="['/projects', project.id, 'specialist-recommendations']" class="btn btn-secondary w-full justify-center text-sm">View Recommendations</a>
       </div>
     </div>
@@ -82,11 +82,11 @@
   <div class="modal-backdrop" *ngIf="showDeleteModal">
     <div class="modal-card">
       <h2>Delete Project?</h2>
-      <p>Are you sure you want to permanently delete <strong>{{project.title}}</strong>?</p>
+      <p>Do you want to permanently delete <strong>{{project.title}}</strong>?</p>
       <div class="modal-actions">
         <button (click)="closeDeleteModal()" class="btn btn-secondary text-sm" [disabled]="isDeleting">Cancel</button>
         <button (click)="confirmDelete()" class="btn btn-primary text-sm btn-danger" [disabled]="isDeleting">
-          {{isDeleting ? 'Deleting...' : 'Confirm Delete'}}
+          {{isDeleting ? 'Deleting...' : 'Confirm'}}
         </button>
       </div>
     </div>
@@ -95,5 +95,5 @@
 
 <div *ngIf="isLoading" class="pd-loading">
   <div class="spinner"></div>
-  <p>Loading project details...</p>
+  <p>Loading project...</p>
 </div>

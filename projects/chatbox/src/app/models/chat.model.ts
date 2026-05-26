@@ -2,6 +2,8 @@ export interface Chat {
   id: string;
   projectId: string;
   title: string;
+  userId?: string;
+  chatLabel?: string;
   chatType?: string;
   contextType: string;
   createdAt: Date | string;
@@ -33,11 +35,15 @@ export interface Message {
 }
 
 export interface ChatMessage {
-  id: string;
-  senderId: string;
-  senderName: string;
-  text: string;
+  id?: string;
+  senderId?: string;
+  senderName?: string;
+  text?: string;
+  chatId?: string;
+  role?: string;
+  content?: string;
   timestamp: Date | string;
-  isRead: boolean;
+  isRead?: boolean;
+  senderType?: string;
   avatarUrl?: string;
 }

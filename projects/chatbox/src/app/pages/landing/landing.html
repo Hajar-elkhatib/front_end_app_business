@@ -1,5 +1,4 @@
 <div class="landing-page">
-  <!-- Navigation -->
   <nav class="navbar">
     <div class="navbar-content">
       <div class="logo">
@@ -7,52 +6,44 @@
         <span class="logo-text">NexusAI</span>
       </div>
       <div class="nav-links">
-        <a href="#features">Fonctionnalités</a>
-        <a href="#how-it-works">Comment ça marche</a>
-        <a href="#pricing">Tarifs</a>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#pricing">Pricing</a>
         <button class="theme-toggle" type="button" (click)="toggleTheme()" [attr.aria-label]="isDarkMode ? 'Use light theme' : 'Use dark theme'" [title]="isDarkMode ? 'Use light theme' : 'Use dark theme'">
           <svg *ngIf="isDarkMode" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
           <svg *ngIf="!isDarkMode" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
         </button>
-        <a routerLink="/login" class="btn-outline">Se connecter</a>
-        <a routerLink="/register" class="btn-primary">S'inscrire</a>
+        <a routerLink="/login" class="btn-outline">Sign in</a>
+        <a routerLink="/register" class="btn-primary">Sign up</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <h1 class="hero-title">Validez votre idée business avec l'IA</h1>
+      <h1 class="hero-title">Validate your business idea with AI</h1>
       <p class="hero-subtitle">
-        Analysez la probabilité de succès de votre startup, explorez votre marché et obtenez des recommandations personnalisées
+        Analyze startup success probability, explore your market, and get personalized recommendations.
       </p>
       <div class="hero-actions">
-        <button routerLink="/register" class="btn-primary btn-large">Commencer gratuitement</button>
-        <button class="btn-secondary btn-large">Voir la démo</button>
+        <button routerLink="/register" class="btn-primary btn-large">Start for free</button>
+        <button class="btn-secondary btn-large">View demo</button>
       </div>
     </div>
     <div class="hero-visual">
       <div class="gradient-circle"></div>
       <div class="stats-card">
-        <div class="stat">
-          <div class="stat-label">Business idea validation</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Market and competitor analysis</div>
-        </div>
-        <div class="stat">
-          <div class="stat-label">Specialist recommendations</div>
-        </div>
+        <div class="stat"><div class="stat-label">Business idea validation</div></div>
+        <div class="stat"><div class="stat-label">Market and competitor analysis</div></div>
+        <div class="stat"><div class="stat-label">Specialist recommendations</div></div>
       </div>
     </div>
   </section>
 
-  <!-- Features Section -->
   <section id="features" class="features">
     <div class="section-header">
-      <h2>Tout ce dont vous avez besoin</h2>
-      <p>Outils complets pour valider et développer votre projet entrepreneurial</p>
+      <h2>Everything you need</h2>
+      <p>Complete tools to validate and develop your entrepreneurial project.</p>
     </div>
     <div class="features-grid">
       <div *ngFor="let feature of features" class="feature-card">
@@ -63,11 +54,10 @@
     </div>
   </section>
 
-  <!-- How It Works Section -->
   <section id="how-it-works" class="how-it-works">
     <div class="section-header">
-      <h2>Comment ça marche</h2>
-      <p>3 étapes simples pour valider votre idée</p>
+      <h2>How it works</h2>
+      <p>Three simple steps to validate your idea.</p>
     </div>
     <div class="steps-container">
       <div *ngFor="let step of steps" class="step">
@@ -78,11 +68,10 @@
     </div>
   </section>
 
-  <!-- Pricing Section -->
   <section id="pricing" class="pricing">
     <div class="section-header">
-      <h2>Plans simples et transparents</h2>
-      <p>Choisissez le plan qui correspond à vos besoins</p>
+      <h2>Simple, transparent plans</h2>
+      <p>Choose the plan that fits your needs.</p>
     </div>
     <div class="pricing-grid">
       <div *ngFor="let plan of pricing" class="pricing-card" [class.highlighted]="plan.highlighted">
@@ -90,7 +79,7 @@
         <p class="plan-description">{{ plan.description }}</p>
         <div class="plan-price">
           <span class="price">{{ plan.price }}</span>
-          <span class="currency" *ngIf="plan.price !== 'Custom'">/mois</span>
+          <span class="currency" *ngIf="plan.price !== 'Custom'">/month</span>
         </div>
         <button [class.btn-primary]="plan.highlighted" [class.btn-outline]="!plan.highlighted">
           {{ plan.cta }}
@@ -105,41 +94,39 @@
     </div>
   </section>
 
-  <!-- CTA Section -->
   <section class="cta-section">
-    <h2>Prêt à valider votre idée?</h2>
-    <p>Créez un compte pour commencer avec vos propres données projet.</p>
-    <button routerLink="/register" class="btn-primary btn-large">Commencer maintenant</button>
+    <h2>Ready to validate your idea?</h2>
+    <p>Create an account and start with your own project data.</p>
+    <button routerLink="/register" class="btn-primary btn-large">Start now</button>
   </section>
 
-  <!-- Footer -->
   <footer class="footer">
     <div class="footer-content">
       <div class="footer-column">
         <h4>NexusAI</h4>
-        <p>Plateforme IA pour valider vos projets entrepreneuriaux</p>
+        <p>AI platform for validating entrepreneurial projects.</p>
       </div>
       <div class="footer-column">
-        <h4>Produit</h4>
-        <a href="#">Fonctionnalités</a>
+        <h4>Product</h4>
+        <a href="#">Features</a>
         <a href="#">Pricing</a>
         <a href="#">Documentation</a>
       </div>
       <div class="footer-column">
         <h4>Support</h4>
-        <a href="#">Aide</a>
+        <a href="#">Help</a>
         <a href="#">Contact</a>
         <a href="#">FAQ</a>
       </div>
       <div class="footer-column">
-        <h4>Légal</h4>
-        <a href="#">CGU</a>
-        <a href="#">Confidentialité</a>
+        <h4>Legal</h4>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
         <a href="#">Cookies</a>
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2026 NexusAI. Tous droits réservés.</p>
+      <p>&copy; 2026 NexusAI. All rights reserved.</p>
     </div>
   </footer>
 </div>

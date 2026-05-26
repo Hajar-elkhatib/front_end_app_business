@@ -3,7 +3,7 @@
     <div>
       <div class="sl-kicker">Specialist directory</div>
       <h1>Find the next specialist for your project</h1>
-      <p>Filter backend specialist profiles by domain, availability, and the skills your brief needs.</p>
+      <p>Filtrez les profils par domaine, disponibilite et competences utiles a votre projet.</p>
     </div>
     <div class="sl-summary" *ngIf="!isLoading && !loadError">
       <strong>{{filteredSpecialists.length}}</strong>
@@ -43,7 +43,7 @@
 
   <div *ngIf="!isLoading && loadError" class="sl-empty">
     <h3>Specialists could not be loaded</h3>
-    <p>Check that the backend is running on port 8080, then try again.</p>
+    <p>Specialist profiles could not be loaded. Please try again.</p>
     <button class="btn btn-secondary" type="button" (click)="loadSpecialists()">Retry</button>
   </div>
 

@@ -13,21 +13,25 @@ export interface MarketAnalysis {
   id: string;
   projectId: string;
   sector: string;
-  country: string;
-  countryCode: string;
+  country?: string;
+  countryCode?: string;
   region: string;
   marketSize: number;
   growthRate: number;
   competitionLevel: string;
-  competitorsCount: number;
+  competitorsCount?: number;
+  competitionCount?: number;
   productTractionUsers: number;
   trendScore: number;
-  geographicScore: number;
-  marketLabel: string;
+  geographicScore?: number;
+  geographicFitScore?: number;
+  marketLabel?: string;
+  priority?: string;
   confidenceScore: number;
   keywords: string;
-  dataSource: string;
-  dataSources: string;
+  dataSource?: string;
+  dataSources?: string;
+  modelVersion?: string;
   createdAt: Date | string;
 }
 
@@ -48,6 +52,7 @@ export interface BusinessIdeaAnalysis {
   strengths: string;
   weaknesses: string;
   recommendationsSummary: string;
+  recommendations?: string;
   warnings: string;
   createdAt: Date | string;
 }
@@ -67,6 +72,29 @@ export interface SentimentAnalysis {
   modelName: string;
   modelVersion: string;
   createdAt: Date | string;
+}
+
+export interface StartupSuccessAnalysis {
+  projectId: string;
+  successProbability: number;
+  predictionLabel: string;
+  confidenceScore: number;
+  modelVersion: string;
+}
+
+export interface AiSpecialistRecommendation {
+  id?: string;
+  projectId: string;
+  specialistId: string;
+  specialistName?: string;
+  expertiseDomain?: string;
+  skills?: string[] | string;
+  availability?: string;
+  recommendedScore: number;
+  rank: number;
+  scoreDetails: string;
+  reason: string;
+  createdAt?: Date | string;
 }
 
 export interface CompetitorAnalysis {

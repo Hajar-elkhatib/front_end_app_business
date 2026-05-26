@@ -1,63 +1,87 @@
-<section class="crud-page">
-  <header class="crud-header">
-    <div>
-      <p class="kicker">Chatbot / RAG</p>
-      <h1>AI Assistant</h1>
-      <p>Create, update, and manage project-aware AI assistant chats.</p>
+<section class="assistant-shell" [class.sidebar-collapsed]="!sidebarOpen">
+  <aside class="assistant-sidebar">
+    <div class="sidebar-top">
+      <div>
+        <p class="kicker">AI Assistant</p>
+        <h1>Conversations</h1>
+      </div>
+      <button class="icon-btn" type="button" (click)="sidebarOpen = !sidebarOpen">☰</button>
     </div>
-    <a routerLink="/chatbot/new" class="btn btn-indigo">New AI Chat</a>
-  </header>
 
-  <div class="crud-toolbar">
-    <label>
-      <span>Chat type</span>
-      <select [(ngModel)]="typeFilter" (ngModelChange)="applyFilters()" class="input">
-        <option value="all">All types</option>
-        <option value="General">General</option>
-        <option value="RAG">RAG</option>
-        <option value="Project">Project</option>
-        <option value="Analysis">Analysis</option>
-      </select>
-    </label>
-    <button class="btn btn-secondary" type="button" (click)="loadChats()">Refresh</button>
-  </div>
+    <button class="btn btn-indigo new-chat-button" type="button" (click)="startNewChat()">New Chat</button>
 
-  <div *ngIf="isLoading" class="state-card">
-    <div class="spinner"></div>
-    <p>Loading AI chats...</p>
-  </div>
+    <div class="chat-list" *ngIf="!isLoadingChats; else loadingChats">
+      <button
+        *ngFor="let chat of chats"
+        class="chat-item"
+        type="button"
+        [class.active]="activeChat?.id === chat.id"
+        (click)="openChat(chat)">
+        <span>{{chat.title || 'New conversation'}}</span>
+        <small>{{chat.createdAt | date:'shortDate'}}</small>
+        <i (click)="deleteLocalChat(chat, $event)">x</i>
+      </button>
+      <div class="empty-sidebar" *ngIf="chats.length === 0">No conversations yet.</div>
+    </div>
+    <ng-template #loadingChats>
+      <div class="empty-sidebar">Loading conversations...</div>
+    </ng-template>
+  </aside>
 
-  <div *ngIf="!isLoading && filteredChats.length === 0" class="state-card">
-    <h2>{{query ? 'No AI chats match your search' : 'No AI chats yet'}}</h2>
-    <p>{{query ? 'Try another search term or clear the search bar.' : 'Create a chat shell now. AI responses stay empty until the backend chat endpoint is available.'}}</p>
-    <a routerLink="/chatbot/new" class="btn btn-indigo">Create AI Chat</a>
-  </div>
+  <main class="chat-panel">
+    <header class="chat-header">
+      <button class="icon-btn mobile-toggle" type="button" (click)="sidebarOpen = !sidebarOpen">☰</button>
+      <div>
+        <h2>{{activeChat?.title || 'Business Assistant'}}</h2>
+        <p>Ask about your project, market, risks, or next steps.</p>
+      </div>
+    </header>
 
-  <div *ngIf="!isLoading && filteredChats.length > 0" class="crud-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Chat</th>
-          <th>Project</th>
-          <th>Type</th>
-          <th>Context</th>
-          <th>Created</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let chat of filteredChats">
-          <td><strong>{{chat.title}}</strong><span>AI responses are backend-driven.</span></td>
-          <td>{{chat.projectId || 'Not linked'}}</td>
-          <td><span class="status-pill">{{chat.chatType || 'General'}}</span></td>
-          <td>{{chat.contextType || 'Project'}}</td>
-          <td>{{chat.createdAt | date:'mediumDate'}}</td>
-          <td class="actions">
-            <a [routerLink]="['/chatbot', chat.id, 'edit']" class="btn btn-secondary text-xs">Edit</a>
-            <button type="button" class="btn btn-secondary text-xs danger" (click)="deleteChat(chat)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <div class="error-banner" *ngIf="errorMessage">{{errorMessage}}</div>
+
+    <div #messageScroller class="messages">
+      <div class="empty-chat" *ngIf="!activeChat">
+        <h2>Start a new conversation</h2>
+        <p>The assistant helps you clarify your strategy, prepare your validation, and understand your results.</p>
+      </div>
+
+      <div class="empty-chat" *ngIf="activeChat && !isLoadingMessages && messages.length === 0">
+        <h2>Your conversation is ready</h2>
+        <p>Ask for feedback on your idea, market risks, positioning, or recommendations.</p>
+      </div>
+
+      <div class="loading-row" *ngIf="isLoadingMessages">Loading conversation...</div>
+
+      <article
+        *ngFor="let message of messages"
+        class="message"
+        [class.assistant]="isAssistant(message)"
+        [class.user]="!isAssistant(message)">
+        <div class="avatar">{{isAssistant(message) ? 'AI' : 'You'}}</div>
+        <div class="bubble">
+          <p>{{messageText(message)}}</p>
+          <time>{{message.timestamp | date:'shortTime'}}</time>
+        </div>
+      </article>
+
+      <article class="message assistant" *ngIf="isSending">
+        <div class="avatar">AI</div>
+        <div class="bubble typing">
+          <span></span><span></span><span></span>
+        </div>
+      </article>
+    </div>
+
+    <footer class="composer">
+      <textarea
+        [(ngModel)]="draft"
+        (keydown)="onComposerKeydown($event)"
+        [disabled]="!activeChat || isSending"
+        placeholder="Write your message..."
+        rows="1"></textarea>
+      <button class="btn btn-indigo" type="button" (click)="sendMessage()" [disabled]="!activeChat || !draft.trim() || isSending">
+        {{isSending ? 'Sending...' : 'Send'}}
+      </button>
+    </footer>
+  </main>
 </section>
