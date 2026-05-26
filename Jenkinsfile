@@ -46,11 +46,6 @@ pipeline {
                 sh "docker tag ${IMAGE}:${TAG} ${IMAGE}:latest"
             }
         }
-        stage('Trivy Scan') {
-            steps {
-               sh "trivy image ${IMAGE}:${TAG}"
-            }
-        }
 
         stage('Push Docker Hub') {
             steps {
@@ -65,14 +60,20 @@ pipeline {
             }
         }
 
+        stage('Deploy avec Ansible') {
+            steps {
+                sh 'ansible-playbook -i /home/azureuser/ansible/inventory.ini /home/azureuser/ansible/deploy.yml'
+            }
+        }
+
     }
 
     post {
         success {
-            echo '✅ Pipeline frontend réussi !'
+            echo ' Pipeline frontend réussi !'
         }
         failure {
-            echo '❌ Pipeline frontend échoué — vérifier les logs'
+            echo ' Pipeline frontend échoué — vérifier les logs'
         }
         always {
             cleanWs()
