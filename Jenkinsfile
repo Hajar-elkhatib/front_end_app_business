@@ -62,7 +62,8 @@ pipeline {
 
         stage('Deploy avec Ansible') {
             steps {
-                sh 'ansible-playbook -i /home/azureuser/ansible/inventory.ini /home/azureuser/ansible/deploy.yml'
+                // Correction Pro : On demande à Jenkins d'exécuter Ansible directement sur l'hôte Préprod via SSH
+                sh 'ssh -o StrictHostKeyChecking=no azureuser@74.161.163.110 "ansible-playbook -i ~/ansible/inventory.ini ~/ansible/deploy.yml"'
             }
         }
 
