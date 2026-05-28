@@ -30,14 +30,12 @@
         </div>
 
         <!-- Description -->
-        <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('description')}">
-          <label class="form-label">Project Description</label>
-          <textarea rows="5" class="input pf-input" formControlName="description"
-            placeholder="Describe the problem, solution, target audience, market, and goals..."></textarea>
-          <div class="error-msg" *ngIf="isFieldInvalid('description')">
-            <span *ngIf="projectForm.get('description')?.errors?.['required']">A project description is required.</span>
-            <span *ngIf="projectForm.get('description')?.errors?.['minlength']">Description must be at least 20
-              characters.</span>
+        <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('summary')}">
+          <label class="form-label">Project Summary</label>
+          <textarea rows="5" class="input pf-input" formControlName="summary"
+            placeholder="Resume the problem, solution, target audience, market, and goals..."></textarea>
+          <div class="error-msg" *ngIf="isFieldInvalid('summary')">
+            {{getFieldError('summary', 'Project summary')}}
           </div>
         </div>
 
@@ -50,7 +48,7 @@
               <option *ngFor="let sec of sectors" [value]="sec">{{sec}}</option>
             </select>
             <div class="error-msg" *ngIf="isFieldInvalid('sector')">
-              Project sector is required.
+              {{getFieldError('sector', 'Project sector')}}
             </div>
           </div>
           <div class="form-group">

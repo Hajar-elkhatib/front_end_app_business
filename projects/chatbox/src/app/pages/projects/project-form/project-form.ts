@@ -24,6 +24,11 @@ export class ProjectForm implements OnInit {
   isLoading = false;
   isSubmitting = false;
   submitError = '';
+  requiredFieldLabels: Record<string, string> = {
+    title: 'Project title',
+    summary: 'Project summary',
+    sector: 'Project sector'
+  };
 
   sectors = ['Technology', 'Finance', 'Health', 'Education', 'Retail', 'Energy', 'Other'];
   competitionLevels = ['Low', 'Medium', 'High'];
@@ -36,7 +41,7 @@ export class ProjectForm implements OnInit {
   initForm() {
     this.projectForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5)]],
-      description: ['', [Validators.required, Validators.minLength(20)]],
+      summary: ['', [Validators.required, Validators.minLength(20)]],
       sector: ['', Validators.required],
       country: [''],
       countryCode: [''],
@@ -76,7 +81,7 @@ export class ProjectForm implements OnInit {
       if (project) {
         this.projectForm.patchValue({
           title: project.title,
-          description: project.description,
+          summary: project.summary || project.description,
           sector: project.sector,
           country: project.country,
           countryCode: project.countryCode,
@@ -110,7 +115,11 @@ export class ProjectForm implements OnInit {
 
     if (this.projectForm.invalid) {
       this.projectForm.markAllAsTouched();
-      this.submitError = 'Please complete the required fields before creating the project.';
+      const invalidFields = Object.keys(this.projectForm.controls)
+        .filter(fieldName => this.projectForm.get(fieldName)?.invalid)
+        .map(fieldName => this.requiredFieldLabels[fieldName] || fieldName);
+
+      this.submitError = `Please complete or correct: ${invalidFields.join(', ')}.`;
       setTimeout(() => {
         document.querySelector('.has-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       });
@@ -150,5 +159,30 @@ export class ProjectForm implements OnInit {
   isFieldInvalid(fieldName: string): boolean {
     const field = this.projectForm.get(fieldName);
     return !!field && field.invalid && (field.dirty || field.touched);
+  }
+
+  getFieldError(fieldName: string, label: string): string {
+    const field = this.projectForm.get(fieldName);
+    if (!field || !field.errors || !(field.dirty || field.touched)) {
+      return '';
+    }
+
+    if (field.errors['required']) {
+      return `* ${label} is required.`;
+    }
+
+    if (field.errors['minlength']) {
+      return `* ${label} must be at least ${field.errors['minlength'].requiredLength} characters.`;
+    }
+
+    if (field.errors['min']) {
+      return `* ${label} must be greater than or equal to ${field.errors['min'].min}.`;
+    }
+
+    if (field.errors['max']) {
+      return `* ${label} must be less than or equal to ${field.errors['max'].max}.`;
+    }
+
+    return `* ${label} is invalid.`;
   }
 }

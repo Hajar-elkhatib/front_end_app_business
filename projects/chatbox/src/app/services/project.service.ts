@@ -23,7 +23,8 @@ export class ProjectService {
       id: res.id,
       entrepreneurId: res.entrepreneurId || '',
       title: res.title || '',
-      description: res.description || '',
+      summary: res.summary || res.description || '',
+      description: res.description || res.summary || '',
       projectStatus: res.projectStatus || 'DRAFT',
       sector: res.sector || '',
       country: res.country || '',
@@ -87,11 +88,11 @@ export class ProjectService {
     const currentUser = this.authService.currentUser;
     const entrepreneurId = currentUser?.id || 'unknown';
 
-    // Map standard form controls or default values into CreateProjectRequest
     const payload = {
-      title: projectData.title,
-      description: projectData.description,
-      sector: projectData.sector,
+      entrepreneurId,
+      title: String(projectData.title || '').trim(),
+      summary: String(projectData.summary || projectData.description || '').trim(),
+      sector: String(projectData.sector || '').trim(),
       country: projectData.country || '',
       countryCode: projectData.countryCode || '',
       region: projectData.region || '',
@@ -112,7 +113,7 @@ export class ProjectService {
       opinions: projectData.opinions || ''
     };
 
-    return this.http.post<any>(`${this.baseUrl}/${entrepreneurId}`, payload).pipe(
+    return this.http.post<any>(this.baseUrl, payload).pipe(
       map(res => this.mapResponseToProject(res)),
       tap(newProj => {
         const current = this.projectsSubject.value;
@@ -124,7 +125,7 @@ export class ProjectService {
   updateProject(id: string, updates: any): Observable<Project | undefined> {
     const payload = {
       title: updates.title,
-      description: updates.description,
+      summary: updates.summary || updates.description,
       sector: updates.sector,
       country: updates.country || '',
       countryCode: updates.countryCode || '',

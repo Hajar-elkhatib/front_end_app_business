@@ -2,6 +2,7 @@ export interface Project {
   id: string;
   entrepreneurId: string;
   title: string;
+  summary?: string;
   description: string;
   sector: string;
   projectStatus: string;
