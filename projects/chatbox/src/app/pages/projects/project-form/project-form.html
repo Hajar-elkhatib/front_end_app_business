@@ -43,12 +43,15 @@
 
         <!-- Grid for core fields -->
         <div class="form-grid">
-          <div class="form-group">
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('sector')}">
             <label class="form-label">Sector</label>
             <select class="input pf-input pf-select" formControlName="sector">
               <option value="">Select a sector</option>
               <option *ngFor="let sec of sectors" [value]="sec">{{sec}}</option>
             </select>
+            <div class="error-msg" *ngIf="isFieldInvalid('sector')">
+              Project sector is required.
+            </div>
           </div>
           <div class="form-group">
             <label class="form-label">Keyword</label>
@@ -123,6 +126,10 @@
         <div class="form-group">
           <label class="form-label">Opinions / Public Feedback</label>
           <textarea rows="3" class="input pf-input" formControlName="opinions" placeholder="Paste real customer opinions or feedback when available"></textarea>
+        </div>
+
+        <div class="error-msg" *ngIf="submitError">
+          {{ submitError }}
         </div>
 
         <!-- Actions -->

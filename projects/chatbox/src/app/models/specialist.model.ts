@@ -1,6 +1,8 @@
 import { User } from './user.model';
 
 export interface Specialist extends User {
+  userId?: string;
+  specialistId?: string;
   profession: string;
   expertiseDomain: string;
 

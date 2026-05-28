@@ -23,6 +23,7 @@ export class ProjectForm implements OnInit {
   projectId: string | null = null;
   isLoading = false;
   isSubmitting = false;
+  submitError = '';
 
   sectors = ['Technology', 'Finance', 'Health', 'Education', 'Retail', 'Energy', 'Other'];
   competitionLevels = ['Low', 'Medium', 'High'];
@@ -105,8 +106,15 @@ export class ProjectForm implements OnInit {
   }
 
   onSubmit() {
+    this.submitError = '';
+
     if (this.projectForm.invalid) {
       this.projectForm.markAllAsTouched();
+      this.submitError = 'Please complete the required fields before creating the project.';
+      setTimeout(() => {
+        document.querySelector('.has-error')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      this.cdr.markForCheck();
       return;
     }
 
@@ -114,16 +122,28 @@ export class ProjectForm implements OnInit {
     const formData = this.projectForm.value;
 
     if (this.isEditMode && this.projectId) {
-      this.projectService.updateProject(this.projectId, formData).subscribe(() => {
-        this.isSubmitting = false;
-        this.router.navigate(['/projects', this.projectId]);
+      this.projectService.updateProject(this.projectId, formData).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.router.navigate(['/projects', this.projectId]);
+        },
+        error: () => this.handleSubmitError('Project update failed. Please check the backend connection and try again.')
       });
     } else {
-      this.projectService.createProject(formData).subscribe((newProj) => {
-        this.isSubmitting = false;
-        this.router.navigate(['/projects']);
+      this.projectService.createProject(formData).subscribe({
+        next: () => {
+          this.isSubmitting = false;
+          this.router.navigate(['/projects']);
+        },
+        error: () => this.handleSubmitError('Project creation failed. Please check the backend connection and try again.')
       });
     }
+  }
+
+  private handleSubmitError(message: string) {
+    this.isSubmitting = false;
+    this.submitError = message;
+    this.cdr.markForCheck();
   }
 
   // Helpers for validation styling

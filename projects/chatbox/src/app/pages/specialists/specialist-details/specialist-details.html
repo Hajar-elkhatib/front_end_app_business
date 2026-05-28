@@ -5,6 +5,7 @@
   </a>
 
   <div *ngIf="isLoading" class="sd-loading">Loading profile...</div>
+  <div *ngIf="!isLoading && loadError" class="sd-loading">{{loadError}}</div>
 
   <div *ngIf="specialist">
     <!-- Header -->
@@ -94,6 +95,33 @@
             </div>
             <p class="sd-review-text">{{r.comment}}</p>
           </div>
+        </div>
+
+        <div class="sd-card">
+          <h3>Submit Evaluation</h3>
+          <form [formGroup]="evaluationForm" (ngSubmit)="submitEvaluation()" style="display: grid; gap: 1rem;">
+            <label style="display: grid; gap: 0.4rem;">
+              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 700;">Project ID</span>
+              <input class="input" type="text" formControlName="projectId" placeholder="Project id">
+            </label>
+
+            <label style="display: grid; gap: 0.4rem;">
+              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 700;">Score</span>
+              <input class="input" type="number" formControlName="score" min="0" max="5" step="0.5">
+            </label>
+
+            <label style="display: grid; gap: 0.4rem;">
+              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 700;">Comment</span>
+              <textarea class="input" rows="3" formControlName="comment" placeholder="Share your feedback"></textarea>
+            </label>
+
+            <p *ngIf="evaluationError" style="color: var(--danger); font-size: 0.85rem;">{{evaluationError}}</p>
+            <p *ngIf="evaluationSuccess" style="color: #047857; font-size: 0.85rem;">{{evaluationSuccess}}</p>
+
+            <button class="sd-btn-chat" type="submit" [disabled]="isSubmittingEvaluation">
+              {{isSubmittingEvaluation ? 'Submitting...' : 'Submit Evaluation'}}
+            </button>
+          </form>
         </div>
       </div>
 

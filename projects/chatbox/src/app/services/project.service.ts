@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { Project } from '../models/project.model';
 import { AuthService } from './auth.service';
 
@@ -12,7 +12,6 @@ export class ProjectService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
   private baseUrl = 'http://localhost:8080/api/projects';
-  private storageKey = 'nexus_local_projects';
 
   private projectsSubject = new BehaviorSubject<Project[]>([]);
   public projects$ = this.projectsSubject.asObservable();
@@ -67,10 +66,6 @@ export class ProjectService {
     }
 
     return this.http.get<any[]>(`${this.baseUrl}/entrepreneur/${currentUser.id}`).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after project endpoints are always available.
-        return of(this.readLocalProjects().filter(project => project.entrepreneurId === currentUser.id));
-      }),
       map(list => list.map(p => this.mapResponseToProject(p))),
       tap(projects => {
         this.loadedProjectsUserId = currentUser.id;
@@ -81,10 +76,6 @@ export class ProjectService {
 
   getProjectById(id: string): Observable<Project | undefined> {
     return this.http.get<any>(`${`${this.baseUrl}/${id}`}`).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after project detail endpoint is always available.
-        return of(this.readLocalProjects().find(project => project.id === id));
-      }),
       map(res => {
         if (!res) return undefined;
         return this.mapResponseToProject(res);
@@ -122,18 +113,6 @@ export class ProjectService {
     };
 
     return this.http.post<any>(`${this.baseUrl}/${entrepreneurId}`, payload).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after project creation endpoint is always available.
-        const localProject = this.mapResponseToProject({
-          ...payload,
-          id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
-          entrepreneurId,
-          projectStatus: 'DRAFT',
-          createdAt: new Date().toISOString()
-        });
-        this.writeLocalProjects([...this.readLocalProjects(), localProject]);
-        return of(localProject);
-      }),
       map(res => this.mapResponseToProject(res)),
       tap(newProj => {
         const current = this.projectsSubject.value;
@@ -168,17 +147,6 @@ export class ProjectService {
     };
 
     return this.http.put<any>(`${this.baseUrl}/${id}`, payload).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after project update endpoint is always available.
-        const projects = this.readLocalProjects();
-        const existing = projects.find(project => project.id === id);
-        if (!existing) {
-          throw new Error('Project not found');
-        }
-        const updated = this.mapResponseToProject({ ...existing, ...payload, id });
-        this.writeLocalProjects(projects.map(project => project.id === id ? updated : project));
-        return of(updated);
-      }),
       map(res => this.mapResponseToProject(res)),
       tap(updatedProj => {
         const current = this.projectsSubject.value.map(p => p.id === id ? updatedProj : p);
@@ -189,17 +157,6 @@ export class ProjectService {
 
   submitProject(id: string): Observable<Project> {
     return this.http.put<any>(`${this.baseUrl}/${id}/submit`, {}).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after submit endpoint is always available.
-        const projects = this.readLocalProjects();
-        const existing = projects.find(project => project.id === id);
-        if (!existing) {
-          throw new Error('Project not found');
-        }
-        const updated = this.mapResponseToProject({ ...existing, projectStatus: 'SUBMITTED' });
-        this.writeLocalProjects(projects.map(project => project.id === id ? updated : project));
-        return of(updated);
-      }),
       map(res => this.mapResponseToProject(res)),
       tap(updatedProj => {
         const current = this.projectsSubject.value.map(p => p.id === id ? updatedProj : p);
@@ -210,29 +167,12 @@ export class ProjectService {
 
   deleteProject(id: string): Observable<boolean> {
     return this.http.delete(`${this.baseUrl}/${id}`, { responseType: 'text' }).pipe(
-      catchError(() => {
-        // TODO backend: remove local fallback after delete endpoint is always available.
-        this.writeLocalProjects(this.readLocalProjects().filter(project => project.id !== id));
-        return of('');
-      }),
       map(() => true),
       tap(() => {
         const current = this.projectsSubject.value;
         this.projectsSubject.next(current.filter(p => p.id !== id));
       })
     );
-  }
-
-  private readLocalProjects(): Project[] {
-    try {
-      return JSON.parse(localStorage.getItem(this.storageKey) || '[]') as Project[];
-    } catch {
-      return [];
-    }
-  }
-
-  private writeLocalProjects(projects: Project[]) {
-    localStorage.setItem(this.storageKey, JSON.stringify(projects));
   }
 
 }

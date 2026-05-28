@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Availability } from '../models/specialist.model';
 import { Complaint, ComplaintStatus, ComplaintType } from '../models/complaint.model';
 
@@ -44,9 +44,10 @@ export class ComplaintService {
 
   getComplaints(status?: ComplaintStatus): Observable<Complaint[]> {
     let url = this.baseUrl;
-    if (status) url += `?status=${status}`;
+    if (status) url += `?status=${encodeURIComponent(this.toApiStatus(status))}`;
 
     return this.http.get<Complaint[]>(url).pipe(
+      map(complaints => complaints.map(complaint => this.mapComplaint(complaint))),
       catchError(() => {
         // TODO backend: remove local fallback after complaint endpoints are available.
         const complaints = this.readLocalComplaints();
@@ -58,6 +59,7 @@ export class ComplaintService {
 
   getComplaintById(id: string): Observable<Complaint> {
     return this.http.get<Complaint>(`${this.baseUrl}/${id}`).pipe(
+      map(complaint => this.mapComplaint(complaint)),
       catchError(() => {
         // TODO backend: remove local fallback after complaint detail endpoint is available.
         const complaint = this.readLocalComplaints().find(item => item.id === id);
@@ -71,6 +73,7 @@ export class ComplaintService {
 
   getUserComplaints(userId: string): Observable<Complaint[]> {
     return this.http.get<Complaint[]>(`${this.baseUrl}?complainantId=${userId}`).pipe(
+      map(complaints => complaints.map(complaint => this.mapComplaint(complaint))),
       catchError(() => {
         // TODO backend: remove local fallback after user complaint endpoint is available.
         return of(this.readLocalComplaints().filter(complaint => complaint.userId === userId));
@@ -81,6 +84,7 @@ export class ComplaintService {
 
   createComplaint(complaint: Omit<Complaint, 'id' | 'createdAt' | 'status'>): Observable<Complaint> {
     return this.http.post<Complaint>(this.baseUrl, complaint).pipe(
+      map(newComplaint => this.mapComplaint(newComplaint)),
       catchError(() => {
         // TODO backend: remove local fallback after complaint creation endpoint is available.
         const newComplaint: Complaint = {
@@ -102,11 +106,17 @@ export class ComplaintService {
   }
 
   updateComplaint(id: string, data: Partial<Complaint>): Observable<Complaint> {
-    return this.http.put<Complaint>(`${this.baseUrl}/${id}`, data).pipe(
+    const payload = this.toApiComplaint(data);
+
+    return this.http.put<Complaint>(`${this.baseUrl}/${id}`, payload).pipe(
+      map(updated => this.mapComplaint(updated)),
       catchError(() => {
         // TODO backend: remove local fallback after complaint update endpoint is available.
         const complaints = this.readLocalComplaints();
         const existing = complaints.find(complaint => complaint.id === id);
+        if (!existing && data.status) {
+          return this.updateComplaintStatus(id, data.status);
+        }
         if (!existing) {
           throw new Error('Complaint not found');
         }
@@ -139,8 +149,9 @@ export class ComplaintService {
   updateComplaintStatus(id: string, status: ComplaintStatus, resolution?: string): Observable<Complaint> {
     return this.http.patch<Complaint>(
       `${this.baseUrl}/${id}/status`,
-      { status, resolution }
+      { status: this.toApiStatus(status), resolution }
     ).pipe(
+      map(updated => this.mapComplaint(updated)),
       tap(updated => {
         const complaints = this.complaintsSubject.value.map(c => c.id === id ? updated : c);
         this.complaintsSubject.next(complaints);
@@ -179,5 +190,33 @@ export class ComplaintService {
 
   private writeLocalComplaints(complaints: Complaint[]) {
     localStorage.setItem(this.storageKey, JSON.stringify(complaints));
+  }
+
+  private mapComplaint(complaint: Complaint): Complaint {
+    return {
+      ...complaint,
+      status: this.fromApiStatus(complaint.status)
+    };
+  }
+
+  private toApiComplaint(data: Partial<Complaint>): Partial<Complaint> {
+    return {
+      ...data,
+      status: data.status ? this.toApiStatus(data.status) : data.status
+    };
+  }
+
+  private toApiStatus(status: string): string {
+    const normalized = status.trim().toUpperCase().replace(/\s+/g, '_');
+    if (normalized === 'IN_PROGRESS') return 'IN_PROGRESS';
+    if (normalized === 'RESOLVED') return 'RESOLVED';
+    return 'PENDING';
+  }
+
+  private fromApiStatus(status: string): string {
+    const normalized = status.trim().toUpperCase().replace(/\s+/g, '_');
+    if (normalized === 'IN_PROGRESS') return 'In Progress';
+    if (normalized === 'RESOLVED') return 'Resolved';
+    return 'Pending';
   }
 }

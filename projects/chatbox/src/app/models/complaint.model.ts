@@ -1,4 +1,4 @@
-export type ComplaintStatus = 'Pending' | 'In Progress' | 'Resolved' | 'Dismissed' | 'Escalated' | string;
+export type ComplaintStatus = 'Pending' | 'In Progress' | 'Resolved' | string;
 export type ComplaintType = 'Technical' | 'Billing' | 'Specialist' | 'Other' | string;
 
 export interface Complaint {

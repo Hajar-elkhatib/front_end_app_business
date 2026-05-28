@@ -24,6 +24,7 @@ export class ComplaintForm implements OnInit {
   isEditMode = false;
   isLoading = false;
   isSaving = false;
+  saveError = '';
 
   form = this.fb.group({
     subject: ['', [Validators.required, Validators.minLength(3)]],
@@ -66,8 +67,12 @@ export class ComplaintForm implements OnInit {
   }
 
   save() {
+    this.saveError = '';
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.saveError = 'Please complete the required fields before saving.';
+      this.cdr.markForCheck();
       return;
     }
 
@@ -100,8 +105,8 @@ export class ComplaintForm implements OnInit {
       },
       error: () => {
         this.isSaving = false;
+        this.saveError = 'Complaint could not be saved. Please check the backend connection and try again.';
         this.cdr.markForCheck();
-        alert('Complaint could not be saved.');
       }
     });
   }

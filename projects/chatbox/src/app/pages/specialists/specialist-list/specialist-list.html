@@ -58,7 +58,7 @@
 
   <div class="sl-grid" *ngIf="!isLoading && !loadError && filteredSpecialists.length > 0">
     <a *ngFor="let spec of filteredSpecialists; let i = index"
-       class="sl-card" [routerLink]="['/specialists', spec.id]">
+       class="sl-card" [routerLink]="['/specialists', spec.userId || spec.id]">
       <div class="sl-card-top">
         <div class="sl-avatar" [ngClass]="['indigo','purple','emerald','sky','amber','rose'][i % 6]">
           {{spec.avatarUrl}}
