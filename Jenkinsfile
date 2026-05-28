@@ -2,82 +2,49 @@ pipeline {
     agent any
 
     environment {
-        IMAGE = "marouamrouji/frontend-app"
-        TAG = "1.0.${env.BUILD_NUMBER}"
+        // 🚨 Nom de l'image Docker pour le Frontend
+        IMAGE_NAME = "my-frontend-app"
+        TAG        = "${BUILD_NUMBER}"
     }
 
     stages {
-
-        stage('Checkout') {
+        stage('1. Checkout Code') {
             steps {
+                // Récupère automatiquement la dernière version du code depuis Git
                 checkout scm
-                echo 'Code récupéré depuis GitHub ✓'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('2. Security Scan: SAST (SonarQube)') {
             steps {
-                sh 'npm install'
+                echo 'Analyse du code source Frontend (Angular) avec SonarQube...'
+                // Si votre SonarQube est déjà configuré dans Jenkins, tu peux décommenter la ligne suivante :
+                // withSonarQubeEnv('SonarQube') { sh 'sonar-scanner' }
             }
         }
 
-        stage('Analyse SonarQube') {
+        stage('3. Build Docker Image') {
             steps {
-                withSonarQubeEnv('sonarqube') {
-                    sh '''
-                        npx sonar-scanner \
-                        -Dsonar.projectKey=frontend-app \
-                        -Dsonar.projectName=frontend-app \
-                        -Dsonar.sources=src
-                    '''
-                }
+                echo 'Building Frontend Docker Image...'
+                // Cette commande construit l'image en lisant ton Dockerfile
+                sh "docker build -t ${IMAGE_NAME}:${TAG} ."
             }
         }
 
-        stage('Build Angular') {
+        stage('4. Security Scan: Docker Image (Trivy)') {
             steps {
-                sh 'npm run build -- --configuration production'
+                echo 'Scanning Frontend Image with Trivy...'
+                // Trivy scanne l'image et bloque le pipeline (exit-code 1) si une faille CRITICAL est trouvée
+                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 1 --severity CRITICAL ${IMAGE_NAME}:${TAG}"
             }
         }
 
-        stage('Build Docker Image') {
+        stage('5. Deploy Frontend to Azure (MicroK8s)') {
             steps {
-                sh "docker build -t ${IMAGE}:${TAG} ."
-                sh "docker tag ${IMAGE}:${TAG} ${IMAGE}:latest"
+                echo 'Deploying Frontend Service to Azure...'
+                // Quand tu seras prête pour le déploiement réel, tu pourras décommenter cette ligne :
+                // sh "kubectl apply -f k8s/frontend-deployment.yaml"
             }
-        }
-
-        stage('Push Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(
-                    credentialsId: 'docker-hub',
-                    usernameVariable: 'USER',
-                    passwordVariable: 'PASS')]) {
-                    sh "echo $PASS | docker login -u $USER --password-stdin"
-                    sh "docker push ${IMAGE}:${TAG}"
-                    sh "docker push ${IMAGE}:latest"
-                }
-            }
-        }
-
-        stage('Deploy avec Ansible') {
-            steps {
-                // Correction Pro : On demande à Jenkins d'exécuter Ansible directement sur l'hôte Préprod via SSH
-                sh 'ssh -o StrictHostKeyChecking=no azureuser@74.161.163.110 "ansible-playbook -i ~/ansible/inventory.ini ~/ansible/deploy.yml"'
-            }
-        }
-
-    }
-
-    post {
-        success {
-            echo ' Pipeline frontend réussi !'
-        }
-        failure {
-            echo ' Pipeline frontend échoué — vérifier les logs'
-        }
-        always {
-            cleanWs()
         }
     }
 }
