@@ -1,12 +1,14 @@
 export interface Chat {
   id: string;
   projectId: string;
+  projectName?: string;
   title: string;
   userId?: string;
   chatLabel?: string;
   chatType?: string;
   contextType: string;
   createdAt: Date | string;
+  updatedAt?: Date | string;
 }
 
 
@@ -46,4 +48,12 @@ export interface ChatMessage {
   isRead?: boolean;
   senderType?: string;
   avatarUrl?: string;
+}
+
+export interface ChatExchange {
+  chatId: string;
+  userMessage: ChatMessage;
+  assistantMessage: ChatMessage;
+  sourcesUsed?: string[];
+  intent?: string;
 }

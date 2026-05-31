@@ -8,7 +8,7 @@
       <button class="icon-btn" type="button" (click)="sidebarOpen = !sidebarOpen">☰</button>
     </div>
 
-    <button class="btn btn-indigo new-chat-button" type="button" (click)="startNewChat()">New Chat</button>
+    <button class="btn btn-indigo new-chat-button" type="button" (click)="openNewChatModal()">New Chat</button>
 
     <div class="chat-list" *ngIf="!isLoadingChats; else loadingChats">
       <button
@@ -18,7 +18,7 @@
         [class.active]="activeChat?.id === chat.id"
         (click)="openChat(chat)">
         <span>{{chat.title || 'New conversation'}}</span>
-        <small>{{chat.createdAt | date:'shortDate'}}</small>
+        <small>{{projectName(chat)}} · {{chat.updatedAt || chat.createdAt | date:'shortDate'}}</small>
         <i (click)="deleteLocalChat(chat, $event)">x</i>
       </button>
       <div class="empty-sidebar" *ngIf="chats.length === 0">No conversations yet.</div>
@@ -33,7 +33,11 @@
       <button class="icon-btn mobile-toggle" type="button" (click)="sidebarOpen = !sidebarOpen">☰</button>
       <div>
         <h2>{{activeChat?.title || 'Business Assistant'}}</h2>
-        <p>Ask about your project, market, risks, or next steps.</p>
+        <p *ngIf="activeChat">
+          <span class="project-badge">{{projectName()}}</span>
+          <a [routerLink]="['/projects', activeChat.projectId]">View Project</a>
+        </p>
+        <p *ngIf="!activeChat">Start a project conversation to get useful business guidance.</p>
       </div>
     </header>
 
@@ -42,12 +46,18 @@
     <div #messageScroller class="messages">
       <div class="empty-chat" *ngIf="!activeChat">
         <h2>Start a new conversation</h2>
-        <p>The assistant helps you clarify your strategy, prepare your validation, and understand your results.</p>
+        <p>Select a project first, then ask about its score, market potential, weaknesses, business plan, or next steps.</p>
+        <button class="btn btn-indigo" type="button" (click)="openNewChatModal()">New Chat</button>
       </div>
 
       <div class="empty-chat" *ngIf="activeChat && !isLoadingMessages && messages.length === 0">
-        <h2>Your conversation is ready</h2>
-        <p>Ask for feedback on your idea, market risks, positioning, or recommendations.</p>
+        <h2>How can I help with {{projectName()}}?</h2>
+        <p>Ask about your score, market potential, weaknesses, business plan, or next steps.</p>
+        <div class="suggestion-grid">
+          <button type="button" *ngFor="let suggestion of suggestions" (click)="sendSuggestion(suggestion)">
+            {{suggestion}}
+          </button>
+        </div>
       </div>
 
       <div class="loading-row" *ngIf="isLoadingMessages">Loading conversation...</div>
@@ -59,7 +69,7 @@
         [class.user]="!isAssistant(message)">
         <div class="avatar">{{isAssistant(message) ? 'AI' : 'You'}}</div>
         <div class="bubble">
-          <p>{{messageText(message)}}</p>
+          <div class="markdown-body" [innerHTML]="renderedMessage(message)"></div>
           <time>{{message.timestamp | date:'shortTime'}}</time>
         </div>
       </article>
@@ -77,7 +87,7 @@
         [(ngModel)]="draft"
         (keydown)="onComposerKeydown($event)"
         [disabled]="!activeChat || isSending"
-        placeholder="Write your message..."
+        placeholder="Ask anything about this project..."
         rows="1"></textarea>
       <button class="btn btn-indigo" type="button" (click)="sendMessage()" [disabled]="!activeChat || !draft.trim() || isSending">
         {{isSending ? 'Sending...' : 'Send'}}
@@ -85,3 +95,33 @@
     </footer>
   </main>
 </section>
+
+<div class="modal-backdrop" *ngIf="isProjectModalOpen" (click)="closeNewChatModal()">
+  <section class="project-modal" (click)="$event.stopPropagation()">
+    <header>
+      <h2>Start a new conversation</h2>
+      <p>Select the project you want to discuss with the AI Assistant.</p>
+    </header>
+
+    <div class="project-picker" *ngIf="!isLoadingProjects; else projectsLoading">
+      <label *ngFor="let project of projects" [class.selected]="selectedProjectId === project.id">
+        <input type="radio" name="selectedProject" [value]="project.id" [(ngModel)]="selectedProjectId">
+        <span>
+          <strong>{{project.title}}</strong>
+          <small>{{project.sector || 'Business project'}}</small>
+        </span>
+      </label>
+      <div class="empty-sidebar" *ngIf="projects.length === 0">Create a project before starting a conversation.</div>
+    </div>
+    <ng-template #projectsLoading>
+      <div class="empty-sidebar">Loading projects...</div>
+    </ng-template>
+
+    <footer>
+      <button class="btn btn-secondary" type="button" (click)="closeNewChatModal()">Cancel</button>
+      <button class="btn btn-indigo" type="button" (click)="confirmStartNewChat()" [disabled]="!selectedProjectId">
+        Start Conversation
+      </button>
+    </footer>
+  </section>
+</div>

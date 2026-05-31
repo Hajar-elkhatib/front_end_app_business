@@ -7,6 +7,12 @@
     </div>
     <div class="header-actions">
       <a routerLink="/projects" class="btn btn-secondary">My Projects</a>
+      <button class="btn btn-secondary" type="button" (click)="generateReport()" [disabled]="!projectId || !businessValidation || isReportLoading">
+        {{isReportLoading ? 'Preparing report...' : (latestReport ? 'Update Report' : 'Generate Report')}}
+      </button>
+      <button class="btn btn-secondary" type="button" (click)="downloadReport()" *ngIf="latestReport">
+        View Report
+      </button>
       <button class="btn btn-indigo" type="button" (click)="runAll()" [disabled]="!projectId || isBusinessLoading">
         {{isBusinessLoading ? 'Analyzing...' : 'Run Analysis'}}
       </button>
@@ -115,19 +121,19 @@
     <section class="text-panels">
       <article>
         <h2>Strengths</h2>
-        <p>{{businessValidation?.strengths || 'No strengths identified yet.'}}</p>
+        <p>{{displayText(businessValidation?.strengths, 'No strengths identified yet.')}}</p>
       </article>
       <article>
         <h2>Weaknesses</h2>
-        <p>{{businessValidation?.weaknesses || 'No weaknesses identified yet.'}}</p>
+        <p>{{displayText(businessValidation?.weaknesses, 'No weaknesses identified yet.')}}</p>
       </article>
       <article>
         <h2>Recommendations</h2>
-        <p>{{businessValidation?.recommendationsSummary || businessValidation?.recommendations || 'No recommendation is available yet.'}}</p>
+        <p>{{businessValidation?.recommendationsSummary || displayText(businessValidation?.recommendations, 'No recommendation is available yet.')}}</p>
       </article>
       <article>
         <h2>Warnings</h2>
-        <p>{{businessValidation?.warnings || 'No warning reported.'}}</p>
+        <p>{{displayText(businessValidation?.warnings, 'No warning reported.')}}</p>
       </article>
     </section>
   </ng-container>

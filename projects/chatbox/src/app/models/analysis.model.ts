@@ -49,11 +49,14 @@ export interface BusinessIdeaAnalysis {
   specialistScore: number;
   modelName: string;
   modelVersion: string;
-  strengths: string;
-  weaknesses: string;
+  strengths: string[] | string;
+  weaknesses: string[] | string;
   recommendationsSummary: string;
-  recommendations?: string;
-  warnings: string;
+  recommendations?: string[] | string;
+  warnings: string[] | string;
+  generatedNeeds?: string[] | string;
+  interpretation?: string;
+  marketOpinionScore?: number;
   createdAt: Date | string;
 }
 

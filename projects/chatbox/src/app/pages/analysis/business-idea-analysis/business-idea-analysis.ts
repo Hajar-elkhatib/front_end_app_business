@@ -11,7 +11,9 @@ import {
 } from '../../../models/analysis.model';
 import { AnalysisService } from '../../../services/analysis.service';
 import { ProjectService } from '../../../services/project.service';
+import { ReportService } from '../../../services/report.service';
 import { Project } from '../../../models/project.model';
+import { Report } from '../../../models/report.model';
 
 @Component({
   selector: 'app-business-idea-analysis',
@@ -23,6 +25,7 @@ import { Project } from '../../../models/project.model';
 export class BusinessIdeaAnalysis implements OnInit {
   private analysisService = inject(AnalysisService);
   private projectService = inject(ProjectService);
+  private reportService = inject(ReportService);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
 
@@ -36,12 +39,15 @@ export class BusinessIdeaAnalysis implements OnInit {
   marketAnalysis?: MarketAnalysis;
   sentimentAnalysis?: SentimentAnalysis;
   specialistRecommendations: AiSpecialistRecommendation[] = [];
+  feedbacks: any[] = [];
+  latestReport?: Report;
 
   isBusinessLoading = false;
   isStartupLoading = false;
   isMarketLoading = false;
   isSentimentLoading = false;
   isSpecialistsLoading = false;
+  isReportLoading = false;
   errorMessage = '';
   isProjectsLoading = false;
 
@@ -49,8 +55,43 @@ export class BusinessIdeaAnalysis implements OnInit {
     this.projectId = this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('projectId') || '';
     this.loadProjects();
     if (this.projectId) {
-      this.runBusinessValidation();
+      this.loadLatestAnalysis();
+      this.loadFeedbacks();
+      this.loadLatestReport();
     }
+  }
+
+  loadLatestAnalysis() {
+    if (!this.projectId) return;
+    this.analysisService.getLatestBusinessValidation(this.projectId).subscribe({
+      next: result => {
+        this.businessValidation = this.normalizeBusinessValidation(result);
+        this.cdr.markForCheck();
+      },
+      error: () => this.cdr.markForCheck()
+    });
+  }
+
+  loadFeedbacks() {
+    if (!this.projectId) return;
+    this.analysisService.getFeedbacks(this.projectId).subscribe({
+      next: feedbacks => {
+        this.feedbacks = feedbacks || [];
+        this.cdr.markForCheck();
+      },
+      error: () => this.cdr.markForCheck()
+    });
+  }
+
+  loadLatestReport() {
+    if (!this.projectId) return;
+    this.reportService.getLatestReport(this.projectId).subscribe({
+      next: report => {
+        this.latestReport = report;
+        this.cdr.markForCheck();
+      },
+      error: () => this.cdr.markForCheck()
+    });
   }
 
   loadProjects() {
@@ -75,7 +116,11 @@ export class BusinessIdeaAnalysis implements OnInit {
     this.marketAnalysis = undefined;
     this.sentimentAnalysis = undefined;
     this.specialistRecommendations = [];
+    this.latestReport = undefined;
     this.errorMessage = '';
+    this.loadLatestAnalysis();
+    this.loadFeedbacks();
+    this.loadLatestReport();
   }
 
   runBusinessValidation() {
@@ -86,6 +131,7 @@ export class BusinessIdeaAnalysis implements OnInit {
       next: result => {
         this.businessValidation = this.normalizeBusinessValidation(result);
         this.isBusinessLoading = false;
+        this.loadLatestReport();
         this.cdr.markForCheck();
       },
       error: () => this.fail('The analysis could not be started. Please try again.', 'business')
@@ -127,12 +173,33 @@ export class BusinessIdeaAnalysis implements OnInit {
     }
     this.errorMessage = '';
     this.isSentimentLoading = true;
-    this.analysisService.analyzeSentiment(this.projectId, this.feedbackText.trim(), this.feedbackSource || 'manual_feedback').subscribe({
-      next: result => {
-        this.sentimentAnalysis = result;
-        this.isSentimentLoading = false;
-        this.cdr.markForCheck();
-      },
+    this.analysisService.createFeedbacks(this.projectId, this.feedbackText.trim()).subscribe({
+      next: () => this.analysisService.analyzeFeedbacks(this.projectId).subscribe({
+        next: feedbacks => {
+          this.feedbacks = feedbacks || [];
+          const scored = this.feedbacks.filter(item => typeof item.sentimentScore === 'number');
+          const avg = scored.length ? scored.reduce((sum, item) => sum + item.sentimentScore, 0) / scored.length : 0;
+          this.sentimentAnalysis = {
+            id: '',
+            projectId: this.projectId,
+            textSource: this.feedbackSource,
+            reviewText: this.feedbackText,
+            sentimentLabel: avg >= 50 ? 'positive' : 'negative',
+            sentimentScore: avg,
+            averageSentimentScore: avg,
+            overallLabel: avg >= 50 ? 'positive' : 'negative',
+            confidenceScore: 100,
+            rating: 0,
+            count: scored.length,
+            modelName: '',
+            modelVersion: '',
+            createdAt: new Date().toISOString()
+          };
+          this.isSentimentLoading = false;
+          this.cdr.markForCheck();
+        },
+        error: () => this.fail('The analysis could not be started. Please try again.', 'sentiment')
+      }),
       error: () => this.fail('The analysis could not be started. Please try again.', 'sentiment')
     });
   }
@@ -148,6 +215,42 @@ export class BusinessIdeaAnalysis implements OnInit {
         this.cdr.markForCheck();
       },
       error: () => this.fail('The analysis could not be started. Please try again.', 'specialists')
+    });
+  }
+
+  generateReport() {
+    if (!this.projectId || !this.businessValidation) return;
+    this.errorMessage = '';
+    this.isReportLoading = true;
+    this.reportService.generateProjectReport(this.projectId).subscribe({
+      next: report => {
+        this.latestReport = report;
+        this.isReportLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.errorMessage = 'The report could not be generated. Please try again.';
+        this.isReportLoading = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  downloadReport() {
+    if (!this.latestReport?.id) return;
+    this.reportService.downloadReport(this.latestReport.id).subscribe({
+      next: blob => {
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${this.latestReport?.title || 'business-validation-report'}.pdf`;
+        link.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.errorMessage = 'The report could not be downloaded. Please try again.';
+        this.cdr.markForCheck();
+      }
     });
   }
 
@@ -211,9 +314,17 @@ export class BusinessIdeaAnalysis implements OnInit {
   sentimentScore(): number {
     return this.sentimentAnalysis?.sentimentScore
       || this.sentimentAnalysis?.averageSentimentScore
+      || this.businessValidation?.marketOpinionScore
       || this.businessValidation?.sentimentScore
       || (this.businessValidation as any)?.marketSentimentScore
       || 0;
+  }
+
+  displayText(value: string[] | string | undefined, fallback: string): string {
+    if (Array.isArray(value)) {
+      return value.length ? value.join('\n') : fallback;
+    }
+    return value && value.trim() ? value : fallback;
   }
 
   private normalizeBusinessValidation(result: any): BusinessIdeaAnalysisModel {
@@ -221,9 +332,9 @@ export class BusinessIdeaAnalysis implements OnInit {
       ...result,
       finalLabel: result.finalLabel || result.predictionLabel || 'Generated',
       startupSuccessScore: result.startupSuccessScore || result.predictionScore || 0,
-      sentimentScore: result.sentimentScore || result.marketSentimentScore || 0,
+      sentimentScore: result.sentimentScore || result.marketOpinionScore || result.marketSentimentScore || 0,
       specialistScore: result.specialistScore || result.specialistOrRiskScore || 0,
-      recommendationsSummary: result.recommendationsSummary || result.recommendations || '',
+      recommendationsSummary: result.recommendationsSummary || '',
       modelName: result.modelName || 'Business Validation',
       createdAt: result.createdAt || new Date().toISOString()
     };

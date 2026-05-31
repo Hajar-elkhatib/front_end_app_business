@@ -10,6 +10,7 @@ import { Report } from '../models/report.model';
 export class ReportService {
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:8080/api/reports';
+  private projectsUrl = 'http://localhost:8080/api/projects';
   private reportsSubject = new BehaviorSubject<Report[]>([]);
   public reports$ = this.reportsSubject.asObservable();
 
@@ -42,8 +43,18 @@ export class ReportService {
     );
   }
 
+  generateProjectReport(projectId: string): Observable<Report> {
+    return this.http.post<Report>(`${this.projectsUrl}/${projectId}/reports/generate`, {}).pipe(
+      tap(created => this.reportsSubject.next([created, ...this.reportsSubject.value]))
+    );
+  }
+
+  downloadReport(id: string): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/${id}/download`, { responseType: 'blob' });
+  }
+
   updateReport(id: string, data: Partial<Report>): Observable<Report> {
-    return throwError(() => new Error('Le rapport ne peut pas etre mis a jour pour le moment.'));
+    return throwError(() => new Error('Reports cannot be updated right now.'));
   }
 
   deleteReport(id: string): Observable<void> {

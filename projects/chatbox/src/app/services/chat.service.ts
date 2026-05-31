@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import { Chat, ChatMessage, Conversation } from '../models/chat.model';
+import { map, tap } from 'rxjs/operators';
+import { Chat, ChatExchange, ChatMessage, Conversation } from '../models/chat.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,7 @@ import { Chat, ChatMessage, Conversation } from '../models/chat.model';
 export class ChatService {
   private http = inject(HttpClient);
   private chatbotBaseUrl = 'http://localhost:8080/api/chatbot';
+  private aiChatsBaseUrl = 'http://localhost:8080/api/chats';
   private conversationBaseUrl = 'http://localhost:8080/api/chat';
   private aiChatsStorageKey = 'nexus_local_ai_assistant_chats';
   private aiMessagesStorageKey = 'nexus_local_ai_assistant_messages';
@@ -22,19 +23,17 @@ export class ChatService {
 
   getAiChats(projectId?: string): Observable<Chat[]> {
     const userId = this.currentUserId();
-    let params = new HttpParams().set('userId', userId);
-    if (projectId) {
-      params = params.set('projectId', projectId);
-    }
-    return this.http.get<Chat[]>(this.chatbotBaseUrl, { params });
+    return this.http.get<Chat[]>(`${this.aiChatsBaseUrl}/user/${userId}`).pipe(
+      map(chats => projectId ? chats.filter(chat => chat.projectId === projectId) : chats)
+    );
   }
 
   getAiChatById(id: string): Observable<Chat> {
-    return this.http.get<Chat>(`${this.chatbotBaseUrl}/chat/${id}`);
+    return this.http.get<Chat>(`${this.aiChatsBaseUrl}/${id}`);
   }
 
   createAiChat(chat: Omit<Chat, 'id' | 'createdAt'> & { id?: string }): Observable<Chat> {
-    return this.http.post<Chat>(this.chatbotBaseUrl, chat);
+    return this.http.post<Chat>(this.aiChatsBaseUrl, chat);
   }
 
   updateAiChat(id: string, data: Partial<Chat>): Observable<Chat> {
@@ -46,20 +45,20 @@ export class ChatService {
     delete allMessages[id];
     this.writeLocalAiMessages(allMessages);
     const params = new HttpParams().set('userId', this.currentUserId());
-    return this.http.delete<void>(`${this.chatbotBaseUrl}/${id}`, { params });
+    return this.http.delete<void>(`${this.aiChatsBaseUrl}/${id}`, { params });
   }
 
   getAiMessages(chatId: string): Observable<ChatMessage[]> {
-    return this.http.get<ChatMessage[]>(`${this.chatbotBaseUrl}/${chatId}/messages`).pipe(
+    return this.http.get<ChatMessage[]>(`${this.aiChatsBaseUrl}/${chatId}/messages`).pipe(
       tap(messages => this.messagesSubject.next(messages))
     );
   }
 
-  sendAiMessage(chatId: string, userId: string, message: string): Observable<ChatMessage> {
-    const params = new HttpParams()
-      .set('userId', userId)
-      .set('message', message);
-    return this.http.post<ChatMessage>(`${this.chatbotBaseUrl}/${chatId}/message`, {}, { params });
+  sendAiMessage(chatId: string, message: string): Observable<ChatExchange> {
+    return this.http.post<ChatExchange>(`${this.aiChatsBaseUrl}/${chatId}/messages`, {
+      message,
+      fastMode: true
+    });
   }
 
   getLocalAiMessages(chatId: string): ChatMessage[] {

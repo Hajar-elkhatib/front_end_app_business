@@ -15,10 +15,31 @@ import {
 export class AnalysisService {
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:8080/api/analysis';
+  private projectsUrl = 'http://localhost:8080/api/projects';
 
   analyzeBusinessValidation(projectId: string, opinions = ''): Observable<BusinessIdeaAnalysis> {
     const payload = opinions.trim() ? { opinions: opinions.trim() } : {};
-    return this.http.post<BusinessIdeaAnalysis>(`${this.baseUrl}/${projectId}/analyze`, payload);
+    return this.http.post<BusinessIdeaAnalysis>(`${this.projectsUrl}/${projectId}/analysis/run`, payload);
+  }
+
+  getLatestBusinessValidation(projectId: string): Observable<BusinessIdeaAnalysis> {
+    return this.http.get<BusinessIdeaAnalysis>(`${this.projectsUrl}/${projectId}/analysis/latest`);
+  }
+
+  getBusinessValidationHistory(projectId: string): Observable<BusinessIdeaAnalysis[]> {
+    return this.http.get<BusinessIdeaAnalysis[]>(`${this.projectsUrl}/${projectId}/analysis/history`);
+  }
+
+  createFeedbacks(projectId: string, feedbackText: string): Observable<any[]> {
+    return this.http.post<any[]>(`${this.projectsUrl}/${projectId}/feedbacks`, { feedbackText });
+  }
+
+  getFeedbacks(projectId: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.projectsUrl}/${projectId}/feedbacks`);
+  }
+
+  analyzeFeedbacks(projectId: string): Observable<any[]> {
+    return this.http.post<any[]>(`${this.projectsUrl}/${projectId}/feedbacks/analyze`, {});
   }
 
   predictStartupSuccess(projectId: string): Observable<StartupSuccessAnalysis> {

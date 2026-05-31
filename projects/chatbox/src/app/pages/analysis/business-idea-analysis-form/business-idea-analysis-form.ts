@@ -73,10 +73,10 @@ export class BusinessIdeaAnalysisForm implements OnInit {
           specialistScore: analysis.specialistScore || 0,
           modelName: analysis.modelName || '',
           modelVersion: analysis.modelVersion || '',
-          strengths: analysis.strengths || '',
-          weaknesses: analysis.weaknesses || '',
+          strengths: this.toFormText(analysis.strengths),
+          weaknesses: this.toFormText(analysis.weaknesses),
           recommendationsSummary: analysis.recommendationsSummary || '',
-          warnings: analysis.warnings || ''
+          warnings: this.toFormText(analysis.warnings)
         });
         this.isLoading = false;
         this.cdr.markForCheck();
@@ -137,5 +137,9 @@ export class BusinessIdeaAnalysisForm implements OnInit {
   isInvalid(field: string): boolean {
     const control = this.form.get(field);
     return !!control && control.invalid && (control.dirty || control.touched);
+  }
+
+  private toFormText(value: string[] | string | undefined): string {
+    return Array.isArray(value) ? value.join('\n') : (value || '');
   }
 }
