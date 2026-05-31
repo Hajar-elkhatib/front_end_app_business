@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
@@ -15,6 +15,8 @@ import { switchMap, timeout } from 'rxjs/operators';
   styleUrls: ['./specialist-details.css']
 })
 export class SpecialistDetails implements OnInit {
+  private fb = inject(FormBuilder);
+
   specialist: Specialist | undefined;
   reviews: SpecialistReview[] = [];
   isLoading = true;
@@ -36,7 +38,6 @@ export class SpecialistDetails implements OnInit {
     private router: Router,
     private specialistService: SpecialistService,
     private evaluationService: EvaluationService,
-    private fb: FormBuilder,
     private cdr: ChangeDetectorRef
   ) {}
 

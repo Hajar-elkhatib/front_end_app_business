@@ -8,10 +8,10 @@
     <div class="header-actions">
       <a routerLink="/projects" class="btn btn-secondary">My Projects</a>
       <button class="btn btn-secondary" type="button" (click)="generateReport()" [disabled]="!projectId || !businessValidation || isReportLoading">
-        {{isReportLoading ? 'Preparing report...' : (latestReport ? 'Update Report' : 'Generate Report')}}
+        {{isReportLoading ? 'Preparing report...' : (latestReport ? 'Update PDF Report' : 'Generate PDF Report')}}
       </button>
       <button class="btn btn-secondary" type="button" (click)="downloadReport()" *ngIf="latestReport">
-        View Report
+        Download Report
       </button>
       <button class="btn btn-indigo" type="button" (click)="runAll()" [disabled]="!projectId || isBusinessLoading">
         {{isBusinessLoading ? 'Analyzing...' : 'Run Analysis'}}

@@ -1,66 +1,77 @@
-<section class="crud-page">
-  <header class="crud-header">
+<section class="reports-page">
+  <header class="reports-header">
     <div>
-      <p class="kicker">Reports</p>
-      <h1>{{projectId ? 'Project Reports' : 'Reports'}}</h1>
-      <p>Review summary documents, analyses, and recommendations linked to your projects.</p>
+      <p class="kicker">AI Reports</p>
+      <h1>{{projectId ? 'Project Reports' : 'AI Reports'}}</h1>
+      <p>Download the PDF reports generated automatically from your project validation analysis.</p>
     </div>
-    <a [routerLink]="['/reports/new']" [queryParams]="projectId ? { projectId: projectId } : null" class="btn btn-indigo">New Report</a>
+    <button class="btn btn-secondary" type="button" (click)="loadReports()">Refresh</button>
   </header>
 
-  <div class="crud-toolbar">
-    <label>
-      <span>Type</span>
-      <select [(ngModel)]="typeFilter" (ngModelChange)="applyFilters()" class="input">
-        <option value="all">All types</option>
-        <option value="General">General</option>
-        <option value="Market">Market</option>
-        <option value="Financial">Financial</option>
-        <option value="Technical">Product</option>
-      </select>
-    </label>
-    <button class="btn btn-secondary" type="button" (click)="loadReports()">Refresh</button>
-  </div>
+  <div *ngIf="errorMessage" class="alert-card">{{errorMessage}}</div>
 
   <div *ngIf="isLoading" class="state-card">
     <div class="spinner"></div>
     <p>Loading reports...</p>
   </div>
 
-  <div *ngIf="!isLoading && filteredReports.length === 0" class="state-card">
-    <h2>{{query ? 'No reports match your search' : 'No reports available'}}</h2>
-    <p>{{query ? 'Try another search or clear the filter.' : 'Your project reports will appear here when available.'}}</p>
-    <a [routerLink]="['/reports/new']" [queryParams]="projectId ? { projectId: projectId } : null" class="btn btn-indigo">Create Report</a>
+  <div *ngIf="!isLoading && rows.length === 0" class="state-card">
+    <h2>No projects available</h2>
+    <p>Create a project first, then run its AI validation to generate a complete PDF report.</p>
+    <a routerLink="/projects" class="btn btn-indigo">View Projects</a>
   </div>
 
-  <div *ngIf="!isLoading && filteredReports.length > 0" class="crud-table">
-    <table>
-      <thead>
-        <tr>
-          <th>Report</th>
-          <th>Project</th>
-          <th>Type</th>
-          <th>Source</th>
-          <th>Date</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let report of filteredReports">
-          <td>
-            <strong>{{report.title}}</strong>
-            <span>{{report.summary || 'No summary available'}}</span>
-          </td>
-          <td>{{projectId ? 'Selected project' : 'Linked project'}}</td>
-          <td><span class="status-pill">{{report.reportType}}</span></td>
-          <td>{{report.generatedBy || 'AI Assistant'}}</td>
-          <td>{{report.createdAt | date:'mediumDate'}}</td>
-          <td class="actions">
-            <a [routerLink]="['/reports', report.id, 'edit']" class="btn btn-secondary text-xs">Open</a>
-            <button type="button" class="btn btn-secondary text-xs danger" (click)="deleteReport(report)">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="!isLoading && rows.length > 0 && projectId && !hasAnyReport()" class="state-card">
+    <h2>No report generated yet</h2>
+    <p>No report generated yet. Run your project analysis to generate a complete PDF report.</p>
+    <a [routerLink]="['/projects', projectId, 'analysis', 'business-idea']" class="btn btn-indigo">Analyze Project</a>
+  </div>
+
+  <div *ngIf="!isLoading && rows.length > 0" class="report-grid">
+    <article class="report-card" *ngFor="let row of rows">
+      <div class="report-card-main">
+        <div>
+          <p class="report-type">Business Validation Report</p>
+          <h2>{{reportTitle(row.report)}}</h2>
+          <p class="report-project">{{row.project.title}}</p>
+        </div>
+        <span class="status-pill" [class.pending]="!row.report">{{reportStatus(row.report)}}</span>
+      </div>
+
+      <div class="report-meta">
+        <div>
+          <span>Generated</span>
+          <strong>{{reportDate(row.report) ? (reportDate(row.report) | date:'mediumDate') : 'Not generated yet'}}</strong>
+        </div>
+        <div>
+          <span>Project</span>
+          <strong>{{row.project.sector || 'Business project'}}</strong>
+        </div>
+      </div>
+
+      <p class="report-summary">
+        {{row.report?.summary || 'No report generated yet. Run your project analysis to generate a complete PDF report.'}}
+      </p>
+
+      <div class="report-actions">
+        <a [routerLink]="['/projects', row.project.id, 'analysis', 'business-idea']" class="btn btn-secondary text-sm">
+          Open
+        </a>
+        <button
+          class="btn btn-secondary text-sm"
+          type="button"
+          (click)="downloadReport(row)"
+          [disabled]="!row.report || row.isDownloading">
+          {{row.isDownloading ? 'Downloading...' : 'Download PDF'}}
+        </button>
+        <button
+          class="btn btn-indigo text-sm"
+          type="button"
+          (click)="generateReport(row)"
+          [disabled]="row.isGenerating">
+          {{row.isGenerating ? 'Preparing...' : (row.report ? 'Update Report' : 'Generate Report')}}
+        </button>
+      </div>
+    </article>
   </div>
 </section>

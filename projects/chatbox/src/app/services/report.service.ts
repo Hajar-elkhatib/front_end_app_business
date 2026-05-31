@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Report } from '../models/report.model';
 
@@ -29,20 +29,6 @@ export class ReportService {
     return this.http.get<Report>(`${this.baseUrl}/${id}`);
   }
 
-  createReport(report: Partial<Report>): Observable<Report> {
-    const payload = {
-      projectId: report.projectId || '',
-      title: report.title || '',
-      summary: report.summary || '',
-      reportType: report.reportType || 'AI_GENERATED',
-      region: (report as any).region || '',
-      modelVersion: report.modelVersion || ''
-    };
-    return this.http.post<Report>(this.baseUrl, payload).pipe(
-      tap(created => this.reportsSubject.next([created, ...this.reportsSubject.value]))
-    );
-  }
-
   generateProjectReport(projectId: string): Observable<Report> {
     return this.http.post<Report>(`${this.projectsUrl}/${projectId}/reports/generate`, {}).pipe(
       tap(created => this.reportsSubject.next([created, ...this.reportsSubject.value]))
@@ -51,10 +37,6 @@ export class ReportService {
 
   downloadReport(id: string): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/${id}/download`, { responseType: 'blob' });
-  }
-
-  updateReport(id: string, data: Partial<Report>): Observable<Report> {
-    return throwError(() => new Error('Reports cannot be updated right now.'));
   }
 
   deleteReport(id: string): Observable<void> {
