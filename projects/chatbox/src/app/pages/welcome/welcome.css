@@ -71,6 +71,18 @@
 .shadow-glow-indigo { box-shadow: 0 4px 16px rgba(99, 102, 241, 0.5); }
 .icon-brand.small { width: 20px; height: 20px; border-radius: 6px; }
 
+.welcome-logo {
+  display: block;
+  width: 156px;
+  height: auto;
+}
+
+.welcome-footer-logo {
+  display: block;
+  width: 124px;
+  height: auto;
+}
+
 .welcome-main { padding-top: 10rem; position: relative; }
 
 /* Abstract Mesh Gradient */

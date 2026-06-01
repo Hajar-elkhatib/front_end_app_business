@@ -8,8 +8,9 @@
 
   <div class="auth-card-wrapper" style="max-width: 600px; margin: 4rem auto;">
     <div class="auth-card" style="width: 100%;">
+      <img class="auth-brand-logo" src="assets/branding/venturelens-logo-dark.svg" alt="VentureLens">
       <h1 class="auth-title">Create your account</h1>
-      <p class="auth-subtitle">Join the NexusAI global network</p>
+      <p class="auth-subtitle">Validate your idea. Understand your risks. Move forward.</p>
 
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
         
@@ -53,7 +54,7 @@
           <div class="form-group">
             <label class="form-label">Email Address</label>
             <div class="form-input-wrap">
-              <input type="email" formControlName="email" class="form-input" placeholder="e.g. sarah@nexus.ai">
+              <input type="email" formControlName="email" class="form-input" placeholder="e.g. sarah@venturelens.ai">
             </div>
             <div *ngIf="isFieldInvalid('email')" class="form-error">Please enter a valid email.</div>
           </div>

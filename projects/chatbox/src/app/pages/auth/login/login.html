@@ -8,11 +8,9 @@
 
   <div class="auth-card-wrapper">
     <div class="auth-card">
-      <div class="auth-logo">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-      </div>
+      <img class="auth-brand-logo" src="assets/branding/venturelens-logo-dark.svg" alt="VentureLens">
       <h1 class="auth-title">Welcome back</h1>
-      <p class="auth-subtitle">Log in to your NexusAI workspace</p>
+      <p class="auth-subtitle">Validate your idea. Understand your risks. Move forward.</p>
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 
         <div class="form-group">

@@ -2,7 +2,7 @@
   <aside class="assistant-sidebar">
     <div class="sidebar-top">
       <div>
-        <p class="kicker">AI Assistant</p>
+        <p class="kicker">VentureLens Advisor</p>
         <h1>Conversations</h1>
       </div>
       <button class="icon-btn" type="button" (click)="sidebarOpen = !sidebarOpen">☰</button>
@@ -32,7 +32,7 @@
     <header class="chat-header">
       <button class="icon-btn mobile-toggle" type="button" (click)="sidebarOpen = !sidebarOpen">☰</button>
       <div>
-        <h2>{{activeChat?.title || 'Business Assistant'}}</h2>
+        <h2>{{activeChat?.title || 'VentureLens Advisor'}}</h2>
         <p *ngIf="activeChat">
           <span class="project-badge">{{projectName()}}</span>
           <a [routerLink]="['/projects', activeChat.projectId]">View Project</a>

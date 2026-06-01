@@ -191,7 +191,7 @@ export class SpecialistService {
       id: userId,
       userId,
       specialistId,
-      fullName: specialist.fullName || 'NexusAI Specialist',
+      fullName: specialist.fullName || 'VentureLens Specialist',
       email: specialist.email || '',
       role: 'specialist',
       phone: specialist.phone || '',

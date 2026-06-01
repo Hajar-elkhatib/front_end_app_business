@@ -3,8 +3,11 @@
   <aside class="sidebar flex-col justify-between">
     <div>
       <div class="sidebar-header flex items-center gap-3 mb-10">
-        <div class="logo-icon shadow-sm" style="background: none; border-radius: 0; box-shadow: none; display: flex; align-items: center; justify-content: center; height: auto; width: auto;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" class="text-indigo-600" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg></div>
-        <span class="font-bold text-xl tracking-tight">NexusAI</span>
+        <div class="brand-lockup">
+          <img class="brand-logo brand-logo-compact brand-logo-light" src="assets/branding/venturelens-logo-compact-light.svg" alt="VentureLens">
+          <img class="brand-logo brand-logo-compact brand-logo-dark" src="assets/branding/venturelens-logo-compact-dark.svg" alt="VentureLens">
+          <img class="brand-logo brand-logo-icon" src="assets/branding/venturelens-icon.svg" alt="VentureLens">
+        </div>
       </div>
       
       <div class="sidebar-group mb-6">
@@ -68,7 +71,7 @@
         <div class="avatar shadow-sm">{{avatarInitial}}</div>
         <div class="overflow-hidden">
           <div class="text-sm font-semibold truncate">{{currentUser?.fullName || 'Nexus User'}}</div>
-          <div class="text-xs text-muted truncate">{{currentUser?.email || 'user@nexusai.local'}}</div>
+          <div class="text-xs text-muted truncate">{{currentUser?.email || 'user@venturelens.local'}}</div>
         </div>
         <svg class="ml-auto text-muted" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
       </button>

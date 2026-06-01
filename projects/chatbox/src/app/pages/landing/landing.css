@@ -16,6 +16,7 @@
 .navbar-content {
   max-width: 1200px;
   margin: 0 auto;
+  min-height: 86px;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -26,13 +27,27 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  font-size: 1.5rem;
-  font-weight: 700;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
-.logo-icon {
-  font-size: 2rem;
+.landing-logo {
+  display: block;
+  width: 265px;
+  height: auto;
+  object-fit: contain;
+}
+
+.landing-logo-dark {
+  display: none;
+}
+
+:host-context([data-theme="dark"]) .landing-logo-light {
+  display: none;
+}
+
+:host-context([data-theme="dark"]) .landing-logo-dark {
+  display: block;
 }
 
 .nav-links {
@@ -588,6 +603,14 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  .navbar-content {
+    padding: 0.875rem 1rem;
+  }
+
+  .landing-logo {
+    width: 220px;
+  }
+
   .hero {
     grid-template-columns: 1fr;
     padding: 4rem 1rem;
