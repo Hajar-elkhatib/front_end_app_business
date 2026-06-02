@@ -1,15 +1,16 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Specialist, SpecialistReview } from '../models/specialist.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SpecialistService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/specialists';
+  private baseUrl = `${environment.apiUrl}/specialists`;
 
   private specialistsSubject = new BehaviorSubject<Specialist[]>([]);
   public specialists$ = this.specialistsSubject.asObservable();
@@ -217,3 +218,5 @@ export class SpecialistService {
     };
   }
 }
+
+

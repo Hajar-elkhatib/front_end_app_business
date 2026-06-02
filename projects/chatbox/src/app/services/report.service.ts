@@ -1,16 +1,17 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Report } from '../models/report.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/reports';
-  private projectsUrl = 'http://localhost:8080/api/projects';
+  private baseUrl = `${environment.apiUrl}/reports`;
+  private projectsUrl = `${environment.apiUrl}/projects`;
   private reportsSubject = new BehaviorSubject<Report[]>([]);
   public reports$ = this.reportsSubject.asObservable();
 
@@ -45,3 +46,5 @@ export class ReportService {
     );
   }
 }
+
+

@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface AdminUser {
   id: string;
@@ -116,7 +117,7 @@ export interface DashboardSummary {
 @Injectable({ providedIn: 'root' })
 export class AdminService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/admin';
+  private baseUrl = `${environment.apiUrl}/admin`;
 
   getDashboardSummary(): Observable<DashboardSummary> {
     return this.http.get<DashboardSummary>(`${this.baseUrl}/dashboard/summary`);
@@ -182,5 +183,5 @@ export class AdminService {
       }
     });
     return params;
-    }
+  }
 }

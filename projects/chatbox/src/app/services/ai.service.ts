@@ -1,15 +1,16 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AIRequest, AIResponse, MLModel, EngineeredFeatures } from '../models/ai.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AIService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/ai';
+  private baseUrl = `${environment.apiUrl}/ai`;
   private requestsSubject = new BehaviorSubject<AIRequest[]>([]);
   public requests$ = this.requestsSubject.asObservable();
 
@@ -88,3 +89,5 @@ export class AIService {
     );
   }
 }
+
+

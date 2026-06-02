@@ -3,15 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { User, AuthResponse } from '../models/user.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private http = inject(HttpClient);
-  
-  // 🚀 CHANGER LOCALHOST PAR L'IP AZURE ET LE NODEPORT DU BACKEND (30234)
-  private baseUrl = 'http://20.199.171.43:30234/api/auth';
+  private baseUrl = `${environment.apiUrl}/auth`;
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -95,21 +94,20 @@ export class AuthService {
     );
   }
 
-  // 🚀 ADRESSES MISES À JOUR AVEC L'IP AZURE POUR LES PROFILS
   getEntrepreneurProfile(userId: string): Observable<any> {
-    return this.http.get<any>(`http://20.199.171.43:30234/api/entrepreneurs/${userId}/profile`);
+    return this.http.get<any>(`${environment.apiUrl}/entrepreneurs/${userId}/profile`);
   }
 
   updateEntrepreneurProfile(userId: string, data: any): Observable<any> {
-    return this.http.put<any>(`http://20.199.171.43:30234/api/entrepreneurs/${userId}/profile`, data);
+    return this.http.put<any>(`${environment.apiUrl}/entrepreneurs/${userId}/profile`, data);
   }
 
   getSpecialistProfile(userId: string): Observable<any> {
-    return this.http.get<any>(`http://20.199.171.43:30234/api/specialists/${userId}/profile`);
+    return this.http.get<any>(`${environment.apiUrl}/specialists/${userId}/profile`);
   }
 
   updateSpecialistProfile(userId: string, data: any): Observable<any> {
-    return this.http.put<any>(`http://20.199.171.43:30234/api/specialists/${userId}/profile`, data);
+    return this.http.put<any>(`${environment.apiUrl}/specialists/${userId}/profile`, data);
   }
 
   logout() {

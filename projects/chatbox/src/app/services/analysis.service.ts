@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import {
@@ -8,14 +8,15 @@ import {
   AiSpecialistRecommendation,
   StartupSuccessAnalysis
 } from '../models/analysis.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AnalysisService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/analysis';
-  private projectsUrl = 'http://localhost:8080/api/projects';
+  private baseUrl = `${environment.apiUrl}/analysis`;
+  private projectsUrl = `${environment.apiUrl}/projects`;
 
   analyzeBusinessValidation(projectId: string, opinions = ''): Observable<BusinessIdeaAnalysis> {
     const payload = opinions.trim() ? { opinions: opinions.trim() } : {};
@@ -77,3 +78,5 @@ export class AnalysisService {
       : throwError(() => new Error('Cette analyse ne peut pas etre mise a jour pour le moment.'));
   }
 }
+
+

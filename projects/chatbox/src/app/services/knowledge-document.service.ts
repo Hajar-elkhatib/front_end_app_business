@@ -1,15 +1,16 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { KnowledgeDocument, DocumentType, DocumentStatus } from '../models/knowledge-document.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class KnowledgeDocumentService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/documents';
+  private baseUrl = `${environment.apiUrl}/documents`;
   private documentsSubject = new BehaviorSubject<KnowledgeDocument[]>([]);
   public documents$ = this.documentsSubject.asObservable();
 
@@ -105,3 +106,4 @@ export class KnowledgeDocumentService {
     );
   }
 }
+

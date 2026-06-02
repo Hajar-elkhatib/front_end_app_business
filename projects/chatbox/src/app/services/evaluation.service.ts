@@ -1,10 +1,11 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Evaluation, EvaluationRequest, EvaluationSummary, Recommendation } from '../models/evaluation.model';
 import { AuthService } from './auth.service';
 import { SpecialistService } from './specialist.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,9 @@ export class EvaluationService {
   private authService = inject(AuthService);
   private specialistService = inject(SpecialistService);
 
-  private baseUrl = 'http://localhost:8080/api/évaluations';
-  private recommendationsUrl = 'http://localhost:8080/api/recommendations';
-  private specialistSummaryUrl = 'http://localhost:8080/api/specialists';
+  private baseUrl = `${environment.apiUrl}/Ã©valuations`;
+  private recommendationsUrl = `${environment.apiUrl}/recommendations`;
+  private specialistSummaryUrl = `${environment.apiUrl}/specialists`;
 
   private evaluationsSubject = new BehaviorSubject<Evaluation[]>([]);
   public evaluations$ = this.evaluationsSubject.asObservable();
@@ -81,7 +82,7 @@ export class EvaluationService {
 
   getEvaluationsBySpecialist(specialistId: string): Observable<Evaluation[]> {
     return this.http.get<Evaluation[]>(
-      `${this.baseUrl}/spécialiste/${encodeURIComponent(specialistId)}`
+      `${this.baseUrl}/spÃ©cialiste/${encodeURIComponent(specialistId)}`
     ).pipe(
       map(response => response.map(evaluation => this.mapEvaluation(evaluation))),
       tap(response => this.evaluationsSubject.next(response))
@@ -167,3 +168,5 @@ export class EvaluationService {
     );
   }
 }
+
+

@@ -1,16 +1,17 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { Availability } from '../models/specialist.model';
 import { Complaint, ComplaintStatus, ComplaintType } from '../models/complaint.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AvailabilityService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/availability';
+  private baseUrl = `${environment.apiUrl}/availability`;
 
   getAvailability(specialistId: string): Observable<Availability> {
     return this.http.get<Availability>(`${this.baseUrl}/${specialistId}`);
@@ -37,7 +38,7 @@ export class AvailabilityService {
 })
 export class ComplaintService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/complaints';
+  private baseUrl = `${environment.apiUrl}/complaints`;
   private storageKey = 'nexus_local_complaints';
   private complaintsSubject = new BehaviorSubject<Complaint[]>([]);
   public complaints$ = this.complaintsSubject.asObservable();
@@ -220,3 +221,5 @@ export class ComplaintService {
     return 'Pending';
   }
 }
+
+

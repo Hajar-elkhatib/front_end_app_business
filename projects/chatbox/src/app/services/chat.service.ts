@@ -1,17 +1,18 @@
-import { Injectable, inject } from '@angular/core';
+﻿import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { Chat, ChatExchange, ChatMessage, Conversation } from '../models/chat.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
   private http = inject(HttpClient);
-  private chatbotBaseUrl = 'http://localhost:8080/api/chatbot';
-  private aiChatsBaseUrl = 'http://localhost:8080/api/chats';
-  private conversationBaseUrl = 'http://localhost:8080/api/chat';
+  private chatbotBaseUrl = `${environment.apiUrl}/chatbot`;
+  private aiChatsBaseUrl = `${environment.apiUrl}/chats`;
+  private conversationBaseUrl = `${environment.apiUrl}/chat`;
   private aiChatsStorageKey = 'nexus_local_ai_assistant_chats';
   private aiMessagesStorageKey = 'nexus_local_ai_assistant_messages';
 
@@ -132,3 +133,5 @@ export class ChatService {
     }
   }
 }
+
+
