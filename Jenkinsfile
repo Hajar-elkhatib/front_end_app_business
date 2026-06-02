@@ -41,7 +41,8 @@ pipeline {
 
         stage('5. Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE}:${TAG} ."
+                // 🟢 Zdna --no-cache hna bach i-t-compila l-code jdid bla cache d l-mrat d l-fayt
+                sh "docker build --no-cache -t ${IMAGE}:${TAG} ."
                 sh "docker tag ${IMAGE}:${TAG} ${IMAGE}:latest"
             }
         }
@@ -68,10 +69,10 @@ pipeline {
 
     post {
         success {
-            echo ' Pipeline frontend réussi et déployé avec succès !'
+            echo '🚀 Pipeline frontend réussi et déployé avec succès !'
         }
         failure {
-            echo ' Pipeline frontend échoué — Vérifier les logs de build'
+            echo '❌ Pipeline frontend échoué — Vérifier les logs de build'
         }
         always {
             cleanWs() 
