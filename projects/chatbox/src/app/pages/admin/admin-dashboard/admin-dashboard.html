@@ -2,78 +2,73 @@
   <header class="admin-header">
     <div>
       <p class="admin-kicker">Admin</p>
-      <h1>Database workspace</h1>
-      <p class="admin-copy">Review data spaces and remove test records while verifying flows.</p>
+      <h1>Dashboard</h1>
+      <p class="admin-copy">Live platform overview from Spring Boot and MongoDB.</p>
     </div>
-    <button type="button" class="admin-refresh" (click)="loadCollections()" [disabled]="isLoadingCollections">
-      Refresh
-    </button>
+    <button type="button" class="admin-refresh" (click)="loadSummary()" [disabled]="isLoading">Refresh</button>
   </header>
 
-  <div class="admin-links">
-    <a routerLink="/admin/users">Users</a>
-    <a routerLink="/admin/projects">Projects</a>
-    <a routerLink="/admin/specialists">Specialists</a>
-    <a routerLink="/admin/complaints">Complaints</a>
-  </div>
-
   <p *ngIf="errorMessage" class="admin-error">{{errorMessage}}</p>
+  <div *ngIf="isLoading" class="table-empty">Loading dashboard...</div>
 
-  <div class="admin-grid">
-    <aside class="collection-panel">
-      <div class="panel-title">Collections</div>
-      <div *ngIf="isLoadingCollections" class="panel-empty">Loading collections...</div>
-      <button
-        *ngFor="let collection of collections"
-        type="button"
-        class="collection-row"
-        [class.active]="collection.name === selectedCollection"
-        (click)="openCollection(collection.name)">
-        <span>{{collection.name}}</span>
-        <strong>{{collection.documentCount}}</strong>
-      </button>
-    </aside>
-
-    <div class="document-panel">
-      <div class="document-bar">
-        <div>
-          <div class="panel-title">{{selectedCollection || 'Documents'}}</div>
-          <div class="panel-meta">Showing up to 100 newest records.</div>
-        </div>
-        <span class="record-count">{{documents.length}} loaded</span>
-      </div>
-
-      <div *ngIf="isLoadingDocuments" class="table-empty">Loading records...</div>
-      <div *ngIf="!isLoadingDocuments && !documents.length" class="table-empty">
-        {{searchQuery ? 'No records match this search.' : 'No records in this collection.'}}
-      </div>
-
-      <div *ngIf="!isLoadingDocuments && documents.length" class="table-scroll">
-        <table>
-          <thead>
-            <tr>
-              <th *ngFor="let field of fieldNames">{{field}}</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let document of documents">
-              <td *ngFor="let field of fieldNames" [title]="getValue(document, field)">
-                {{getValue(document, field)}}
-              </td>
-              <td>
-                <button
-                  type="button"
-                  class="delete-btn"
-                  [disabled]="isDeletingId === getId(document)"
-                  (click)="deleteDocument(document)">
-                  Delete
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <ng-container *ngIf="!isLoading && summary as data">
+    <div class="metric-grid">
+      <article class="metric-card"><span>Total Users</span><strong>{{data.totalUsers}}</strong></article>
+      <article class="metric-card"><span>Entrepreneurs</span><strong>{{data.totalEntrepreneurs}}</strong></article>
+      <article class="metric-card"><span>Specialists</span><strong>{{data.totalSpecialists}}</strong></article>
+      <article class="metric-card"><span>Total Projects</span><strong>{{data.totalProjects}}</strong></article>
+      <article class="metric-card"><span>Analyzed Projects</span><strong>{{data.analyzedProjects}}</strong></article>
+      <article class="metric-card"><span>Pending Requests</span><strong>{{data.pendingSpecialistRequests}}</strong></article>
+      <article class="metric-card"><span>Generated Reports</span><strong>{{data.generatedReports}}</strong></article>
     </div>
-  </div>
+
+    <div class="admin-two-col">
+      <section class="admin-panel">
+        <div class="panel-title">Projects by Status</div>
+        <div *ngIf="!data.projectsByStatus.length" class="table-empty compact">No project statuses yet.</div>
+        <div *ngFor="let item of data.projectsByStatus" class="summary-row">
+          <span>{{item.label}}</span>
+          <strong>{{item.count}}</strong>
+        </div>
+      </section>
+
+      <section class="admin-panel">
+        <div class="panel-title">Projects by Sector</div>
+        <div *ngIf="!data.projectsBySector.length" class="table-empty compact">No sectors yet.</div>
+        <div *ngFor="let item of data.projectsBySector" class="summary-row">
+          <span>{{item.label}}</span>
+          <strong>{{item.count}}</strong>
+        </div>
+      </section>
+    </div>
+
+    <div class="admin-two-col">
+      <section class="admin-panel">
+        <div class="panel-title">Recent Projects</div>
+        <div *ngIf="!data.recentProjects.length" class="table-empty compact">No projects yet.</div>
+        <a *ngFor="let project of data.recentProjects" class="summary-row linked" [routerLink]="['/admin/projects', project.id]">
+          <span>{{project.title || 'Untitled project'}}</span>
+          <em>{{project.analysisStatus}}</em>
+        </a>
+      </section>
+
+      <section class="admin-panel">
+        <div class="panel-title">Pending Specialist Requests</div>
+        <div *ngIf="!data.pendingRequests.length" class="table-empty compact">No pending requests.</div>
+        <a *ngFor="let request of data.pendingRequests" class="summary-row linked" routerLink="/admin/support-requests">
+          <span>{{request.project || 'Project'}}</span>
+          <em>{{request.status}}</em>
+        </a>
+      </section>
+    </div>
+
+    <section class="admin-panel">
+      <div class="panel-title">Recent Reports</div>
+      <div *ngIf="!data.recentReports.length" class="table-empty compact">No reports generated yet.</div>
+      <div *ngFor="let report of data.recentReports" class="summary-row">
+        <span>{{report.title}}</span>
+        <em>{{report.reportType || 'Report'}}</em>
+      </div>
+    </section>
+  </ng-container>
 </section>

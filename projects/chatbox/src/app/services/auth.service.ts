@@ -9,7 +9,9 @@ import { User, AuthResponse } from '../models/user.model';
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:8080/api/auth';
+  
+  // 🚀 CHANGER LOCALHOST PAR L'IP AZURE ET LE NODEPORT DU BACKEND (30234)
+  private baseUrl = 'http://20.199.171.43:30234/api/auth';
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
@@ -37,7 +39,7 @@ export class AuthService {
   getDashboardRoute(): string {
     const role = this.currentUserSubject.value?.role;
     if (role === 'admin') {
-      return '/admin';
+      return '/admin/dashboard';
     }
     return role === 'specialist' ? '/dashboard/specialist' : '/dashboard/entrepreneur';
   }
@@ -45,7 +47,6 @@ export class AuthService {
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<any>(`${this.baseUrl}/login`, { email, password }).pipe(
       map(res => {
-        // Normalize role (e.g., 'ENTREPRENEUR' -> 'entrepreneur')
         const normalizedRole = (res.role || 'ENTREPRENEUR').toLowerCase();
         const user: User = {
           id: res.userId || res.id || 'unknown',
@@ -71,7 +72,6 @@ export class AuthService {
   registerEntrepreneur(data: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/register/entrepreneur`, data).pipe(
       map(res => {
-        // Backend register returns AuthResponse: message, userId, role
         const normalizedRole = (res.role || 'ENTREPRENEUR').toLowerCase() as 'entrepreneur' | 'specialist';
         return {
           message: res.message,
@@ -85,7 +85,6 @@ export class AuthService {
   registerSpecialist(data: any): Observable<any> {
     return this.http.post<any>(`${this.baseUrl}/register/specialist`, data).pipe(
       map(res => {
-        // Backend register returns AuthResponse: message, userId, role
         const normalizedRole = (res.role || 'SPECIALIST').toLowerCase() as 'entrepreneur' | 'specialist';
         return {
           message: res.message,
@@ -96,20 +95,21 @@ export class AuthService {
     );
   }
 
+  // 🚀 ADRESSES MISES À JOUR AVEC L'IP AZURE POUR LES PROFILS
   getEntrepreneurProfile(userId: string): Observable<any> {
-    return this.http.get<any>(`http://localhost:8080/api/entrepreneurs/${userId}/profile`);
+    return this.http.get<any>(`http://20.199.171.43:30234/api/entrepreneurs/${userId}/profile`);
   }
 
   updateEntrepreneurProfile(userId: string, data: any): Observable<any> {
-    return this.http.put<any>(`http://localhost:8080/api/entrepreneurs/${userId}/profile`, data);
+    return this.http.put<any>(`http://20.199.171.43:30234/api/entrepreneurs/${userId}/profile`, data);
   }
 
   getSpecialistProfile(userId: string): Observable<any> {
-    return this.http.get<any>(`http://localhost:8080/api/specialists/${userId}/profile`);
+    return this.http.get<any>(`http://20.199.171.43:30234/api/specialists/${userId}/profile`);
   }
 
   updateSpecialistProfile(userId: string, data: any): Observable<any> {
-    return this.http.put<any>(`http://localhost:8080/api/specialists/${userId}/profile`, data);
+    return this.http.put<any>(`http://20.199.171.43:30234/api/specialists/${userId}/profile`, data);
   }
 
   logout() {

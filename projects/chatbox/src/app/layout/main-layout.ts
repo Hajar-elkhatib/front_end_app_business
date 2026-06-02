@@ -60,7 +60,7 @@ export class MainLayout implements OnInit {
       return '/profile/specialist';
     }
     if (this.authService.userRole === 'admin') {
-      return '/admin';
+      return '/admin/dashboard';
     }
     return '/profile/entrepreneur';
   }
@@ -207,12 +207,11 @@ export class MainLayout implements OnInit {
   private getSearchableLinks(): SearchSuggestion[] {
     if (this.isAdmin) {
       return [
-        { label: 'Admin dashboard', description: 'Platform monitoring workspace', route: '/admin' },
+        { label: 'Admin dashboard', description: 'Platform monitoring workspace', route: '/admin/dashboard' },
         { label: 'Users', description: 'Manage users', route: '/admin/users' },
-        { label: 'Entrepreneurs', description: 'Manage entrepreneurs', route: '/admin/entrepreneurs' },
         { label: 'Specialists', description: 'Manage specialists', route: '/admin/specialists' },
+        { label: 'Support requests', description: 'Match projects with specialists', route: '/admin/support-requests' },
         { label: 'Project monitoring', description: 'Review all projects', route: '/admin/projects' },
-        { label: 'Complaints', description: 'Manage platform complaints', route: '/admin/complaints' },
         { label: 'Reports', description: 'Manage reports', route: '/admin/reports' },
         { label: 'AI models', description: 'Monitor ML models', route: '/admin/ai-models' }
       ];
