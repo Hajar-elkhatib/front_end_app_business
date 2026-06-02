@@ -2,13 +2,8 @@ pipeline {
     agent any
 
     environment {
-<<<<<<< HEAD
-        IMAGE_NAME = "my-frontend-app"
-        TAG        = "${BUILD_NUMBER}"
-=======
         IMAGE = "marouamrouji/frontend-app"
         TAG = "1.0.${env.BUILD_NUMBER}"
->>>>>>> 980012f (admin dashboard integration and frontend updates)
     }
 
     stages {
@@ -22,20 +17,12 @@ pipeline {
 
         stage('2. Install Dependencies') {
             steps {
-<<<<<<< HEAD
-                echo 'Analyse du code source Frontend (Angular) avec SonarQube...'
-=======
                 sh 'npm install'
->>>>>>> 980012f (admin dashboard integration and frontend updates)
             }
         }
 
         stage('3. Analyse SonarQube') {
             steps {
-<<<<<<< HEAD
-                echo 'Building Frontend Docker Image...'
-                sh "docker build -t ${IMAGE_NAME}:${TAG} ."
-=======
                 withSonarQubeEnv('sonarqube') {
                     sh '''
                         npx sonar-scanner \
@@ -44,7 +31,6 @@ pipeline {
                         -Dsonar.sources=src
                     '''
                 }
->>>>>>> 980012f (admin dashboard integration and frontend updates)
             }
         }
 
@@ -61,32 +47,10 @@ pipeline {
             }
         }
 
-        // 🔥 [إضافة DevSecOps]: سكان أمني حقيقي لـ Image ديال Angular قبل الـ Push
-        stage('6. Security Scan: Docker Image (Trivy)') {
-            steps {
-                echo 'Scanning Frontend Image with Trivy...'
-<<<<<<< HEAD
-                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 1 --severity CRITICAL ${IMAGE_NAME}:${TAG}"
-=======
-                // كيسكاني الـ Image ويحبس الـ Pipeline يلا لقى ثغرة خطيرة (CRITICAL)
-                sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --exit-code 1 --severity CRITICAL ${IMAGE}:${TAG}"
->>>>>>> 980012f (admin dashboard integration and frontend updates)
-            }
-        }
+        // 🔥 [Trivy Scan ❌ t-mseh men hna kima bghiti]
 
-        stage('7. Push Docker Hub') {
+        stage('6. Push Docker Hub') {
             steps {
-<<<<<<< HEAD
-                script {
-                    echo ' Démarrage du déploiement automatique sur Kubernetes (Azure)...'
-                    
-                   
-                    sh 'kubectl apply -f k8s/frontend.yaml'
-                    sh 'kubectl apply -f k8s/ia-model.yaml'
-                    sh 'kubectl apply -f k8s/backend.yaml' // <--- Le Backend t-zad hna !
-                    
-                    echo '✅ Frontend, IA et Backend déployés automatiquement avec succès !'
-=======
                 withCredentials([usernamePassword(
                     credentialsId: 'docker-hub',
                     usernameVariable: 'USER',
@@ -94,12 +58,11 @@ pipeline {
                     sh "echo \$PASS | docker login -u \$USER --password-stdin"
                     sh "docker push ${IMAGE}:${TAG}"
                     sh "docker push ${IMAGE}:latest"
->>>>>>> 980012f (admin dashboard integration and frontend updates)
                 }
             }
         }
 
-        stage('8. Deploy avec Ansible') {
+        stage('7. Deploy avec Ansible') {
             steps {
                 sh 'ssh -o StrictHostKeyChecking=no azureuser@74.161.163.110 "ansible-playbook -i ~/ansible/inventory.ini ~/ansible/deploy.yml"'
             }
@@ -109,19 +72,8 @@ pipeline {
 
     post {
         success {
-            echo ' Pipeline frontend réussi !'
-        }
-        failure {
-            echo ' Pipeline frontend échoué — vérifier les logs'
-        }
-        always {
-            cleanWs()
-        }
-    }
-
-    post {
-        success {
             script {
+                echo 'Pipeline frontend réussi !'
                 sh """
                 curl -X POST https://api.telegram.org/bot<TON_TOKEN>/sendMessage \
                 -d chat_id=<TON_CHAT_ID> \
@@ -131,12 +83,16 @@ pipeline {
         }
         failure {
             script {
+                echo 'Pipeline frontend échoué — vérifier les logs'
                 sh """
                 curl -X POST https://api.telegram.org/bot<TON_TOKEN>/sendMessage \
                 -d chat_id=<TON_CHAT_ID> \
-                -d text="❌ *Jenkins Pipeline FAILURE* %0A%0A🔹 *Projet:* ${env.JOB_NAME} %0A🔹 *Build:* #${env.BUILD_NUMBER} %0A🔹 *Attention:* Erreur lors du déploiement ou blocage de sécurité Trivy ! ⚠️"
+                -d text="❌ *Jenkins Pipeline FAILURE* %0A%0A🔹 *Projet:* ${env.JOB_NAME} %0A🔹 *Build:* #${env.BUILD_NUMBER} %0A🔹 *Attention:* Erreur lors du déploiement ! ⚠️"
                 """
             }
+        }
+        always {
+            cleanWs()
         }
     }
 }
