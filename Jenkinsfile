@@ -3,15 +3,14 @@ pipeline {
 
     environment {
         IMAGE = "marouamrouji/frontend-app"
-        TAG = "1.0.${env.BUILD_NUMBER}"
+        TAG   = "1.0.${env.BUILD_NUMBER}"
     }
 
     stages {
-
         stage('1. Checkout') {
             steps {
                 checkout scm
-                echo 'Code récupéré depuis GitHub ✓'
+                echo '✅ Code récupéré depuis GitHub'
             }
         }
 
@@ -47,8 +46,6 @@ pipeline {
             }
         }
 
-        // 🔥 [Trivy Scan ❌ t-mseh men hna kima bghiti]
-
         stage('6. Push Docker Hub') {
             steps {
                 withCredentials([usernamePassword(
@@ -67,32 +64,17 @@ pipeline {
                 sh 'ssh -o StrictHostKeyChecking=no azureuser@74.161.163.110 "ansible-playbook -i ~/ansible/inventory.ini ~/ansible/deploy.yml"'
             }
         }
-
     }
 
     post {
         success {
-            script {
-                echo 'Pipeline frontend réussi !'
-                sh """
-                curl -X POST https://api.telegram.org/bot<TON_TOKEN>/sendMessage \
-                -d chat_id=<TON_CHAT_ID> \
-                -d text="🚀 *Jenkins Pipeline SUCCESS* %0A%0A🔹 *Projet:* ${env.JOB_NAME} %0A🔹 *Build:* #${env.BUILD_NUMBER} %0A🔹 *Statut:* Tout l'écosystème (Front, Backend, IA) est déployé sur Azure ! 🎉"
-                """
-            }
+            echo ' Pipeline frontend réussi et déployé avec succès !'
         }
         failure {
-            script {
-                echo 'Pipeline frontend échoué — vérifier les logs'
-                sh """
-                curl -X POST https://api.telegram.org/bot<TON_TOKEN>/sendMessage \
-                -d chat_id=<TON_CHAT_ID> \
-                -d text="❌ *Jenkins Pipeline FAILURE* %0A%0A🔹 *Projet:* ${env.JOB_NAME} %0A🔹 *Build:* #${env.BUILD_NUMBER} %0A🔹 *Attention:* Erreur lors du déploiement ! ⚠️"
-                """
-            }
+            echo ' Pipeline frontend échoué — Vérifier les logs de build'
         }
         always {
-            cleanWs()
+            cleanWs() 
         }
     }
 }
