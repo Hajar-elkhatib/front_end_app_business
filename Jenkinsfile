@@ -33,18 +33,39 @@ pipeline {
             }
         }
 
-       
         stage('5. Deploy Frontend to Azure (MicroK8s)') {
             steps {
                 script {
-                    echo '🚀 Démarrage du déploiement automatique sur Kubernetes (Azure)...'
+                    echo ' Démarrage du déploiement automatique sur Kubernetes (Azure)...'
                     
-                    
+                   
                     sh 'kubectl apply -f k8s/frontend.yaml'
                     sh 'kubectl apply -f k8s/ia-model.yaml'
+                    sh 'kubectl apply -f k8s/backend.yaml' // <--- Le Backend t-zad hna !
                     
-                    echo '✅ Frontend et IA déployés et mis à jour automatiquement avec succès !'
+                    echo '✅ Frontend, IA et Backend déployés automatiquement avec succès !'
                 }
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                sh """
+                curl -X POST https://api.telegram.org/bot<TON_TOKEN>/sendMessage \
+                -d chat_id=<TON_CHAT_ID> \
+                -d text="🚀 *Jenkins Pipeline SUCCESS* %0A%0A🔹 *Projet:* ${env.JOB_NAME} %0A🔹 *Build:* #${env.BUILD_NUMBER} %0A🔹 *Statut:* Tout l'écosystème (Front, Backend, IA) est déployé sur Azure ! 🎉"
+                """
+            }
+        }
+        failure {
+            script {
+                sh """
+                curl -X POST https://api.telegram.org/bot<TON_TOKEN>/sendMessage \
+                -d chat_id=<TON_CHAT_ID> \
+                -d text="❌ *Jenkins Pipeline FAILURE* %0A%0A🔹 *Projet:* ${env.JOB_NAME} %0A🔹 *Build:* #${env.BUILD_NUMBER} %0A🔹 *Attention:* Erreur lors du déploiement ou blocage de sécurité Trivy ! ⚠️"
+                """
             }
         }
     }
