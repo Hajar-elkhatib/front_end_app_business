@@ -1,7 +1,3 @@
-Jenkinsfile dial l-Frontend (Angular)
-Hada fih l-isla7 dial permission d Docker socket li drna, o scan d Trivy m9add:
-
-Groovy
 pipeline {
     agent any
     
