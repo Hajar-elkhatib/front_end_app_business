@@ -5,13 +5,13 @@ pipeline {
         DOCKER_HUB_USER = 'marouamrouji'
         IMAGE_NAME      = 'frontend-app'
         IMAGE_TAG       = "1.0.${BUILD_NUMBER}"
-        REGISTRY_CRED   = 'docker-hub' // خليتها نفس ID لي نجح ليك ف الـ Backend
+        REGISTRY_CRED   = 'docker-hub' 
     }
 
     stages {
         stage('1. Checkout SCM') {
             steps {
-                cleanWs() // تنظيف لسلامة كود أنغولار
+                cleanWs() 
                 checkout scm
                 echo "✅ Code Frontend récupéré"
             }
@@ -27,7 +27,7 @@ pipeline {
         stage('3. Analyse SonarQube') {
             steps {
                 withSonarQubeEnv('sonarqube') {
-                    // زدنا wait=false لضمان عدم البلوكاج بسبب الـ Quality Gate
+                  
                     sh 'npx sonar-scanner -Dsonar.projectKey=frontend-app -Dsonar.projectName=frontend-app -Dsonar.sources=src -Dsonar.qualitygate.wait=false'
                 }
             }
@@ -65,11 +65,13 @@ pipeline {
             }
         }
 
-        stage('8. Deploy avec Ansible') {
+      stage('8. Deploy avec Ansible') {
             steps {
-                echo "🚀 Déploiement du Frontend avec Ansible..."
-                sh "ansible-playbook -i ansible/hosts ansible/deploy-frontend.yml --extra-vars 'image_tag=${IMAGE_TAG}'"
+                echo "🚀 Déploiement du Backend sur le Cluster..."
+                // عيطنا على الـ deploy.yml الصحيح لي عندك ف السيرفر ديريكت
+                sh "ssh -o StrictHostKeyChecking=no azureuser@74.161.163.110 'ansible-playbook -i ~/ansible/inventory.ini ~/ansible/deploy.yml --extra-vars \"image_tag=${IMAGE_TAG}\"'"
             }
+        }
         }
     }
 
