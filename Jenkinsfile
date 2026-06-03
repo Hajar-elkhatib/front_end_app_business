@@ -72,7 +72,7 @@ pipeline {
                 sh "ssh -o StrictHostKeyChecking=no azureuser@74.161.163.110 'ansible-playbook -i ~/ansible/inventory.ini ~/ansible/deploy.yml --extra-vars \"image_tag=${IMAGE_TAG}\"'"
             }
         }
-        }
+        
     }
 
     post {
