@@ -36,7 +36,7 @@ pipeline {
         stage('4. Security Scan (Trivy fs)') {
             steps {
                 echo "🔍 Scanning filesystem specifications with Trivy..."
-                // خدمناه بـ Docker لضمان عدم وقوع خطأ introuvable
+               
                 sh "docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v ${WORKSPACE}:/apps aquasec/trivy fs /apps --severity HIGH,CRITICAL --exit-code 0"
             }
         }
@@ -68,7 +68,7 @@ pipeline {
       stage('8. Deploy avec Ansible') {
             steps {
                 echo "🚀 Déploiement du Backend sur le Cluster..."
-                // عيطنا على الـ deploy.yml الصحيح لي عندك ف السيرفر ديريكت
+               
                 sh "ssh -o StrictHostKeyChecking=no azureuser@74.161.163.110 'ansible-playbook -i ~/ansible/inventory.ini ~/ansible/deploy.yml --extra-vars \"image_tag=${IMAGE_TAG}\"'"
             }
         }
