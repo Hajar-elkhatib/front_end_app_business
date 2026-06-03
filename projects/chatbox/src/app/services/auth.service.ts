@@ -11,7 +11,6 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   private http = inject(HttpClient);
   
-  // 🟢 L-url m9add direct mn l-environment variable
   private baseUrl = `${environment.apiUrl}/auth`;
 
   private currentUserSubject = new BehaviorSubject<User | null>(null);
@@ -25,12 +24,27 @@ export class AuthService {
     }
   }
 
-  public get currentUserValue(): User | null {
+  public get currentUser(): User | null {
     return this.currentUserSubject.value;
   }
 
-  login(credentials: any): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, credentials).pipe(
+  public get isLoggedIn(): boolean {
+    return !!this.currentUser;
+  }
+
+  public get userRole(): string {
+    return this.currentUser?.role || '';
+  }
+
+  getDashboardRoute(): string {
+    const role = this.userRole.toLowerCase();
+    if (role === 'admin') return '/admin/dashboard';
+    if (role === 'specialist') return '/specialist/dashboard';
+    return '/entrepreneur/dashboard';
+  }
+
+  login(email: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, { email, password }).pipe(
       tap(response => {
         if (response && response.token) {
           localStorage.setItem('nexus_token', response.token);
@@ -49,7 +63,6 @@ export class AuthService {
     return this.http.post<any>(`${this.baseUrl}/register/specialist`, data);
   }
 
-  // 🟢 Mises à jour des profils avec environment.apiUrl
   getEntrepreneurProfile(userId: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/entrepreneurs/${userId}/profile`);
   }
