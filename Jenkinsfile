@@ -5,7 +5,7 @@ pipeline {
         DOCKER_HUB_USER = 'marouamrouji'
         IMAGE_NAME      = 'frontend-app'
         IMAGE_TAG       = "1.0.${BUILD_NUMBER}"
-        REGISTRY_CRED   = 'docker-hub-credentials' // خليتها نفس ID لي نجح ليك ف الـ Backend
+        REGISTRY_CRED   = 'docker-hub' // خليتها نفس ID لي نجح ليك ف الـ Backend
     }
 
     stages {
