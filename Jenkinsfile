@@ -41,7 +41,7 @@ pipeline {
 
         stage('5. Build Docker Image') {
             steps {
-                // 🟢 Zdna --no-cache hna bach i-t-compila l-code jdid bla cache d l-mrat d l-fayt
+                // 🟢 Hna zdna --no-cache bach i-akhd s-stora d l-code jdad completement
                 sh "docker build --no-cache -t ${IMAGE}:${TAG} ."
                 sh "docker tag ${IMAGE}:${TAG} ${IMAGE}:latest"
             }
