@@ -6,7 +6,7 @@ RUN npm install
 COPY . .
 RUN npm run build -- --configuration production
 
-# Étape 2 — Serveur Nginx
+
 FROM nginx:alpine
 COPY --from=build /app/dist/chatbox/browser /usr/share/nginx/html
 EXPOSE 80
