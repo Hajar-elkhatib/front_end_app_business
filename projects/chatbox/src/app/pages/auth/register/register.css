@@ -124,6 +124,52 @@
 
 .form-input::placeholder { color: #52525b; }
 
+select.form-input {
+  cursor: pointer;
+}
+
+select.form-input option {
+  background: #18181b;
+  color: #ffffff;
+}
+
+select.form-input[multiple] {
+  min-height: 120px;
+}
+
+.language-picker {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.65rem;
+}
+
+.language-chip {
+  min-height: 44px;
+  padding: 0.65rem 0.85rem;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #d4d4d8;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.language-chip:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.22);
+  color: #ffffff;
+}
+
+.language-chip.selected {
+  background: rgba(168, 85, 247, 0.16);
+  border-color: #a855f7;
+  color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.12);
+}
+
 .form-input:focus {
   border-color: #a855f7;
   background: rgba(0, 0, 0, 0.4);

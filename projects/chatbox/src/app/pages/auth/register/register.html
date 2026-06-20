@@ -44,9 +44,10 @@
           <div class="form-group">
             <label class="form-label">Phone Number</label>
             <div class="form-input-wrap">
-              <input type="text" formControlName="phone" class="form-input" placeholder="e.g. +1 555-0199">
+              <input type="tel" formControlName="phone" class="form-input" placeholder="06XXXXXXXX or +2126XXXXXXXX">
             </div>
-            <div *ngIf="isFieldInvalid('phone')" class="form-error">Phone number is required.</div>
+            <div *ngIf="registerForm.get('phone')?.hasError('required') && isFieldInvalid('phone')" class="form-error">Phone number is required.</div>
+            <div *ngIf="registerForm.get('phone')?.hasError('pattern') && isFieldInvalid('phone')" class="form-error">Enter a valid Moroccan mobile number starting with 06 or 07, or with +2126 / +2127.</div>
           </div>
         </div>
 
@@ -70,6 +71,16 @@
             </div>
             <div *ngIf="isFieldInvalid('password')" class="form-error">Password must be at least 6 characters.</div>
           </div>
+
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Confirm Password</label>
+          <div class="form-input-wrap">
+            <input [type]="showPassword ? 'text' : 'password'" formControlName="confirmPassword" class="form-input" placeholder="Confirm your password">
+          </div>
+          <div *ngIf="registerForm.get('confirmPassword')?.hasError('required') && isFieldInvalid('confirmPassword')" class="form-error">Password confirmation is required.</div>
+          <div *ngIf="isConfirmPasswordInvalid()" class="form-error">Passwords do not match.</div>
         </div>
 
         <!-- Entrepreneur Specific Fields -->
@@ -131,19 +142,25 @@
 
           <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
             <div class="form-group">
-              <label class="form-label">Location</label>
+              <label class="form-label">Country</label>
               <div class="form-input-wrap">
-                <input type="text" formControlName="location" class="form-input" placeholder="Austin, TX / Remote">
+                <select formControlName="country" class="form-input">
+                  <option value="">Select country</option>
+                  <option *ngFor="let country of countryCities | keyvalue" [value]="country.key">{{country.key}}</option>
+                </select>
               </div>
-              <div *ngIf="isFieldInvalid('location')" class="form-error">Location is required.</div>
+              <div *ngIf="isFieldInvalid('country')" class="form-error">Country is required.</div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Languages</label>
+              <label class="form-label">City</label>
               <div class="form-input-wrap">
-                <input type="text" formControlName="languages" class="form-input" placeholder="English, French">
+                <select formControlName="city" class="form-input" [disabled]="!registerForm.get('country')?.value">
+                  <option value="">Select city</option>
+                  <option *ngFor="let city of availableCities" [value]="city">{{city}}</option>
+                </select>
               </div>
-              <div *ngIf="isFieldInvalid('languages')" class="form-error">Languages are required.</div>
+              <div *ngIf="isFieldInvalid('city')" class="form-error">City is required.</div>
             </div>
 
             <div class="form-group">
@@ -153,6 +170,22 @@
               </div>
               <div *ngIf="isFieldInvalid('hourlyRate')" class="form-error">Hourly rate is required.</div>
             </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Languages</label>
+            <input type="hidden" formControlName="languages">
+            <div class="language-picker" role="group" aria-label="Select languages">
+              <button
+                *ngFor="let language of languageOptions"
+                type="button"
+                class="language-chip"
+                [class.selected]="isLanguageSelected(language)"
+                (click)="toggleLanguage(language)">
+                {{language}}
+              </button>
+            </div>
+            <div *ngIf="isFieldInvalid('languages')" class="form-error">At least one language is required.</div>
           </div>
 
           <div class="form-group">

@@ -1,8 +1,21 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { AuthService } from '../../../services/auth.service';
+
+const MOROCCAN_PHONE_PATTERN = /^(?:0[67]\d{8}|\+212[67]\d{8})$/;
+
+const passwordMatchValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  const password = control.get('password')?.value;
+  const confirmPassword = control.get('confirmPassword')?.value;
+
+  return password && confirmPassword && password !== confirmPassword ? { passwordMismatch: true } : null;
+};
+
+const requiredArrayValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
+  return Array.isArray(control.value) && control.value.length > 0 ? null : { required: true };
+};
 
 @Component({
   selector: 'app-register',
@@ -20,14 +33,23 @@ export class Register implements OnInit {
   registerForm!: FormGroup;
   isLoading = false;
   showPassword = false;
+  readonly countryCities: Record<string, string[]> = {
+    Morocco: ['Casablanca', 'Rabat', 'Marrakech', 'Fes', 'Tangier', 'Agadir', 'Meknes', 'Oujda'],
+    France: ['Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice', 'Nantes', 'Bordeaux', 'Lille'],
+    Spain: ['Madrid', 'Barcelona', 'Valencia', 'Seville', 'Zaragoza', 'Malaga'],
+    Canada: ['Montreal', 'Toronto', 'Vancouver', 'Ottawa', 'Quebec City', 'Calgary'],
+    'United States': ['New York', 'San Francisco', 'Los Angeles', 'Chicago', 'Austin', 'Seattle']
+  };
+  readonly languageOptions = ['Arabic', 'French', 'English', 'Spanish', 'German', 'Italian'];
 
   ngOnInit() {
     this.registerForm = this.fb.group({
       fullName: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
       role: ['entrepreneur', Validators.required],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern(MOROCCAN_PHONE_PATTERN)]],
       
       // Entrepreneur specific
       companyName: [''],
@@ -38,12 +60,13 @@ export class Register implements OnInit {
       expertiseDomain: [''],
       skillsInput: [''],
       sectorsInput: [''],
-      location: [''],
-      languages: [''],
+      country: [''],
+      city: [''],
+      languages: [[]],
       hourlyRate: [0],
       industryExperience: [0],
       bio: ['']
-    });
+    }, { validators: passwordMatchValidator });
 
     this.onRoleChange('entrepreneur');
 
@@ -51,17 +74,29 @@ export class Register implements OnInit {
       this.onRoleChange(role);
       this.cdr.markForCheck();
     });
+
+    this.registerForm.get('country')?.valueChanges.subscribe(country => {
+      const cityControl = this.registerForm.get('city');
+      const cities = this.countryCities[country] || [];
+
+      if (!cities.includes(cityControl?.value)) {
+        cityControl?.setValue('');
+      }
+    });
   }
 
   onRoleChange(role: 'entrepreneur' | 'specialist') {
     const entFields = ['companyName', 'businessType'];
-    const specFields = ['profession', 'expertiseDomain', 'location', 'languages', 'hourlyRate', 'industryExperience', 'bio'];
+    const specFields = ['profession', 'expertiseDomain', 'country', 'city', 'languages', 'hourlyRate', 'industryExperience', 'bio'];
 
     if (role === 'entrepreneur') {
       entFields.forEach(f => this.registerForm.get(f)?.setValidators([Validators.required]));
       specFields.forEach(f => this.registerForm.get(f)?.clearValidators());
     } else {
-      specFields.forEach(f => this.registerForm.get(f)?.setValidators([Validators.required]));
+      specFields.forEach(f => {
+        const validators = f === 'languages' ? [requiredArrayValidator] : [Validators.required];
+        this.registerForm.get(f)?.setValidators(validators);
+      });
       entFields.forEach(f => this.registerForm.get(f)?.clearValidators());
     }
 
@@ -72,6 +107,28 @@ export class Register implements OnInit {
 
   togglePassword() {
     this.showPassword = !this.showPassword;
+  }
+
+  get availableCities(): string[] {
+    const country = this.registerForm?.get('country')?.value;
+    return this.countryCities[country] || [];
+  }
+
+  toggleLanguage(language: string) {
+    const control = this.registerForm.get('languages');
+    const current = Array.isArray(control?.value) ? control.value : [];
+    const next = current.includes(language)
+      ? current.filter((item: string) => item !== language)
+      : [...current, language];
+
+    control?.setValue(next);
+    control?.markAsTouched();
+    control?.updateValueAndValidity();
+  }
+
+  isLanguageSelected(language: string): boolean {
+    const current = this.registerForm?.get('languages')?.value;
+    return Array.isArray(current) && current.includes(language);
   }
 
   onSubmit() {
@@ -116,8 +173,8 @@ export class Register implements OnInit {
         expertiseDomain: val.expertiseDomain,
         skills: val.skillsInput ? val.skillsInput.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
         sectors: val.sectorsInput ? val.sectorsInput.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
-        location: val.location,
-        languages: val.languages,
+        location: `${val.city}, ${val.country}`,
+        languages: Array.isArray(val.languages) ? val.languages.join(', ') : val.languages,
         hourlyRate: Number(val.hourlyRate),
         industryExperience: Number(val.industryExperience),
         bio: val.bio
@@ -143,5 +200,10 @@ export class Register implements OnInit {
   isFieldInvalid(fieldName: string): boolean {
     const field = this.registerForm.get(fieldName);
     return !!field && field.invalid && (field.dirty || field.touched);
+  }
+
+  isConfirmPasswordInvalid(): boolean {
+    const field = this.registerForm.get('confirmPassword');
+    return !!field && (field.dirty || field.touched) && this.registerForm.hasError('passwordMismatch');
   }
 }
