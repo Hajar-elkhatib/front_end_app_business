@@ -27,6 +27,8 @@ export const routes: Routes = [
       { path: 'dashboard', canActivate: [dashboardRedirectGuard], loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
       { path: 'dashboard/entrepreneur', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/dashboard/entrepreneur/entrepreneur-dashboard').then(m => m.EntrepreneurDashboard) },
       { path: 'dashboard/specialist', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
+      { path: 'entrepreneur/dashboard', redirectTo: 'dashboard/entrepreneur', pathMatch: 'full' },
+      { path: 'specialist/dashboard', redirectTo: 'dashboard/specialist', pathMatch: 'full' },
       { path: 'admin', redirectTo: 'admin/dashboard', pathMatch: 'full' },
       { path: 'admin/dashboard', canActivate: [roleGuard], data: { roles: ['admin'] }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
       { path: 'admin/users', canActivate: [roleGuard], data: { roles: ['admin'] }, loadComponent: () => import('./pages/admin/admin-users/admin-users').then(m => m.AdminUsers) },

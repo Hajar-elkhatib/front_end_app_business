@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { User, AuthResponse } from '../models/user.model';
+import { tap } from 'rxjs/operators';
+import { User, AuthResponse, LoginResponse } from '../models/user.model';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -20,7 +20,7 @@ export class AuthService {
     const savedUser = localStorage.getItem('nexus_user');
     const savedToken = localStorage.getItem('nexus_token');
     if (savedUser && savedToken) {
-      this.currentUserSubject.next(JSON.parse(savedUser));
+      this.currentUserSubject.next(this.normalizeUser(JSON.parse(savedUser)));
     }
   }
 
@@ -33,23 +33,24 @@ export class AuthService {
   }
 
   public get userRole(): string {
-    return this.currentUser?.role || '';
+    return this.normalizeRole(this.currentUser?.role);
   }
 
   getDashboardRoute(): string {
-    const role = this.userRole.toLowerCase();
+    const role = this.userRole;
     if (role === 'admin') return '/admin/dashboard';
-    if (role === 'specialist') return '/specialist/dashboard';
-    return '/entrepreneur/dashboard';
+    if (role === 'specialist') return '/dashboard/specialist';
+    return '/dashboard/entrepreneur';
   }
 
-  login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(`${this.baseUrl}/login`, { email, password }).pipe(
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.baseUrl}/login`, { email, password }).pipe(
       tap(response => {
         if (response && response.token) {
           localStorage.setItem('nexus_token', response.token);
-          localStorage.setItem('nexus_user', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
+          const user = this.mapLoginResponseToUser(response, email);
+          localStorage.setItem('nexus_user', JSON.stringify(user));
+          this.currentUserSubject.next(user);
         }
       })
     );
@@ -83,5 +84,27 @@ export class AuthService {
     localStorage.removeItem('nexus_token');
     localStorage.removeItem('nexus_user');
     this.currentUserSubject.next(null);
+  }
+
+  private mapLoginResponseToUser(response: LoginResponse, email: string): User {
+    return {
+      id: response.userId,
+      fullName: response.fullName,
+      email: response.email || email,
+      role: this.normalizeRole(response.role),
+      phone: '',
+      createdAt: ''
+    };
+  }
+
+  private normalizeUser(user: User): User {
+    return {
+      ...user,
+      role: this.normalizeRole(user.role)
+    };
+  }
+
+  private normalizeRole(role?: string): string {
+    return (role || '').replace(/^ROLE_/i, '').toLowerCase();
   }
 }

@@ -20,3 +20,11 @@ export interface AuthResponse {
   token: string;
 }
 
+export interface LoginResponse {
+  token: string;
+  userId: string;
+  role: string;
+  fullName: string;
+  email?: string;
+}
+
