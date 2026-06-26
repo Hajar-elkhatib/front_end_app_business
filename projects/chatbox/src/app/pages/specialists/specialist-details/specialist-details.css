@@ -90,6 +90,10 @@
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
 }
 .sd-card h3 { font-size: 0.9rem; font-weight: 600; color: #a1a1aa; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.04em; }
+.sd-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+.sd-average { display: flex; align-items: baseline; gap: 0.45rem; margin-top: 0.3rem; }
+.sd-average-score { font-size: 1.2rem; font-weight: 700; color: #fff; }
+.sd-average-text { color: #71717a; font-size: 0.8rem; }
 
 .sd-bio { color: #d4d4d8; line-height: 1.7; font-size: 0.95rem; }
 
@@ -123,6 +127,24 @@
 .sd-review-text { color: #a1a1aa; font-size: 0.875rem; line-height: 1.6; }
 .sd-star { color: #fbbf24; }
 .sd-star-empty { color: #3f3f46; }
+.sd-review-actions { display: flex; gap: 0.75rem; margin-top: 0.6rem; }
+.sd-review-link { background: transparent; border: 0; color: #a5b4fc; cursor: pointer; font: inherit; padding: 0; }
+.sd-review-link.danger { color: #f87171; }
+.sd-form-label { font-size: 0.82rem; color: var(--text-secondary); font-weight: 700; }
+.sd-star-picker { display: flex; gap: 0.35rem; }
+.sd-star-button { background: transparent; border: 0; padding: 0; color: #fbbf24; cursor: pointer; }
+.sd-status-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+.sd-status-badge.online { background: rgba(34,197,94,0.12); color: #22c55e; }
+.sd-status-badge.offline { background: rgba(148,163,184,0.12); color: #94a3b8; }
+.sd-availability-panel { display: grid; gap: 1rem; }
+.sd-availability-line { display: flex; gap: 0.75rem; align-items: center; color: #d4d4d8; }
+.sd-availability-title { font-size: 0.9rem; font-weight: 600; }
+.sd-availability-text { color: #71717a; font-size: 0.82rem; }
 
 /* Calendar placeholder */
 .sd-calendar-placeholder {

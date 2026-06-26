@@ -10,6 +10,7 @@ export interface Evaluation {
   projectId?: string;
   specialistId: string;
   entrepreneurId: string;
+  entrepreneurName?: string;
   score: number;
   comment: string;
   status: string;
@@ -18,12 +19,14 @@ export interface Evaluation {
   availableDate?: Date | string;
   currentSessions?: number;
   createdAt?: Date | string;
+  updatedAt?: Date | string;
 }
 
 export interface EvaluationRequest {
   projectId?: string;
   specialistId: string;
   entrepreneurId: string;
+  entrepreneurName?: string;
   score: number;
   comment: string;
   status?: string;
@@ -38,6 +41,16 @@ export interface EvaluationSummary {
   averageScore?: number;
   totalEvaluations?: number;
   [key: string]: any;
+}
+
+export interface EvaluationReviewView {
+  id: string;
+  reviewerName: string;
+  comment: string;
+  rating: number;
+  createdAt?: Date | string;
+  canDelete: boolean;
+  raw: Evaluation;
 }
 
 export interface Recommendation {

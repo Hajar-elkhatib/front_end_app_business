@@ -3,6 +3,7 @@ import { User } from './user.model';
 export interface Specialist extends User {
   userId?: string;
   specialistId?: string;
+  mongoId?: string;
   profession: string;
   expertiseDomain: string;
 

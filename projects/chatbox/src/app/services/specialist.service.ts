@@ -184,7 +184,8 @@ export class SpecialistService {
   }
 
   private mapSpecialist(specialist: any): Specialist {
-    const userId = String(specialist.userId || specialist.id || '');
+    const mongoId = String(specialist.id || specialist._id || specialist.specialistId || '');
+    const userId = String(specialist.userId || specialist.user?.id || specialist.id || '');
     const specialistId = String(specialist.specialistId || specialist.id || specialist.userId || '');
 
     return {
@@ -192,6 +193,7 @@ export class SpecialistService {
       id: userId,
       userId,
       specialistId,
+      mongoId,
       fullName: specialist.fullName || 'VentureLens Specialist',
       email: specialist.email || '',
       role: 'specialist',

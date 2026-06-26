@@ -49,12 +49,12 @@
         <div class="sd-stat-label">Hourly Rate</div>
       </div>
       <div class="sd-stat">
-        <div class="sd-stat-val">{{specialist.averageRating}}</div>
+        <div class="sd-stat-val">{{averageRating}}</div>
         <div class="sd-stat-label">Rating</div>
       </div>
       <div class="sd-stat">
-        <div class="sd-stat-val">{{specialist.completedProjects || 0}}</div>
-        <div class="sd-stat-label">Projects</div>
+        <div class="sd-stat-val">{{reviewCount}}</div>
+        <div class="sd-stat-label">Reviews</div>
       </div>
       <div class="sd-stat">
         <div class="sd-stat-val">{{specialist.responseRate || 0}}%</div>
@@ -79,50 +79,67 @@
         </div>
 
         <div class="sd-card">
-          <h3>Reviews ({{reviews.length}})</h3>
-          <div *ngIf="reviews.length === 0" class="sd-calendar-placeholder">
+          <div class="sd-card-head">
+            <div>
+              <h3>Reviews ({{reviewCount}})</h3>
+              <div class="sd-average" *ngIf="hasReviews">
+                <span class="sd-average-score">{{averageRating | number:'1.1-1'}}</span>
+                <span class="sd-average-text">Average rating</span>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="!hasReviews" class="sd-calendar-placeholder">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             <p style="margin-top: 0.75rem;">No reviews yet.</p>
           </div>
           <div *ngFor="let r of reviews" class="sd-review">
             <div class="sd-review-header">
-              <span class="sd-review-author">{{r.author}}</span>
-              <span class="sd-review-date">{{r.date}}</span>
+              <span class="sd-review-author">{{reviewerDisplay(r)}}</span>
+              <span class="sd-review-date">{{createdAtDisplay(r)}}</span>
             </div>
             <div class="sd-review-stars">
-              <svg *ngFor="let s of getRatingStars(r.rating)" class="sd-star" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              <svg *ngFor="let s of getEmptyStars(r.rating)" class="sd-star-empty" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg *ngFor="let s of ratingStars; let i = index" [class.sd-star]="i < r.rating" [class.sd-star-empty]="i >= r.rating" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
             </div>
             <p class="sd-review-text">{{r.comment}}</p>
+            <div class="sd-review-actions">
+              <button *ngIf="canDeleteReview(r)" type="button" class="sd-review-link" (click)="startEditReview(r)">Edit</button>
+              <button *ngIf="canDeleteReview(r)" type="button" class="sd-review-link danger" (click)="deleteReview(r)">Delete</button>
+            </div>
           </div>
         </div>
 
         <div class="sd-card">
-          <h3>Submit Evaluation</h3>
-          <form [formGroup]="evaluationForm" (ngSubmit)="submitEvaluation()" style="display: grid; gap: 1rem;">
+          <h3>{{editingReviewId ? 'Edit Review' : 'Submit Review'}}</h3>
+          <form [formGroup]="reviewForm" (ngSubmit)="saveReview()" style="display: grid; gap: 1rem;">
             <label style="display: grid; gap: 0.4rem;">
-              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 700;">Project ID</span>
-              <input class="input" type="text" formControlName="projectId" placeholder="Project id">
+              <span class="sd-form-label">Reviewer name</span>
+              <input class="input" type="text" formControlName="reviewerName" placeholder="Enter reviewer name">
             </label>
 
             <label style="display: grid; gap: 0.4rem;">
-              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 700;">Score</span>
-              <input class="input" type="number" formControlName="score" min="0" max="5" step="0.5">
+              <span class="sd-form-label">Star rating</span>
+              <div class="sd-star-picker" (mouseleave)="setHoverRating(0)">
+                <button type="button" *ngFor="let star of ratingStars" class="sd-star-button" (mouseenter)="setHoverRating(star)" (click)="setRating(star)">
+                  <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="star <= (hoverRating || selectedRating) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                </button>
+              </div>
             </label>
 
             <label style="display: grid; gap: 0.4rem;">
-              <span style="font-size: 0.82rem; color: var(--text-secondary); font-weight: 700;">Comment</span>
+              <span class="sd-form-label">Comment</span>
               <textarea class="input" rows="3" formControlName="comment" placeholder="Share your feedback"></textarea>
             </label>
 
+            <div class="sd-review-actions">
+              <button *ngIf="editingReviewId" type="button" class="sd-btn-secondary" (click)="cancelReviewEdit()">Cancel</button>
+              <button class="sd-btn-chat" type="submit">{{editingReviewId ? 'Update Review' : 'Submit Review'}}</button>
+            </div>
+
             <p *ngIf="evaluationError" style="color: var(--danger); font-size: 0.85rem;">{{evaluationError}}</p>
             <p *ngIf="evaluationSuccess" style="color: #047857; font-size: 0.85rem;">{{evaluationSuccess}}</p>
-
-            <button class="sd-btn-chat" type="submit" [disabled]="isSubmittingEvaluation">
-              {{isSubmittingEvaluation ? 'Submitting...' : 'Submit Evaluation'}}
-            </button>
           </form>
         </div>
+
       </div>
 
       <!-- Right Column -->
@@ -136,11 +153,27 @@
         </div>
 
         <div class="sd-card">
-          <h3>Availability</h3>
-          <div class="sd-calendar-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <p style="margin-top: 0.75rem;">Calendar integration coming soon.</p>
-            <p>Contact the specialist directly to discuss availability.</p>
+          <div class="sd-card-head">
+            <h3>Availability</h3>
+            <span class="sd-status-badge" [class.online]="specialist.available" [class.offline]="!specialist.available">
+              {{specialist.available ? 'Available' : 'Busy'}}
+            </span>
+          </div>
+          <div class="sd-availability-panel">
+            <div class="sd-availability-line">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <div>
+                <div class="sd-availability-title">Weekly availability</div>
+                <div class="sd-availability-text">Monday-Friday</div>
+              </div>
+            </div>
+            <div class="sd-availability-line">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 8v5l3 3"/><circle cx="12" cy="12" r="9"/></svg>
+              <div>
+                <div class="sd-availability-title">Working hours</div>
+                <div class="sd-availability-text">09:00 - 17:00</div>
+              </div>
+            </div>
           </div>
         </div>
 

@@ -57,11 +57,17 @@
           </div>
           <div class="form-group">
             <label class="form-label">Country</label>
-            <input type="text" class="input pf-input" formControlName="country" placeholder="e.g. Morocco">
+            <select class="input pf-input pf-select" formControlName="country">
+              <option value="">Select country</option>
+              <option *ngFor="let country of countries" [value]="country">{{country}}</option>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label">Region</label>
-            <input type="text" class="input pf-input" formControlName="region" placeholder="e.g. Casablanca-Settat">
+            <select class="input pf-input pf-select" formControlName="region" [disabled]="!projectForm.get('country')?.value">
+              <option value="">Select region</option>
+              <option *ngFor="let region of availableRegions" [value]="region">{{region}}</option>
+            </select>
           </div>
           <div class="form-group">
             <label class="form-label">Founder Experience Years</label>

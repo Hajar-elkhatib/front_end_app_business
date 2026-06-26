@@ -1,11 +1,9 @@
-﻿import { Injectable, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map, switchMap, tap } from 'rxjs/operators';
-import { Evaluation, EvaluationRequest, EvaluationSummary, Recommendation } from '../models/evaluation.model';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { AuthService } from './auth.service';
-import { SpecialistService } from './specialist.service';
 import { environment } from '../../environments/environment';
+import { Evaluation, EvaluationRequest, EvaluationReviewView, EvaluationSummary } from '../models/evaluation.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,31 +11,26 @@ import { environment } from '../../environments/environment';
 export class EvaluationService {
   private http = inject(HttpClient);
   private authService = inject(AuthService);
-  private specialistService = inject(SpecialistService);
-
-  private baseUrl = `${environment.apiUrl}/Ã©valuations`;
-  private recommendationsUrl = `${environment.apiUrl}/recommendations`;
-  private specialistSummaryUrl = `${environment.apiUrl}/specialists`;
+  private baseUrl = `${environment.apiUrl}/evaluations`;
+  private specialistUrl = `${environment.apiUrl}/specialists`;
 
   private evaluationsSubject = new BehaviorSubject<Evaluation[]>([]);
   public evaluations$ = this.evaluationsSubject.asObservable();
 
   createEvaluation(evaluation: EvaluationRequest): Observable<Evaluation> {
-    return this.http.post<Evaluation>(this.baseUrl, this.toEvaluationRequest(evaluation)).pipe(
+    return this.http.post<Evaluation>(this.baseUrl, this.toRequestBody(evaluation)).pipe(
       map(response => this.mapEvaluation(response)),
-      switchMap(response => this.refreshSpecialistAfterEvaluation(response)),
-      tap(response => {
-        this.evaluationsSubject.next([...this.evaluationsSubject.value, response]);
-      })
+      tap(response => this.evaluationsSubject.next([...this.evaluationsSubject.value, response]))
     );
   }
 
-  submitProjectEvaluation(
-    projectId: string,
-    specialistId: string,
-    data: Partial<Pick<EvaluationRequest, 'score' | 'comment' | 'status' | 'startTime' | 'endTime' | 'availableDate' | 'currentSessions'>> = {}
-  ): Observable<Evaluation> {
+  createReview(evaluation: EvaluationRequest): Observable<Evaluation> {
+    return this.createEvaluation(evaluation);
+  }
+
+  submitProjectEvaluation(projectId: string, specialistId: string, data: Partial<Pick<EvaluationRequest, 'score' | 'comment' | 'status' | 'startTime' | 'endTime' | 'availableDate' | 'currentSessions'>> = {}): Observable<Evaluation> {
     const entrepreneurId = this.authService.currentUser?.id;
+    const entrepreneurName = this.authService.currentUser?.fullName;
 
     if (!entrepreneurId) {
       throw new Error('Cannot create an evaluation without an authenticated entrepreneur.');
@@ -47,6 +40,7 @@ export class EvaluationService {
       projectId: String(projectId),
       specialistId: String(specialistId),
       entrepreneurId: String(entrepreneurId),
+      entrepreneurName,
       score: Number(data.score || 0),
       comment: data.comment || '',
       status: data.status || 'PENDING',
@@ -57,34 +51,15 @@ export class EvaluationService {
     });
   }
 
-  requestProjectEvaluation(
-    projectId: string,
-    data: Pick<EvaluationRequest, 'specialistId'> & Partial<Pick<EvaluationRequest, 'score' | 'comment' | 'status' | 'startTime' | 'endTime' | 'availableDate' | 'currentSessions'>>
-  ): Observable<Evaluation> {
-    return this.submitProjectEvaluation(projectId, data.specialistId, data);
-  }
-
   getEvaluationById(id: string): Observable<Evaluation> {
     return this.http.get<Evaluation>(`${this.baseUrl}/${encodeURIComponent(id)}`).pipe(
       map(response => this.mapEvaluation(response))
     );
   }
 
-  deleteEvaluation(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${encodeURIComponent(id)}`).pipe(
-      tap(() => {
-        this.evaluationsSubject.next(
-          this.evaluationsSubject.value.filter(evaluation => evaluation.id !== id)
-        );
-      })
-    );
-  }
-
   getEvaluationsBySpecialist(specialistId: string): Observable<Evaluation[]> {
-    return this.http.get<Evaluation[]>(
-      `${this.baseUrl}/spÃ©cialiste/${encodeURIComponent(specialistId)}`
-    ).pipe(
-      map(response => response.map(evaluation => this.mapEvaluation(evaluation))),
+    return this.http.get<Evaluation[]>(`${this.baseUrl}/specialist/${encodeURIComponent(specialistId)}`).pipe(
+      map(response => response.map(item => this.mapEvaluation(item))),
       tap(response => this.evaluationsSubject.next(response))
     );
   }
@@ -94,43 +69,66 @@ export class EvaluationService {
   }
 
   getEvaluationsByEntrepreneur(entrepreneurId: string): Observable<Evaluation[]> {
-    return this.http.get<Evaluation[]>(
-      `${this.baseUrl}/entrepreneur/${encodeURIComponent(entrepreneurId)}`
-    ).pipe(
-      map(response => response.map(evaluation => this.mapEvaluation(evaluation))),
+    return this.http.get<Evaluation[]>(`${this.baseUrl}/entrepreneur/${encodeURIComponent(entrepreneurId)}`).pipe(
+      map(response => response.map(item => this.mapEvaluation(item))),
       tap(response => this.evaluationsSubject.next(response))
     );
   }
 
   getEntrepreneurEvaluations(entrepreneurId?: string): Observable<Evaluation[]> {
     const currentEntrepreneurId = entrepreneurId || this.authService.currentUser?.id;
-
     if (!currentEntrepreneurId) {
       throw new Error('Cannot load evaluations without an entrepreneur id.');
     }
-
     return this.getEvaluationsByEntrepreneur(currentEntrepreneurId);
   }
 
+  deleteEvaluation(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${encodeURIComponent(id)}`).pipe(
+      tap(() => {
+        this.evaluationsSubject.next(this.evaluationsSubject.value.filter(item => item.id !== id));
+      })
+    );
+  }
+
+  deleteReview(id: string): Observable<void> {
+    return this.deleteEvaluation(id);
+  }
+
   getSpecialistEvaluationSummary(specialistId: string): Observable<EvaluationSummary> {
-    return this.http.get<EvaluationSummary>(
-      `${this.specialistSummaryUrl}/${encodeURIComponent(specialistId)}/evaluation-summary`
+    return this.getSpecialistEvaluations(specialistId).pipe(
+      map(items => ({
+        specialistId,
+        averageScore: this.computeAverageScore(items),
+        totalEvaluations: items.length
+      }))
     );
   }
 
-  getRecommendations(): Observable<Recommendation[]> {
-    return this.http.get<Recommendation[]>(this.recommendationsUrl);
+  toReviewViews(evaluations: Evaluation[]): EvaluationReviewView[] {
+    const currentUser = this.authService.currentUser;
+    return evaluations.map(evaluation => ({
+      id: evaluation.id,
+      reviewerName: evaluation.entrepreneurName || evaluation.entrepreneurId || 'Anonymous',
+      comment: evaluation.comment,
+      rating: Number(evaluation.score || 0),
+      createdAt: evaluation.createdAt,
+      canDelete: !!currentUser && this.canDeleteReview(evaluation, currentUser.id, currentUser.fullName),
+      raw: evaluation
+    }));
   }
 
-  createRecommendation(recommendation: Omit<Recommendation, 'id' | 'createdAt'>): Observable<Recommendation> {
-    return this.http.post<Recommendation>(this.recommendationsUrl, recommendation);
+  canDeleteReview(evaluation: Evaluation, currentUserId?: string, currentUserName?: string): boolean {
+    if (!currentUserId) return false;
+    if (evaluation.entrepreneurId && evaluation.entrepreneurId === currentUserId) return true;
+    if (evaluation.entrepreneurName && currentUserName && evaluation.entrepreneurName === currentUserName) return true;
+    return false;
   }
 
-  endorseRecommendation(recommendationId: string): Observable<Recommendation> {
-    return this.http.post<Recommendation>(
-      `${this.recommendationsUrl}/${encodeURIComponent(recommendationId)}/endorse`,
-      {}
-    );
+  computeAverageScore(evaluations: Evaluation[]): number {
+    if (!evaluations.length) return 0;
+    const total = evaluations.reduce((sum, item) => sum + Number(item.score || 0), 0);
+    return Math.round((total / evaluations.length) * 10) / 10;
   }
 
   private mapEvaluation(evaluation: Evaluation): Evaluation {
@@ -140,6 +138,7 @@ export class EvaluationService {
       projectId: evaluation.projectId ? String(evaluation.projectId) : undefined,
       specialistId: String(evaluation.specialistId || ''),
       entrepreneurId: String(evaluation.entrepreneurId || ''),
+      entrepreneurName: evaluation.entrepreneurName || evaluation['reviewerName'] || evaluation['author'] || undefined,
       score: Number(evaluation.score || 0),
       comment: evaluation.comment || '',
       status: evaluation.status || 'PENDING',
@@ -147,11 +146,12 @@ export class EvaluationService {
     };
   }
 
-  private toEvaluationRequest(evaluation: EvaluationRequest): EvaluationRequest {
+  private toRequestBody(evaluation: EvaluationRequest): EvaluationRequest {
     return {
       projectId: evaluation.projectId ? String(evaluation.projectId) : undefined,
       specialistId: String(evaluation.specialistId),
       entrepreneurId: String(evaluation.entrepreneurId),
+      entrepreneurName: evaluation.entrepreneurName,
       score: Number(evaluation.score || 0),
       comment: evaluation.comment || '',
       status: evaluation.status || 'PENDING',
@@ -161,12 +161,4 @@ export class EvaluationService {
       currentSessions: Number(evaluation.currentSessions || 0)
     };
   }
-
-  private refreshSpecialistAfterEvaluation(evaluation: Evaluation): Observable<Evaluation> {
-    return this.specialistService.refreshSpecialistProfile(evaluation.specialistId).pipe(
-      map(() => evaluation)
-    );
-  }
 }
-
-

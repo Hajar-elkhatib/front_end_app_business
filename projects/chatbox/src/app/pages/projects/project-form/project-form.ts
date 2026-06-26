@@ -30,12 +30,26 @@ export class ProjectForm implements OnInit {
     sector: 'Project sector'
   };
 
-  sectors = ['Technology', 'Finance', 'Health', 'Education', 'Retail', 'Energy', 'Other'];
   competitionLevels = ['Low', 'Medium', 'High'];
+  countries = ['Morocco', 'France', 'Spain', 'Canada', 'United States'];
+  sectors = ['Technology', 'Finance', 'Health', 'Education', 'Retail', 'Energy', 'Other'];
+  regionsByCountry: Record<string, string[]> = {
+    Morocco: ['Casablanca-Settat', 'Rabat-Salé-Kénitra', 'Marrakech-Safi', 'Tanger-Tétouan-Al Hoceïma'],
+    France: ['Île-de-France', 'Auvergne-Rhône-Alpes', 'Provence-Alpes-Côte d\'Azur'],
+    Spain: ['Madrid', 'Catalonia', 'Andalusia'],
+    Canada: ['Ontario', 'Quebec', 'British Columbia'],
+    'United States': ['California', 'New York', 'Texas', 'Washington']
+  };
 
   ngOnInit() {
     this.initForm();
     this.checkMode();
+    this.projectForm.get('country')?.valueChanges.subscribe(country => {
+      const region = this.projectForm.get('region');
+      if (!this.availableRegions.includes(region?.value)) {
+        region?.setValue('');
+      }
+    });
   }
 
   initForm() {
@@ -62,6 +76,11 @@ export class ProjectForm implements OnInit {
       viewsWorldRank: [0],
       opinions: ['']
     });
+  }
+
+  get availableRegions(): string[] {
+    const country = this.projectForm?.get('country')?.value;
+    return this.regionsByCountry[country] || [];
   }
 
   checkMode() {

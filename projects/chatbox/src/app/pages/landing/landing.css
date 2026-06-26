@@ -165,19 +165,38 @@
 .btn-primary {
   background: linear-gradient(135deg, #6366f1, #8b5cf6);
   color: white;
-  border: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease, background 0.2s ease;
   text-decoration: none;
   display: inline-block;
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.22);
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible,
+.btn-primary:active {
+  color: white;
+  background: linear-gradient(135deg, #5b5be9, #7c3aed);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 14px 30px rgba(99, 102, 241, 0.3);
+}
+
+.btn-primary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.22), 0 12px 28px rgba(99, 102, 241, 0.26);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 8px 18px rgba(99, 102, 241, 0.22);
 }
 
 .btn-secondary {

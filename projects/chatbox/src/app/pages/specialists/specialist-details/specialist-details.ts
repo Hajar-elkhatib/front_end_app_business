@@ -3,9 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule, ActivatedRoute, Router } from '@angular/router';
 import { SpecialistService } from '../../../services/specialist.service';
-import { Specialist, SpecialistReview } from '../../../models/specialist.model';
+import { Specialist } from '../../../models/specialist.model';
+import { timeout } from 'rxjs/operators';
+import { AuthService } from '../../../services/auth.service';
 import { EvaluationService } from '../../../services/evaluation.service';
-import { switchMap, timeout } from 'rxjs/operators';
+import { EvaluationReviewView } from '../../../models/evaluation.model';
 
 @Component({
   selector: 'app-specialist-details',
@@ -18,26 +20,28 @@ export class SpecialistDetails implements OnInit {
   private fb = inject(FormBuilder);
 
   specialist: Specialist | undefined;
-  reviews: SpecialistReview[] = [];
+  reviews: EvaluationReviewView[] = [];
+  reviewForm = this.fb.group({
+    reviewerName: ['', Validators.required],
+    comment: ['', [Validators.required, Validators.minLength(3)]],
+    rating: [5, [Validators.required, Validators.min(1), Validators.max(5)]]
+  });
+  hoverRating = 0;
+  editingReviewId: string | null = null;
   isLoading = true;
   loadError = '';
   isSubmittingEvaluation = false;
   evaluationSuccess = '';
   evaluationError = '';
   showDeleteModal = false;
-
-  evaluationForm = this.fb.group({
-    projectId: ['', Validators.required],
-    score: [5, [Validators.required, Validators.min(0), Validators.max(5)]],
-    comment: ['', [Validators.required, Validators.minLength(3)]],
-    status: ['COMPLETED', Validators.required]
-  });
+  reviewToast = '';
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private specialistService: SpecialistService,
     private evaluationService: EvaluationService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -49,7 +53,6 @@ export class SpecialistDetails implements OnInit {
     }
 
     this.loadSpecialistProfile(userId);
-    this.loadReviews(userId);
   }
 
   loadSpecialistProfile(userId: string) {
@@ -62,6 +65,10 @@ export class SpecialistDetails implements OnInit {
       next: specialist => {
         this.specialist = specialist;
         this.isLoading = false;
+        const specialistMongoId = this.getSpecialistMongoId();
+        if (specialistMongoId) {
+          this.loadReviews(specialistMongoId);
+        }
         this.cdr.markForCheck();
       },
       error: () => {
@@ -73,13 +80,19 @@ export class SpecialistDetails implements OnInit {
   }
 
   loadReviews(userId: string) {
-    this.specialistService.getReviews(userId).subscribe({
+    this.evaluationService.getSpecialistEvaluations(userId).subscribe({
       next: reviews => {
-        this.reviews = reviews;
+        this.reviews = this.evaluationService.toReviewViews(reviews).sort((a, b) => {
+          const left = new Date(a.createdAt || 0).getTime();
+          const right = new Date(b.createdAt || 0).getTime();
+          return right - left;
+        });
+        this.updateSpecialistReviewStats(reviews);
         this.cdr.markForCheck();
       },
       error: () => {
         this.reviews = [];
+        this.updateSpecialistReviewStats([]);
         this.cdr.markForCheck();
       }
     });
@@ -87,53 +100,131 @@ export class SpecialistDetails implements OnInit {
 
   submitEvaluation() {
     if (!this.specialist) return;
+    this.saveReview();
+  }
 
-    this.evaluationSuccess = '';
-    this.evaluationError = '';
+  get ratingStars(): number[] {
+    return [1, 2, 3, 4, 5];
+  }
 
-    if (this.evaluationForm.invalid) {
-      this.evaluationForm.markAllAsTouched();
-      this.evaluationError = 'Please complete the evaluation form.';
-      this.cdr.markForCheck();
+  get reviewCount(): number {
+    return this.reviews.length;
+  }
+
+  get averageRating(): number {
+    if (!this.reviews.length) return 0;
+    return Math.round((this.reviews.reduce((sum, review) => sum + Number(review.rating || 0), 0) / this.reviews.length) * 10) / 10;
+  }
+
+  get hasReviews(): boolean {
+    return this.reviews.length > 0;
+  }
+
+  get selectedRating(): number {
+    return Number(this.reviewForm.get('rating')?.value || 0);
+  }
+
+  setHoverRating(value: number) {
+    this.hoverRating = value;
+  }
+
+  setRating(value: number) {
+    this.reviewForm.patchValue({ rating: value });
+    this.reviewForm.get('rating')?.markAsTouched();
+  }
+
+  startEditReview(review: EvaluationReviewView) {
+    this.editingReviewId = review.id;
+    this.reviewForm.patchValue({
+      reviewerName: review.reviewerName,
+      comment: review.comment,
+      rating: review.rating
+    });
+  }
+
+  cancelReviewEdit() {
+    this.editingReviewId = null;
+    this.reviewForm.reset({ reviewerName: '', comment: '', rating: 5 });
+  }
+
+  saveReview() {
+    if (!this.specialist) return;
+    if (this.reviewForm.invalid) {
+      this.reviewForm.markAllAsTouched();
       return;
     }
-
-    const value = this.evaluationForm.getRawValue();
-    const specialistId = this.specialist.id;
-
-    this.isSubmittingEvaluation = true;
-    this.evaluationService.submitProjectEvaluation(
-      String(value.projectId),
+    const value = this.reviewForm.getRawValue();
+    const specialistId = this.getSpecialistMongoId();
+    if (!specialistId) {
+      this.evaluationError = 'Specialist identifier is missing.';
+      return;
+    }
+    const currentUserId = this.authService.currentUser?.id;
+    const payload = {
       specialistId,
-      {
-        score: Number(value.score || 0),
-        comment: value.comment || '',
-        status: value.status || 'COMPLETED'
-      }
-    ).pipe(
-      switchMap(() => this.specialistService.getProfile(specialistId))
-    ).subscribe({
-      next: updatedSpecialist => {
-        this.specialist = updatedSpecialist;
-        this.isSubmittingEvaluation = false;
-        this.evaluationSuccess = 'Evaluation submitted successfully.';
-        this.evaluationForm.patchValue({ score: 5, comment: '' });
+      entrepreneurId: currentUserId || '',
+      entrepreneurName: value.reviewerName || this.authService.currentUser?.fullName || 'Anonymous',
+      score: Number(value.rating || 5),
+      comment: value.comment || '',
+      availableDate: undefined,
+      startTime: undefined,
+      endTime: undefined,
+      status: 'COMPLETED'
+    };
+
+    this.evaluationService.createEvaluation(payload).subscribe({
+      next: () => {
+        this.loadReviews(specialistId);
+        // Reload the profile so rating and reviewsCount refresh immediately.
+        this.loadSpecialistProfile(this.route.snapshot.paramMap.get('id') || this.route.snapshot.paramMap.get('userId') || specialistId);
+        this.reviewForm.reset({ reviewerName: '', comment: '', rating: 5 });
+        this.editingReviewId = null;
+        this.reviewToast = 'Review saved successfully.';
+        this.evaluationSuccess = this.reviewToast;
         this.cdr.markForCheck();
       },
       error: () => {
-        this.isSubmittingEvaluation = false;
-        this.evaluationError = 'Evaluation could not be submitted.';
+        this.evaluationError = 'Review could not be saved.';
         this.cdr.markForCheck();
       }
     });
   }
 
-  getRatingStars(rating: number): number[] {
-    return Array(Math.floor(rating)).fill(0);
+  deleteReview(review: EvaluationReviewView) {
+    if (!this.specialist) return;
+    const specialistMongoId = this.getSpecialistMongoId();
+    this.evaluationService.deleteReview(review.id).subscribe(() => {
+      if (specialistMongoId) {
+        this.loadReviews(specialistMongoId);
+        this.loadSpecialistProfile(this.route.snapshot.paramMap.get('id') || this.route.snapshot.paramMap.get('userId') || specialistMongoId);
+      }
+    });
   }
 
-  getEmptyStars(rating: number): number[] {
-    return Array(5 - Math.floor(rating)).fill(0);
+  canDeleteReview(review: EvaluationReviewView): boolean {
+    return review.canDelete;
+  }
+
+  reviewerDisplay(review: EvaluationReviewView): string {
+    return review.reviewerName || 'Anonymous';
+  }
+
+  createdAtDisplay(review: EvaluationReviewView): string {
+    return review.createdAt ? new Date(review.createdAt).toLocaleDateString() : '';
+  }
+
+  private updateSpecialistReviewStats(reviews: { score: number }[]) {
+    if (!this.specialist) return;
+    const average = this.evaluationService.computeAverageScore(reviews);
+    this.specialist = {
+      ...this.specialist,
+      averageRating: average,
+      reviewsCount: reviews.length
+    };
+  }
+
+  private getSpecialistMongoId(): string {
+    return this.specialist?.mongoId || this.specialist?.specialistId || '';
   }
 
   deleteSpecialist() {

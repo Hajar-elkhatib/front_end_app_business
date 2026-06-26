@@ -87,17 +87,23 @@
         <div *ngIf="registerForm.get('role')?.value === 'entrepreneur'" class="role-specific-section">
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
-              <label class="form-label">Company Name</label>
+              <label class="form-label">Company Type</label>
               <div class="form-input-wrap">
-                <input type="text" formControlName="companyName" class="form-input" placeholder="e.g. TechNova Inc.">
+                <input type="text" formControlName="companyName" class="form-input" list="company-type-options" placeholder="Search company type" (input)="onCompanyTypeSearch($any($event.target).value)">
+                <datalist id="company-type-options">
+                  <option *ngFor="let item of filteredCompanyTypes" [value]="item"></option>
+                </datalist>
               </div>
               <div *ngIf="isFieldInvalid('companyName')" class="form-error">Company name is required.</div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Business Type</label>
+              <label class="form-label">Business Size</label>
               <div class="form-input-wrap">
-                <input type="text" formControlName="businessType" class="form-input" placeholder="e.g. SaaS, Fintech, Web3">
+                <input type="text" formControlName="businessType" class="form-input" list="business-size-options" placeholder="Search business size" (input)="onBusinessSizeSearch($any($event.target).value)">
+                <datalist id="business-size-options">
+                  <option *ngFor="let item of filteredBusinessSizes" [value]="item"></option>
+                </datalist>
               </div>
               <div *ngIf="isFieldInvalid('businessType')" class="form-error">Business type is required.</div>
             </div>
@@ -110,7 +116,10 @@
             <div class="form-group">
               <label class="form-label">Profession / Title</label>
               <div class="form-input-wrap">
-                <input type="text" formControlName="profession" class="form-input" placeholder="e.g. Senior AI Engineer">
+                <input type="text" formControlName="profession" class="form-input" list="profession-options" placeholder="Search profession" (input)="onProfessionSearch($any($event.target).value)">
+                <datalist id="profession-options">
+                  <option *ngFor="let item of filteredProfessions" [value]="item"></option>
+                </datalist>
               </div>
               <div *ngIf="isFieldInvalid('profession')" class="form-error">Profession is required.</div>
             </div>
@@ -118,7 +127,10 @@
             <div class="form-group">
               <label class="form-label">Expertise Domain</label>
               <div class="form-input-wrap">
-                <input type="text" formControlName="expertiseDomain" class="form-input" placeholder="e.g. Machine Learning, Cloud DevOps">
+                <input type="text" formControlName="expertiseDomain" class="form-input" list="expertise-options" placeholder="Search domain" (input)="onExpertiseSearch($any($event.target).value)">
+                <datalist id="expertise-options">
+                  <option *ngFor="let item of filteredExpertise" [value]="item"></option>
+                </datalist>
               </div>
               <div *ngIf="isFieldInvalid('expertiseDomain')" class="form-error">Expertise domain is required.</div>
             </div>
@@ -126,16 +138,26 @@
 
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
             <div class="form-group">
-              <label class="form-label">Skills (comma-separated)</label>
-              <div class="form-input-wrap">
-                <input type="text" formControlName="skillsInput" class="form-input" placeholder="Python, TensorFlow, RAG, NLP">
+              <label class="form-label">Skills</label>
+              <div class="multi-select">
+                <input type="text" class="form-input" placeholder="Search skills" (input)="onSkillSearch($any($event.target).value)">
+                <div class="multi-select-options">
+                  <button *ngFor="let item of filteredSkills; trackBy: trackByValue" type="button" class="multi-select-option" [class.selected]="isMultiValueSelected('skills', item)" (click)="toggleMultiValue('skills', item)">
+                    <span class="checkbox"></span>{{item}}
+                  </button>
+                </div>
               </div>
             </div>
 
             <div class="form-group">
-              <label class="form-label">Target Sectors (comma-separated)</label>
-              <div class="form-input-wrap">
-                <input type="text" formControlName="sectorsInput" class="form-input" placeholder="Fintech, Healthcare, E-commerce">
+              <label class="form-label">Target Sectors</label>
+              <div class="multi-select">
+                <input type="text" class="form-input" placeholder="Search sectors" (input)="onSectorSearch($any($event.target).value)">
+                <div class="multi-select-options">
+                  <button *ngFor="let item of filteredSectors; trackBy: trackByValue" type="button" class="multi-select-option" [class.selected]="isMultiValueSelected('sectors', item)" (click)="toggleMultiValue('sectors', item)">
+                    <span class="checkbox"></span>{{item}}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -144,10 +166,10 @@
             <div class="form-group">
               <label class="form-label">Country</label>
               <div class="form-input-wrap">
-                <select formControlName="country" class="form-input">
-                  <option value="">Select country</option>
-                  <option *ngFor="let country of countryCities | keyvalue" [value]="country.key">{{country.key}}</option>
-                </select>
+                <input type="text" formControlName="country" class="form-input" list="country-options" placeholder="Search country" (input)="onCountrySearch($any($event.target).value)">
+                <datalist id="country-options">
+                  <option *ngFor="let item of filteredCountries" [value]="item"></option>
+                </datalist>
               </div>
               <div *ngIf="isFieldInvalid('country')" class="form-error">Country is required.</div>
             </div>
@@ -155,10 +177,10 @@
             <div class="form-group">
               <label class="form-label">City</label>
               <div class="form-input-wrap">
-                <select formControlName="city" class="form-input" [disabled]="!registerForm.get('country')?.value">
-                  <option value="">Select city</option>
-                  <option *ngFor="let city of availableCities" [value]="city">{{city}}</option>
-                </select>
+                <input type="text" formControlName="city" class="form-input" list="city-options" placeholder="Search city" [disabled]="!registerForm.get('country')?.value" (input)="onCitySearch($any($event.target).value)">
+                <datalist id="city-options">
+                  <option *ngFor="let city of filteredCities" [value]="city"></option>
+                </datalist>
               </div>
               <div *ngIf="isFieldInvalid('city')" class="form-error">City is required.</div>
             </div>
@@ -172,18 +194,19 @@
             </div>
           </div>
 
-          <div class="form-group">
-            <label class="form-label">Languages</label>
-            <input type="hidden" formControlName="languages">
-            <div class="language-picker" role="group" aria-label="Select languages">
-              <button
-                *ngFor="let language of languageOptions"
-                type="button"
-                class="language-chip"
-                [class.selected]="isLanguageSelected(language)"
-                (click)="toggleLanguage(language)">
-                {{language}}
-              </button>
+            <div class="form-group">
+              <label class="form-label">Languages</label>
+              <div class="multi-select">
+              <input type="text" class="form-input" placeholder="Search languages" (input)="onLanguageSearch($any($event.target).value)">
+              <input type="hidden" formControlName="languages">
+              <div class="chip-list" *ngIf="selectedLanguages.length">
+                <span *ngFor="let language of selectedLanguages" class="selected-chip">{{language}}</span>
+              </div>
+              <div class="multi-select-options">
+                <button *ngFor="let language of filteredLanguages" type="button" class="multi-select-option" [class.selected]="isLanguageSelected(language)" (click)="toggleLanguage(language)">
+                  <span class="checkbox"></span>{{language}}
+                </button>
+              </div>
             </div>
             <div *ngIf="isFieldInvalid('languages')" class="form-error">At least one language is required.</div>
           </div>

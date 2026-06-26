@@ -33,6 +33,13 @@ export class Register implements OnInit {
   registerForm!: FormGroup;
   isLoading = false;
   showPassword = false;
+  readonly companyTypes = ['SaaS', 'FinTech', 'Healthcare', 'AI', 'E-commerce', 'Education', 'Logistics', 'Manufacturing', 'Agriculture', 'Tourism', 'Other'];
+  readonly businessSizes = ['Startup', 'Small Business', 'Medium Enterprise', 'Large Enterprise'];
+  readonly professionOptions = ['Founder', 'Product Manager', 'Software Engineer', 'AI Engineer', 'Data Scientist', 'UX Designer', 'Marketing Strategist', 'Business Analyst', 'Consultant', 'Other'];
+  readonly expertiseDomains = ['AI', 'Data Science', 'Cloud Computing', 'Cybersecurity', 'Product Strategy', 'Marketing', 'Finance', 'Operations', 'UX/UI', 'Growth'];
+  readonly skillOptions = ['Python', 'TypeScript', 'Angular', 'React', 'Node.js', 'SQL', 'Machine Learning', 'LLM', 'Cloud', 'DevOps', 'Figma', 'SEO'];
+  readonly sectorOptions = ['Technology', 'Finance', 'Healthcare', 'Education', 'Retail', 'Energy', 'Logistics', 'Manufacturing', 'Agriculture', 'Tourism', 'Other'];
+  readonly countries = ['Morocco', 'France', 'Spain', 'Canada', 'United States'];
   readonly countryCities: Record<string, string[]> = {
     Morocco: ['Casablanca', 'Rabat', 'Marrakech', 'Fes', 'Tangier', 'Agadir', 'Meknes', 'Oujda'],
     France: ['Paris', 'Lyon', 'Marseille', 'Toulouse', 'Nice', 'Nantes', 'Bordeaux', 'Lille'],
@@ -41,6 +48,15 @@ export class Register implements OnInit {
     'United States': ['New York', 'San Francisco', 'Los Angeles', 'Chicago', 'Austin', 'Seattle']
   };
   readonly languageOptions = ['Arabic', 'French', 'English', 'Spanish', 'German', 'Italian'];
+  filteredCountries = [...this.countries];
+  filteredCities: string[] = [];
+  filteredProfessions = [...this.professionOptions];
+  filteredExpertise = [...this.expertiseDomains];
+  filteredSkills = [...this.skillOptions];
+  filteredSectors = [...this.sectorOptions];
+  filteredCompanyTypes = [...this.companyTypes];
+  filteredBusinessSizes = [...this.businessSizes];
+  filteredLanguages = [...this.languageOptions];
 
   ngOnInit() {
     this.registerForm = this.fb.group({
@@ -58,8 +74,8 @@ export class Register implements OnInit {
       // Specialist specific
       profession: [''],
       expertiseDomain: [''],
-      skillsInput: [''],
-      sectorsInput: [''],
+      skills: [[]],
+      sectors: [[]],
       country: [''],
       city: [''],
       languages: [[]],
@@ -78,6 +94,7 @@ export class Register implements OnInit {
     this.registerForm.get('country')?.valueChanges.subscribe(country => {
       const cityControl = this.registerForm.get('city');
       const cities = this.countryCities[country] || [];
+      this.filteredCities = this.filterOptions(cities, '');
 
       if (!cities.includes(cityControl?.value)) {
         cityControl?.setValue('');
@@ -94,7 +111,7 @@ export class Register implements OnInit {
       specFields.forEach(f => this.registerForm.get(f)?.clearValidators());
     } else {
       specFields.forEach(f => {
-        const validators = f === 'languages' ? [requiredArrayValidator] : [Validators.required];
+        const validators = ['languages', 'skills', 'sectors'].includes(f) ? [requiredArrayValidator] : [Validators.required];
         this.registerForm.get(f)?.setValidators(validators);
       });
       entFields.forEach(f => this.registerForm.get(f)?.clearValidators());
@@ -114,6 +131,65 @@ export class Register implements OnInit {
     return this.countryCities[country] || [];
   }
 
+  onCountrySearch(value: string) {
+    this.filteredCountries = this.filterOptions(this.countries, value);
+  }
+
+  onCitySearch(value: string) {
+    this.filteredCities = this.filterOptions(this.availableCities, value);
+  }
+
+  onProfessionSearch(value: string) {
+    this.filteredProfessions = this.filterOptions(this.professionOptions, value);
+  }
+
+  onExpertiseSearch(value: string) {
+    this.filteredExpertise = this.filterOptions(this.expertiseDomains, value);
+  }
+
+  onSkillSearch(value: string) {
+    this.filteredSkills = this.filterOptions(this.skillOptions, value);
+  }
+
+  onSectorSearch(value: string) {
+    this.filteredSectors = this.filterOptions(this.sectorOptions, value);
+  }
+
+  onCompanyTypeSearch(value: string) {
+    this.filteredCompanyTypes = this.filterOptions(this.companyTypes, value);
+  }
+
+  onBusinessSizeSearch(value: string) {
+    this.filteredBusinessSizes = this.filterOptions(this.businessSizes, value);
+  }
+
+  onLanguageSearch(value: string) {
+    this.filteredLanguages = this.filterOptions(this.languageOptions, value);
+  }
+
+  selectSingleValue(field: 'companyName' | 'businessType' | 'profession' | 'expertiseDomain' | 'country' | 'city', value: string) {
+    this.registerForm.get(field)?.setValue(value);
+    this.registerForm.get(field)?.markAsTouched();
+  }
+
+  toggleMultiValue(field: 'skills' | 'sectors' | 'languages', value: string) {
+    const control = this.registerForm.get(field);
+    const current = Array.isArray(control?.value) ? control.value : [];
+    const next = current.includes(value) ? current.filter((item: string) => item !== value) : [...current, value];
+    control?.setValue(next);
+    control?.markAsTouched();
+    control?.updateValueAndValidity();
+  }
+
+  isMultiValueSelected(field: 'skills' | 'sectors' | 'languages', value: string): boolean {
+    const current = this.registerForm?.get(field)?.value;
+    return Array.isArray(current) && current.includes(value);
+  }
+
+  trackByValue(_: number, value: string) {
+    return value;
+  }
+
   toggleLanguage(language: string) {
     const control = this.registerForm.get('languages');
     const current = Array.isArray(control?.value) ? control.value : [];
@@ -129,6 +205,11 @@ export class Register implements OnInit {
   isLanguageSelected(language: string): boolean {
     const current = this.registerForm?.get('languages')?.value;
     return Array.isArray(current) && current.includes(language);
+  }
+
+  get selectedLanguages(): string[] {
+    const current = this.registerForm?.get('languages')?.value;
+    return Array.isArray(current) ? current : [];
   }
 
   onSubmit() {
@@ -171,8 +252,8 @@ export class Register implements OnInit {
         phone: val.phone,
         profession: val.profession,
         expertiseDomain: val.expertiseDomain,
-        skills: val.skillsInput ? val.skillsInput.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
-        sectors: val.sectorsInput ? val.sectorsInput.split(',').map((s: string) => s.trim()).filter(Boolean) : [],
+        skills: Array.isArray(val.skills) ? val.skills : [],
+        sectors: Array.isArray(val.sectors) ? val.sectors : [],
         location: `${val.city}, ${val.country}`,
         languages: Array.isArray(val.languages) ? val.languages.join(', ') : val.languages,
         hourlyRate: Number(val.hourlyRate),
@@ -205,5 +286,13 @@ export class Register implements OnInit {
   isConfirmPasswordInvalid(): boolean {
     const field = this.registerForm.get('confirmPassword');
     return !!field && (field.dirty || field.touched) && this.registerForm.hasError('passwordMismatch');
+  }
+
+  private filterOptions(options: string[], query: string): string[] {
+    const normalized = query.trim().toLowerCase();
+    if (!normalized) {
+      return [...options];
+    }
+    return options.filter(option => option.toLowerCase().includes(normalized));
   }
 }
