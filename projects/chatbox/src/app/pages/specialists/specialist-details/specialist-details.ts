@@ -163,7 +163,6 @@ export class SpecialistDetails implements OnInit {
     const payload = {
       specialistId,
       entrepreneurId: currentUserId || '',
-      entrepreneurName: value.reviewerName || this.authService.currentUser?.fullName || 'Anonymous',
       score: Number(value.rating || 5),
       comment: value.comment || '',
       availableDate: undefined,

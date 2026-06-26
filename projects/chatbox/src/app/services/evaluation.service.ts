@@ -151,7 +151,6 @@ export class EvaluationService {
       projectId: evaluation.projectId ? String(evaluation.projectId) : undefined,
       specialistId: String(evaluation.specialistId),
       entrepreneurId: String(evaluation.entrepreneurId),
-      entrepreneurName: evaluation.entrepreneurName,
       score: Number(evaluation.score || 0),
       comment: evaluation.comment || '',
       status: evaluation.status || 'PENDING',
