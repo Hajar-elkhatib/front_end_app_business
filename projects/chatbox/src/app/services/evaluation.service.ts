@@ -132,13 +132,14 @@ export class EvaluationService {
   }
 
   private mapEvaluation(evaluation: Evaluation): Evaluation {
+    const rawEvaluation = evaluation as Evaluation & { reviewerName?: string; author?: string };
     return {
       ...evaluation,
       id: String(evaluation.id || ''),
       projectId: evaluation.projectId ? String(evaluation.projectId) : undefined,
       specialistId: String(evaluation.specialistId || ''),
       entrepreneurId: String(evaluation.entrepreneurId || ''),
-      entrepreneurName: evaluation.entrepreneurName || evaluation['reviewerName'] || evaluation['author'] || undefined,
+      entrepreneurName: evaluation.entrepreneurName || rawEvaluation.reviewerName || rawEvaluation.author || undefined,
       score: Number(evaluation.score || 0),
       comment: evaluation.comment || '',
       status: evaluation.status || 'PENDING',

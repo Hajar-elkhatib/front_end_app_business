@@ -7,7 +7,7 @@ import { Specialist } from '../../../models/specialist.model';
 import { timeout } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 import { EvaluationService } from '../../../services/evaluation.service';
-import { EvaluationReviewView } from '../../../models/evaluation.model';
+import { Evaluation, EvaluationReviewView } from '../../../models/evaluation.model';
 
 @Component({
   selector: 'app-specialist-details',
@@ -212,7 +212,7 @@ export class SpecialistDetails implements OnInit {
     return review.createdAt ? new Date(review.createdAt).toLocaleDateString() : '';
   }
 
-  private updateSpecialistReviewStats(reviews: { score: number }[]) {
+  private updateSpecialistReviewStats(reviews: Evaluation[]) {
     if (!this.specialist) return;
     const average = this.evaluationService.computeAverageScore(reviews);
     this.specialist = {
