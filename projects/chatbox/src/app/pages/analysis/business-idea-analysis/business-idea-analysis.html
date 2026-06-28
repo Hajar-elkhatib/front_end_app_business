@@ -29,6 +29,7 @@
   </section>
 
   <div *ngIf="errorMessage" class="alert-card">{{errorMessage}}</div>
+  <div *ngIf="secondaryWarning" class="alert-card warning-card">{{secondaryWarning}}</div>
 
   <ng-container *ngIf="projectId">
     <section class="score-shell">

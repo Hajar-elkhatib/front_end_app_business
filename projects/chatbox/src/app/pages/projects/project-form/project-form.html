@@ -1,5 +1,4 @@
 <div class="pf-page" *ngIf="!isLoading">
-  <!-- Back -->
   <div class="pf-top-nav">
     <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']" class="pf-back">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -14,133 +13,229 @@
     <div class="card glass pf-card">
       <div class="pf-card-header">
         <h2>{{isEditMode ? 'Edit Project' : 'Create New Project'}}</h2>
-        <p>{{isEditMode ? 'Update the information used by your analyses.' : 'Describe your project, market, and traction to prepare validation.'}}</p>
+        <p>The more information you provide, the more accurate the analysis will be.</p>
+      </div>
+
+      <div class="pf-steps" aria-label="Project form steps">
+        <button
+          *ngFor="let step of steps; let index = index"
+          type="button"
+          class="pf-step"
+          [class.active]="currentStep === index + 1"
+          [class.done]="currentStep > index + 1"
+          (click)="goToStep(index + 1)">
+          <span>{{index + 1}}</span>
+          {{step}}
+        </button>
       </div>
 
       <form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="pf-form">
-        <!-- Title -->
-        <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('title')}">
-          <label class="form-label">Project Title</label>
-          <input type="text" class="input pf-input" formControlName="title"
-            placeholder="ex. SmartRetail AI">
-          <div class="error-msg" *ngIf="isFieldInvalid('title')">
-            <span *ngIf="projectForm.get('title')?.errors?.['required']">Project title is required.</span>
-            <span *ngIf="projectForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters.</span>
-          </div>
-        </div>
+        <section *ngIf="currentStep === 1" class="pf-section">
+          <h3>Choose your project stage</h3>
+          <p class="form-helper">Select the situation that best describes your project today.</p>
 
-        <!-- Description -->
-        <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('summary')}">
-          <label class="form-label">Project Summary</label>
-          <textarea rows="5" class="input pf-input" formControlName="summary"
-            placeholder="Resume the problem, solution, target audience, market, and goals..."></textarea>
-          <div class="error-msg" *ngIf="isFieldInvalid('summary')">
-            {{getFieldError('summary', 'Project summary')}}
+          <div class="stage-grid">
+            <button
+              *ngFor="let stage of projectStages"
+              type="button"
+              class="stage-card"
+              [class.selected]="projectStage === stage.value"
+              (click)="selectStage(stage.value)">
+              <strong>{{stage.title}}</strong>
+              <span>{{stage.description}}</span>
+            </button>
           </div>
-        </div>
+        </section>
 
-        <!-- Grid for core fields -->
-        <div class="form-grid">
+        <section *ngIf="currentStep === 2" class="pf-section">
+          <h3>Project Basics</h3>
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('title')}">
+            <label class="form-label">Project title</label>
+            <input type="text" class="input pf-input" formControlName="title" placeholder="e.g. SmartRetail AI">
+            <div class="error-msg" *ngIf="isFieldInvalid('title')">Project title is required.</div>
+          </div>
+
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('description')}">
+            <label class="form-label">Short description</label>
+            <textarea rows="4" class="input pf-input" formControlName="description" placeholder="Briefly describe the project, who it serves, and what it does."></textarea>
+            <div class="error-msg" *ngIf="isFieldInvalid('description')">Short description is required.</div>
+          </div>
+
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('problem')}">
+            <label class="form-label">Problem to solve</label>
+            <textarea rows="3" class="input pf-input" formControlName="problem" placeholder="What problem are customers facing?"></textarea>
+            <div class="error-msg" *ngIf="isFieldInvalid('problem')">Problem to solve is required.</div>
+          </div>
+
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('solution')}">
+            <label class="form-label">Proposed solution</label>
+            <textarea rows="3" class="input pf-input" formControlName="solution" placeholder="How does your project solve this problem?"></textarea>
+            <div class="error-msg" *ngIf="isFieldInvalid('solution')">Proposed solution is required.</div>
+          </div>
+
           <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('sector')}">
             <label class="form-label">Sector</label>
             <select class="input pf-input pf-select" formControlName="sector">
               <option value="">Select a sector</option>
-              <option *ngFor="let sec of sectors" [value]="sec">{{sec}}</option>
+              <option *ngFor="let sector of sectors" [value]="sector">{{sector}}</option>
             </select>
-            <div class="error-msg" *ngIf="isFieldInvalid('sector')">
-              {{getFieldError('sector', 'Project sector')}}
+            <div class="error-msg" *ngIf="isFieldInvalid('sector')">Sector is required.</div>
+          </div>
+
+          <div class="form-group" *ngIf="projectForm.get('sector')?.value === 'Other'" [ngClass]="{'has-error': isFieldInvalid('customSector')}">
+            <label class="form-label">Other sector</label>
+            <input type="text" class="input pf-input" formControlName="customSector" placeholder="Enter your sector">
+            <div class="error-msg" *ngIf="isFieldInvalid('customSector')">Please enter the sector.</div>
+          </div>
+        </section>
+
+        <section *ngIf="currentStep === 3" class="pf-section">
+          <h3>Location & Market</h3>
+          <div class="form-grid">
+            <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('country')}">
+              <label class="form-label">Country</label>
+              <select class="input pf-input pf-select" formControlName="country">
+                <option *ngFor="let country of countries" [value]="country">{{country}}</option>
+              </select>
+            </div>
+
+            <div class="form-group" *ngIf="projectForm.get('country')?.value === 'Other'" [ngClass]="{'has-error': isFieldInvalid('customCountry')}">
+              <label class="form-label">Other country</label>
+              <input type="text" class="input pf-input" formControlName="customCountry" placeholder="Enter your country">
+              <div class="error-msg" *ngIf="isFieldInvalid('customCountry')">Please enter the country.</div>
+            </div>
+
+            <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('city')}">
+              <label class="form-label">City</label>
+              <select class="input pf-input pf-select" formControlName="city">
+                <option *ngFor="let city of cityOptions" [value]="city">{{city}}</option>
+              </select>
+              <div class="error-msg" *ngIf="isFieldInvalid('city')">City is required.</div>
+            </div>
+
+            <div class="form-group" *ngIf="projectForm.get('city')?.value === 'Other'" [ngClass]="{'has-error': isFieldInvalid('customCity')}">
+              <label class="form-label">Other city</label>
+              <input type="text" class="input pf-input" formControlName="customCity" placeholder="Enter your city">
+              <div class="error-msg" *ngIf="isFieldInvalid('customCity')">Please enter the city.</div>
+            </div>
+
+            <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('targetMarketScope')}">
+              <label class="form-label">Target market scope</label>
+              <select class="input pf-input pf-select" formControlName="targetMarketScope">
+                <option *ngFor="let scope of marketScopes" [value]="scope">{{scope}}</option>
+              </select>
+            </div>
+
+            <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('competitionLevel')}">
+              <label class="form-label">Competition level</label>
+              <select class="input pf-input pf-select" formControlName="competitionLevel">
+                <option *ngFor="let level of competitionLevels" [value]="level">{{level}}</option>
+              </select>
+            </div>
+
+            <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('teamSize')}">
+              <label class="form-label">Team size</label>
+              <input type="number" class="input pf-input" formControlName="teamSize" min="1">
+            </div>
+
+            <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('founderExperienceYears')}">
+              <label class="form-label">Founder experience</label>
+              <input type="number" class="input pf-input" formControlName="founderExperienceYears" min="0">
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">Keyword</label>
-            <input type="text" class="input pf-input" formControlName="keyword" placeholder="e.g. fintech lending">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Country</label>
-            <select class="input pf-input pf-select" formControlName="country">
-              <option value="">Select country</option>
-              <option *ngFor="let country of countries" [value]="country">{{country}}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Region</label>
-            <select class="input pf-input pf-select" formControlName="region" [disabled]="!projectForm.get('country')?.value">
-              <option value="">Select region</option>
-              <option *ngFor="let region of availableRegions" [value]="region">{{region}}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Founder Experience Years</label>
-            <input type="number" class="input pf-input" formControlName="founderExperienceYears" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Funding Rounds</label>
-            <input type="number" class="input pf-input" formControlName="fundingRounds" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Team Size</label>
-            <input type="number" class="input pf-input" formControlName="teamSize" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Market Size (Billion)</label>
-            <input type="number" class="input pf-input" formControlName="marketSizeBillion" min="0" step="0.01">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Market Growth Rate %</label>
-            <input type="number" class="input pf-input" formControlName="marketGrowthRatePercent" step="0.01">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Traction Users</label>
-            <input type="number" class="input pf-input" formControlName="productTractionUsers" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Burn Rate (Million)</label>
-            <input type="number" class="input pf-input" formControlName="burnRateMillion" min="0" step="0.01">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Revenue (Million)</label>
-            <input type="number" class="input pf-input" formControlName="revenueMillion" min="0" step="0.01">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Runway Months</label>
-            <input type="number" class="input pf-input" formControlName="runwayMonths" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Competition Level</label>
-            <select class="input pf-input pf-select" formControlName="competitionLevel">
-              <option value="">Select a level</option>
-              <option *ngFor="let level of competitionLevels" [value]="level">{{level}}</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Search Trend Score</label>
-            <input type="number" class="input pf-input" formControlName="searchTrendScore" min="0" max="100">
-          </div>
-          <div class="form-group">
-            <label class="form-label">World Rank Views</label>
-            <input type="number" class="input pf-input" formControlName="viewsWorldRank" min="0">
-          </div>
-        </div>
 
-        <div class="form-group">
-          <label class="form-label">Founder Background</label>
-          <textarea rows="3" class="input pf-input" formControlName="founderBackground" placeholder="Founder background, domain experience, and execution notes"></textarea>
-        </div>
+          <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('targetCustomers')}">
+            <label class="form-label">Target customers</label>
+            <textarea rows="3" class="input pf-input" formControlName="targetCustomers" placeholder="Who are your first customers? Be specific."></textarea>
+            <div class="error-msg" *ngIf="isFieldInvalid('targetCustomers')">Target customers are required.</div>
+          </div>
+        </section>
 
-        <div class="form-group">
-          <label class="form-label">Opinions / Public Feedback</label>
-          <textarea rows="3" class="input pf-input" formControlName="opinions" placeholder="Paste real customer opinions or feedback when available"></textarea>
-        </div>
+        <section *ngIf="currentStep === 4" class="pf-section">
+          <h3>Business & Validation</h3>
 
-        <div class="error-msg" *ngIf="submitError">
-          {{ submitError }}
-        </div>
+          <ng-container *ngIf="projectStage === 'IDEA_ONLY'; else launchedFields">
+            <div class="form-group checkbox-row">
+              <input type="checkbox" id="hasPrototype" formControlName="hasPrototype">
+              <label for="hasPrototype">Do you already have a prototype?</label>
+            </div>
 
-        <!-- Actions -->
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Estimated initial budget</label>
+                <input type="number" class="input pf-input" formControlName="estimatedInitialBudget" min="0" placeholder="e.g. 30000">
+              </div>
+              <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('expectedMonthlyExpenses')}">
+                <label class="form-label">Expected monthly expenses</label>
+                <input type="number" class="input pf-input" formControlName="expectedMonthlyExpenses" min="0" placeholder="e.g. 5000">
+                <div class="error-msg" *ngIf="isFieldInvalid('expectedMonthlyExpenses')">Expected monthly expenses are required.</div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Currency</label>
+                <select class="input pf-input pf-select" formControlName="currency">
+                  <option *ngFor="let currency of currencies" [value]="currency">{{currency}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Customer feedback or early opinions</label>
+              <textarea rows="3" class="input pf-input" formControlName="customerFeedbacks" placeholder="Paste feedback, interview notes, or early reactions if available."></textarea>
+            </div>
+          </ng-container>
+
+          <ng-template #launchedFields>
+            <div class="form-grid">
+              <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('usersOrCustomers')}">
+                <label class="form-label">Number of users or customers</label>
+                <input type="number" class="input pf-input" formControlName="usersOrCustomers" min="0">
+              </div>
+              <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('monthlyRevenue')}">
+                <label class="form-label">Monthly revenue</label>
+                <input type="number" class="input pf-input" formControlName="monthlyRevenue" min="0">
+              </div>
+              <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('monthlyExpenses')}">
+                <label class="form-label">Monthly expenses</label>
+                <input type="number" class="input pf-input" formControlName="monthlyExpenses" min="0">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Currency</label>
+                <select class="input pf-input pf-select" formControlName="currency">
+                  <option *ngFor="let currency of currencies" [value]="currency">{{currency}}</option>
+                </select>
+              </div>
+              <div class="form-group" [ngClass]="{'has-error': isFieldInvalid('fundingStatus')}">
+                <label class="form-label">Funding status</label>
+                <select class="input pf-input pf-select" formControlName="fundingStatus">
+                  <option *ngFor="let status of fundingStatuses" [value]="status.value">{{status.label}}</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Customer feedbacks or opinions</label>
+              <textarea rows="3" class="input pf-input" formControlName="customerFeedbacks" placeholder="Paste customer reviews, interviews, objections, or positive feedback."></textarea>
+            </div>
+          </ng-template>
+
+          <div class="form-group">
+            <label class="form-label">Main challenges</label>
+            <textarea rows="3" class="input pf-input" formControlName="mainChallenges" placeholder="What is blocking or slowing the project?"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">What kind of support do you need?</label>
+            <textarea rows="3" class="input pf-input" formControlName="expectedSupportNeeds" placeholder="e.g. market research, go-to-market, finance, legal, product strategy"></textarea>
+          </div>
+        </section>
+
+        <div class="error-msg" *ngIf="submitError">{{submitError}}</div>
+
         <div class="pf-actions">
-          <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']"
-            class="btn btn-secondary text-sm">Cancel</a>
-          <button type="submit" class="btn btn-indigo text-sm" [disabled]="isSubmitting">
+          <a [routerLink]="isEditMode ? ['/projects', projectId] : ['/projects']" class="btn btn-secondary text-sm">Cancel</a>
+          <button type="button" class="btn btn-secondary text-sm" *ngIf="currentStep > 1" (click)="previousStep()">Back</button>
+          <button type="button" class="btn btn-indigo text-sm" *ngIf="currentStep < steps.length" (click)="nextStep()">Continue</button>
+          <button type="submit" class="btn btn-indigo text-sm" *ngIf="currentStep === steps.length" [disabled]="isSubmitting">
             {{isSubmitting ? 'Saving...' : (isEditMode ? 'Save Project' : 'Create Project')}}
           </button>
         </div>

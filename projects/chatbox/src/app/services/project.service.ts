@@ -5,6 +5,7 @@ import { map, tap } from 'rxjs/operators';
 import { Project } from '../models/project.model';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
+import { countryCodeFor } from '../data/location-options';
 
 @Injectable({
   providedIn: 'root'
@@ -26,11 +27,17 @@ export class ProjectService {
       title: res.title || '',
       summary: res.summary || res.description || '',
       description: res.description || res.summary || '',
+      projectStage: res.projectStage || this.inferProjectStage(res),
+      problem: res.problem || '',
+      solution: res.solution || '',
       projectStatus: res.projectStatus || 'DRAFT',
       sector: res.sector || '',
       country: res.country || '',
       countryCode: res.countryCode || '',
       region: res.region || '',
+      city: res.city || res.region || '',
+      targetMarketScope: res.targetMarketScope || 'Local',
+      targetCustomers: res.targetCustomers || '',
       keyword: res.keyword || '',
       founderExperienceYears: res.founderExperienceYears || 0,
       fundingRounds: res.fundingRounds || 0,
@@ -46,6 +53,17 @@ export class ProjectService {
       searchTrendScore: res.searchTrendScore || 0,
       viewsWorldRank: res.viewsWorldRank || 0,
       opinions: res.opinions || '',
+      hasPrototype: !!res.hasPrototype,
+      estimatedInitialBudget: res.estimatedInitialBudget || 0,
+      expectedMonthlyExpenses: res.expectedMonthlyExpenses || 0,
+      currency: res.currency || 'MAD',
+      usersOrCustomers: res.usersOrCustomers || res.productTractionUsers || 0,
+      monthlyRevenue: res.monthlyRevenue || 0,
+      monthlyExpenses: res.monthlyExpenses || 0,
+      fundingStatus: res.fundingStatus || 'NO_FUNDING',
+      mainChallenges: res.mainChallenges || '',
+      expectedSupportNeeds: res.expectedSupportNeeds || '',
+      customerFeedbacks: res.customerFeedbacks || res.opinions || '',
       createdAt: res.createdAt || ''
     };
   }
@@ -89,32 +107,9 @@ export class ProjectService {
     const currentUser = this.authService.currentUser;
     const entrepreneurId = currentUser?.id || 'unknown';
 
-    const payload = {
-      entrepreneurId,
-      title: String(projectData.title || '').trim(),
-      summary: String(projectData.summary || projectData.description || '').trim(),
-      sector: String(projectData.sector || '').trim(),
-      country: projectData.country || '',
-      countryCode: projectData.countryCode || '',
-      region: projectData.region || '',
-      keyword: projectData.keyword || '',
-      founderExperienceYears: Number(projectData.founderExperienceYears || 0),
-      fundingRounds: Number(projectData.fundingRounds || 0),
-      teamSize: Number(projectData.teamSize || 0),
-      marketSizeBillion: Number(projectData.marketSizeBillion || 0),
-      marketGrowthRatePercent: Number(projectData.marketGrowthRatePercent || 0),
-      productTractionUsers: Number(projectData.productTractionUsers || 0),
-      burnRateMillion: Number(projectData.burnRateMillion || 0),
-      revenueMillion: Number(projectData.revenueMillion || 0),
-      runwayMonths: Number(projectData.runwayMonths || 0),
-      founderBackground: projectData.founderBackground || '',
-      competitionLevel: projectData.competitionLevel || '',
-      searchTrendScore: Number(projectData.searchTrendScore || 0),
-      viewsWorldRank: Number(projectData.viewsWorldRank || 0),
-      opinions: projectData.opinions || ''
-    };
+    const payload = this.toProjectPayload(projectData, entrepreneurId);
 
-    return this.http.post<any>(this.baseUrl, payload).pipe(
+    return this.http.post<any>(`${this.baseUrl}/${entrepreneurId}`, payload).pipe(
       map(res => this.mapResponseToProject(res)),
       tap(newProj => {
         const current = this.projectsSubject.value;
@@ -124,29 +119,7 @@ export class ProjectService {
   }
 
   updateProject(id: string, updates: any): Observable<Project | undefined> {
-    const payload = {
-      title: updates.title,
-      summary: updates.summary || updates.description,
-      sector: updates.sector,
-      country: updates.country || '',
-      countryCode: updates.countryCode || '',
-      region: updates.region || '',
-      keyword: updates.keyword || '',
-      founderExperienceYears: Number(updates.founderExperienceYears || 0),
-      fundingRounds: Number(updates.fundingRounds || 0),
-      teamSize: Number(updates.teamSize || 0),
-      marketSizeBillion: Number(updates.marketSizeBillion || 0),
-      marketGrowthRatePercent: Number(updates.marketGrowthRatePercent || 0),
-      productTractionUsers: Number(updates.productTractionUsers || 0),
-      burnRateMillion: Number(updates.burnRateMillion || 0),
-      revenueMillion: Number(updates.revenueMillion || 0),
-      runwayMonths: Number(updates.runwayMonths || 0),
-      founderBackground: updates.founderBackground || '',
-      competitionLevel: updates.competitionLevel || '',
-      searchTrendScore: Number(updates.searchTrendScore || 0),
-      viewsWorldRank: Number(updates.viewsWorldRank || 0),
-      opinions: updates.opinions || ''
-    };
+    const payload = this.toProjectPayload(updates);
 
     return this.http.put<any>(`${this.baseUrl}/${id}`, payload).pipe(
       map(res => this.mapResponseToProject(res)),
@@ -155,6 +128,194 @@ export class ProjectService {
         this.projectsSubject.next(current);
       })
     );
+  }
+
+  private toProjectPayload(projectData: any, entrepreneurId?: string): any {
+    const stage = projectData.projectStage || 'IDEA_ONLY';
+    const currency = projectData.currency || 'MAD';
+    const monthlyRevenue = stage === 'ALREADY_LAUNCHED' ? Number(projectData.monthlyRevenue || 0) : 0;
+    const monthlyExpenses = stage === 'ALREADY_LAUNCHED'
+      ? Number(projectData.monthlyExpenses || 0)
+      : Number(projectData.expectedMonthlyExpenses || 0);
+    const usersOrCustomers = stage === 'ALREADY_LAUNCHED' ? Number(projectData.usersOrCustomers || 0) : 0;
+    const funding = this.fundingToLegacy(projectData.fundingStatus || 'NO_FUNDING');
+    const city = String(projectData.city || projectData.region || '').trim();
+    const realSector = String(projectData.sector || '').trim();
+    const normalizedSectorForML = this.normalizeSectorForML(realSector);
+
+    // User amounts are collected in real-world currency and normalized internally for ML compatibility.
+    return {
+      entrepreneurId,
+      title: String(projectData.title || '').trim(),
+      description: String(projectData.description || projectData.summary || '').trim(),
+      projectStage: stage,
+      problem: String(projectData.problem || '').trim(),
+      solution: String(projectData.solution || '').trim(),
+      sector: realSector,
+      country: projectData.country || 'Morocco',
+      countryCode: this.countryToCode(projectData.country || 'Morocco'),
+      region: city,
+      city,
+      targetMarketScope: projectData.targetMarketScope || 'Local',
+      targetCustomers: String(projectData.targetCustomers || '').trim(),
+      founderExperienceYears: Number(projectData.founderExperienceYears || 0),
+      fundingRounds: funding.fundingRounds,
+      teamSize: Number(projectData.teamSize || 1),
+      marketSizeBillion: this.estimateMarketSize(projectData.targetMarketScope),
+      marketGrowthRatePercent: this.estimateMarketGrowth(normalizedSectorForML),
+      productTractionUsers: usersOrCustomers,
+      burnRateMillion: this.amountToMillions(monthlyExpenses, currency),
+      revenueMillion: this.amountToMillions(monthlyRevenue, currency),
+      investorType: funding.investorType,
+      competitionLevel: projectData.competitionLevel || 'Medium',
+      searchTrendScore: this.estimateSearchTrend(normalizedSectorForML),
+      userWordBank: false,
+      hasPrototype: !!projectData.hasPrototype,
+      estimatedInitialBudget: Number(projectData.estimatedInitialBudget || 0),
+      expectedMonthlyExpenses: Number(projectData.expectedMonthlyExpenses || 0),
+      currency,
+      usersOrCustomers,
+      monthlyRevenue,
+      monthlyExpenses,
+      fundingStatus: projectData.fundingStatus || 'NO_FUNDING',
+      mainChallenges: String(projectData.mainChallenges || '').trim(),
+      expectedSupportNeeds: String(projectData.expectedSupportNeeds || '').trim(),
+      customerFeedbacks: String(projectData.customerFeedbacks || '').trim(),
+      opinions: String(projectData.customerFeedbacks || projectData.opinions || '').trim()
+    };
+  }
+
+  private amountToMillions(amount: number, currency: string): number {
+    const usd = Number(amount || 0) * this.currencyToUsdRate(currency);
+    return Math.max(usd / 1_000_000, 0);
+  }
+
+  private currencyToUsdRate(currency: string): number {
+    const rates: Record<string, number> = {
+      MAD: 0.10,
+      EUR: 1.08,
+      USD: 1
+    };
+    return rates[currency] || 1;
+  }
+
+  private fundingToLegacy(status: string): { investorType: string; fundingRounds: number } {
+    const mapping: Record<string, { investorType: string; fundingRounds: number }> = {
+      NO_FUNDING: { investorType: 'none', fundingRounds: 0 },
+      SELF_FUNDED: { investorType: 'none', fundingRounds: 0 },
+      FAMILY_FRIENDS: { investorType: 'angel', fundingRounds: 0 },
+      ANGEL_INVESTOR: { investorType: 'angel', fundingRounds: 1 },
+      INCUBATOR_GRANT: { investorType: 'angel', fundingRounds: 1 },
+      VENTURE_CAPITAL: { investorType: 'tier2_vc', fundingRounds: 1 },
+      BANK_LOAN: { investorType: 'none', fundingRounds: 1 }
+    };
+    return mapping[status] || mapping['NO_FUNDING'];
+  }
+
+  private countryToCode(country: string): string {
+    return countryCodeFor(country);
+  }
+
+  private normalizeSectorForML(sector: string): string {
+    const mapping: Record<string, string> = {
+      'SaaS / Software': 'SaaS',
+      'Artificial Intelligence': 'SaaS',
+      'Education / EdTech': 'Education',
+      'Health / MedTech': 'Health',
+      FinTech: 'Finance',
+      'Agriculture / AgriTech': 'Agriculture',
+      'Food & Beverage': 'Food',
+      'Tourism / Travel': 'Travel',
+      'Logistics / Delivery': 'Logistics',
+      'Real Estate / PropTech': 'Real Estate',
+      'Fashion / Beauty': 'Retail',
+      'Energy / CleanTech': 'Energy',
+      'Environment / Recycling': 'Energy',
+      LegalTech: 'Legal',
+      'HR / Recruitment': 'Services',
+      'Marketing / Advertising': 'Marketing',
+      'Media / Content': 'Media',
+      'Sports / Fitness': 'Health',
+      'Non-profit / Association': 'Social Impact',
+      'Handmade / Crafts': 'Retail',
+      'Local Services': 'Services'
+    };
+    return mapping[sector] || sector || 'SaaS';
+  }
+
+  private estimateMarketSize(scope: string): number {
+    const mapping: Record<string, number> = {
+      Local: 0.05,
+      Regional: 0.2,
+      National: 1,
+      International: 8
+    };
+    return mapping[scope] ?? 0.2;
+  }
+
+  private estimateMarketGrowth(sector: string): number {
+    const mapping: Record<string, number> = {
+      Education: 6,
+      SaaS: 10,
+      Finance: 7,
+      Health: 6,
+      Retail: 4,
+      'E-commerce': 8,
+      Food: 4,
+      'Real Estate': 5,
+      Agriculture: 5,
+      Energy: 8,
+      Marketplace: 7,
+      Travel: 5,
+      Logistics: 6,
+      Transportation: 5,
+      Manufacturing: 4,
+      Construction: 4,
+      Cybersecurity: 9,
+      Legal: 5,
+      Services: 4,
+      Marketing: 6,
+      Media: 5,
+      Gaming: 7,
+      'Social Impact': 4
+    };
+    return mapping[sector] ?? 5;
+  }
+
+  private estimateSearchTrend(sector: string): number {
+    const mapping: Record<string, number> = {
+      Education: 58,
+      SaaS: 68,
+      Finance: 62,
+      Health: 60,
+      Retail: 52,
+      'E-commerce': 64,
+      Food: 50,
+      'Real Estate': 55,
+      Agriculture: 48,
+      Energy: 63,
+      Marketplace: 58,
+      Travel: 54,
+      Logistics: 56,
+      Transportation: 53,
+      Manufacturing: 46,
+      Construction: 45,
+      Cybersecurity: 66,
+      Legal: 48,
+      Services: 50,
+      Marketing: 57,
+      Media: 55,
+      Gaming: 60,
+      'Social Impact': 49
+    };
+    return mapping[sector] ?? 50;
+  }
+
+  private inferProjectStage(project: any): string {
+    return Number(project.monthlyRevenue || project.revenueMillion || 0) > 0
+      || Number(project.usersOrCustomers || project.productTractionUsers || 0) > 0
+      ? 'ALREADY_LAUNCHED'
+      : 'IDEA_ONLY';
   }
 
   submitProject(id: string): Observable<Project> {

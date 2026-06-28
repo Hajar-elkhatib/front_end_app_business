@@ -42,6 +42,13 @@ export interface BusinessIdeaAnalysis {
   predictionLabel: string;
   confidenceScore: number;
   finalScore: number;
+  rawModelFinalScore?: number;
+  llmReviewedFinalScore?: number;
+  llmAdjustment?: number;
+  scoreReliability?: string;
+  dataQualityLevel?: string;
+  scoreReviewReason?: string;
+  scoreReviewSource?: string;
   finalLabel: string;
   startupSuccessScore: number;
   marketAnalysisScore: number;

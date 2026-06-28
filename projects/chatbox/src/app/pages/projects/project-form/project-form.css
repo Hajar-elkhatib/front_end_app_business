@@ -11,7 +11,7 @@
 .pf-back:hover { color: #fff; }
 
 /* Container */
-.pf-container { max-width: 720px; margin: 0 auto; }
+.pf-container { max-width: 860px; margin: 0 auto; }
 
 /* Card Form */
 .pf-card {
@@ -22,8 +22,53 @@
 .pf-card-header h2 { font-size: 1.45rem; color: #fff; font-weight: 700; letter-spacing: -0.02em; }
 .pf-card-header p { color: #71717a; font-size: 0.875rem; margin-top: 0.35rem; line-height: 1.5; }
 
+.pf-steps {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.pf-step {
+  min-height: 3rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 0.55rem 0.65rem;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: left;
+}
+
+.pf-step span {
+  display: inline-grid;
+  place-items: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.35rem;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.pf-step.active,
+.pf-step.done {
+  border-color: var(--indigo-500);
+  color: var(--text-primary);
+}
+
+.pf-step.active span,
+.pf-step.done span {
+  background: var(--indigo-600);
+  color: #fff;
+}
+
 /* Forms Structure */
 .pf-form { display: flex; flex-direction: column; gap: 1.5rem; }
+.pf-section { display: flex; flex-direction: column; gap: 1.25rem; }
+.pf-section h3 { font-size: 1.15rem; font-weight: 750; color: var(--text-primary); margin: 0; }
 
 .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
 .form-label { font-size: 0.85rem; font-weight: 500; color: #fff; }
@@ -47,6 +92,60 @@
 .pf-select option { background: #18181b; color: #fff; }
 
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+.stage-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stage-card {
+  min-height: 8rem;
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.25rem;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  text-align: left;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stage-card strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.stage-card span {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.stage-card:hover,
+.stage-card.selected {
+  border-color: var(--indigo-500);
+  box-shadow: 0 0 0 4px var(--indigo-100);
+  transform: translateY(-1px);
+}
+
+.checkbox-row {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.checkbox-row input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--indigo-600);
+}
+
+.checkbox-row label {
+  color: var(--text-primary);
+  font-weight: 600;
+}
 
 /* Form Error States */
 .form-group.has-error .pf-input { border-color: #ef4444; }
@@ -89,5 +188,7 @@
 
 @media (max-width: 640px) {
   .pf-card { padding: 1.5rem; }
-  .form-grid { grid-template-columns: 1fr; }
+  .form-grid,
+  .stage-grid,
+  .pf-steps { grid-template-columns: 1fr; }
 }

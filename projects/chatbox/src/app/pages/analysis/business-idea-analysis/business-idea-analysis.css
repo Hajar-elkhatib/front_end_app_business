@@ -11,6 +11,7 @@
   padding: 1rem;
 }
 .alert-card { border-color: color-mix(in srgb, var(--danger) 40%, var(--border-color)); color: var(--danger); }
+.warning-card { border-color: color-mix(in srgb, var(--warning) 45%, var(--border-color)); color: var(--text-primary); }
 .state-card { min-height: 180px; display: grid; place-items: center; text-align: center; }
 .score-shell {
   display: grid;

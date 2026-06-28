@@ -49,6 +49,7 @@ export class BusinessIdeaAnalysis implements OnInit {
   isSpecialistsLoading = false;
   isReportLoading = false;
   errorMessage = '';
+  secondaryWarning = '';
   isProjectsLoading = false;
 
   ngOnInit() {
@@ -118,6 +119,7 @@ export class BusinessIdeaAnalysis implements OnInit {
     this.specialistRecommendations = [];
     this.latestReport = undefined;
     this.errorMessage = '';
+    this.secondaryWarning = '';
     this.loadLatestAnalysis();
     this.loadFeedbacks();
     this.loadLatestReport();
@@ -126,6 +128,7 @@ export class BusinessIdeaAnalysis implements OnInit {
   runBusinessValidation() {
     if (!this.projectId) return;
     this.errorMessage = '';
+    this.secondaryWarning = '';
     this.isBusinessLoading = true;
     this.analysisService.analyzeBusinessValidation(this.projectId, this.feedbackText).subscribe({
       next: result => {
@@ -140,7 +143,7 @@ export class BusinessIdeaAnalysis implements OnInit {
 
   runStartupSuccess() {
     if (!this.projectId) return;
-    this.errorMessage = '';
+    this.clearErrorForStandaloneRun('startup');
     this.isStartupLoading = true;
     this.analysisService.predictStartupSuccess(this.projectId).subscribe({
       next: result => {
@@ -148,13 +151,13 @@ export class BusinessIdeaAnalysis implements OnInit {
         this.isStartupLoading = false;
         this.cdr.markForCheck();
       },
-      error: () => this.fail('The analysis could not be started. Please try again.', 'startup')
+      error: () => this.failSecondary('Startup success could not be refreshed.', 'startup')
     });
   }
 
   runMarketAnalysis() {
     if (!this.projectId) return;
-    this.errorMessage = '';
+    this.clearErrorForStandaloneRun('market');
     this.isMarketLoading = true;
     this.analysisService.analyzeMarket(this.projectId).subscribe({
       next: result => {
@@ -162,7 +165,7 @@ export class BusinessIdeaAnalysis implements OnInit {
         this.isMarketLoading = false;
         this.cdr.markForCheck();
       },
-      error: () => this.fail('The analysis could not be started. Please try again.', 'market')
+      error: () => this.failSecondary('Market analysis could not be refreshed.', 'market')
     });
   }
 
@@ -198,15 +201,15 @@ export class BusinessIdeaAnalysis implements OnInit {
           this.isSentimentLoading = false;
           this.cdr.markForCheck();
         },
-        error: () => this.fail('The analysis could not be started. Please try again.', 'sentiment')
+        error: () => this.failSecondary('Customer feedback could not be refreshed.', 'sentiment')
       }),
-      error: () => this.fail('The analysis could not be started. Please try again.', 'sentiment')
+      error: () => this.failSecondary('Customer feedback could not be refreshed.', 'sentiment')
     });
   }
 
   runSpecialistRecommendations() {
     if (!this.projectId) return;
-    this.errorMessage = '';
+    this.clearErrorForStandaloneRun('specialists');
     this.isSpecialistsLoading = true;
     this.analysisService.recommendSpecialists(this.projectId).subscribe({
       next: result => {
@@ -214,7 +217,7 @@ export class BusinessIdeaAnalysis implements OnInit {
         this.isSpecialistsLoading = false;
         this.cdr.markForCheck();
       },
-      error: () => this.fail('The analysis could not be started. Please try again.', 'specialists')
+      error: () => this.failSecondary('Specialist recommendations could not be refreshed.', 'specialists')
     });
   }
 
@@ -255,6 +258,8 @@ export class BusinessIdeaAnalysis implements OnInit {
   }
 
   runAll() {
+    this.errorMessage = '';
+    this.secondaryWarning = '';
     this.runBusinessValidation();
     this.runStartupSuccess();
     this.runMarketAnalysis();
@@ -275,24 +280,13 @@ export class BusinessIdeaAnalysis implements OnInit {
   }
 
   displayedFinalScore(): number {
-    const parts = this.scoreParts();
-    if (parts.length === 0) {
-      return this.businessValidation?.finalScore || 0;
-    }
-    const weights: Record<string, number> = {
-      'Startup Success': 0.35,
-      'Market Analysis': 0.25,
-      'Customer Feedback': 0.25,
-      'Other AI Signals': 0.15
-    };
-    let weighted = 0;
-    let totalWeight = 0;
-    for (const part of parts) {
-      const weight = weights[part.label] || 0;
-      weighted += part.value * weight;
-      totalWeight += weight;
-    }
-    return totalWeight > 0 ? weighted / totalWeight : (this.businessValidation?.finalScore || 0);
+    const analysis = this.businessValidation as any;
+    return this.firstNumeric(
+      analysis?.llmReviewedFinalScore,
+      analysis?.finalScore,
+      analysis?.rawModelFinalScore,
+      0
+    );
   }
 
   displayedFinalLabel(): string {
@@ -348,5 +342,33 @@ export class BusinessIdeaAnalysis implements OnInit {
     if (area === 'sentiment') this.isSentimentLoading = false;
     if (area === 'specialists') this.isSpecialistsLoading = false;
     this.cdr.markForCheck();
+  }
+
+  private failSecondary(message: string, area: 'startup' | 'market' | 'sentiment' | 'specialists') {
+    this.secondaryWarning = this.businessValidation
+      ? `The project analysis was completed. ${message}`
+      : message;
+    if (area === 'startup') this.isStartupLoading = false;
+    if (area === 'market') this.isMarketLoading = false;
+    if (area === 'sentiment') this.isSentimentLoading = false;
+    if (area === 'specialists') this.isSpecialistsLoading = false;
+    this.cdr.markForCheck();
+  }
+
+  private firstNumeric(...values: any[]): number {
+    for (const value of values) {
+      const numeric = Number(value);
+      if (value !== null && value !== undefined && value !== '' && Number.isFinite(numeric)) {
+        return numeric;
+      }
+    }
+    return 0;
+  }
+
+  private clearErrorForStandaloneRun(area: 'startup' | 'market' | 'specialists') {
+    if (!this.isBusinessLoading && !this.businessValidation) {
+      this.errorMessage = '';
+    }
+    this.secondaryWarning = '';
   }
 }
