@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Project } from '../../../models/project.model';
 import { AssignmentService } from '../../../services/assignment.service';
 import { AuthService } from '../../../services/auth.service';
@@ -17,6 +17,7 @@ export class SpecialistDashboard implements OnInit {
   private assignmentService = inject(AssignmentService);
   private specialistService = inject(SpecialistService);
   private authService = inject(AuthService);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   assignedProjects: Project[] = [];
@@ -59,5 +60,17 @@ export class SpecialistDashboard implements OnInit {
         this.cdr.markForCheck();
       }
     });
+  }
+
+  openAvailability() {
+    this.router.navigate(['/specialist/availability']);
+  }
+
+  openConversations() {
+    this.router.navigate(['/conversations']);
+  }
+
+  openEvaluations() {
+    this.router.navigate(['/specialist/evaluations']);
   }
 }

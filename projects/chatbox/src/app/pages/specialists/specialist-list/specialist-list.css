@@ -148,12 +148,15 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  font: inherit;
   min-height: 278px;
   overflow: hidden;
   padding: 1.35rem;
   position: relative;
+  text-align: left;
   text-decoration: none;
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+  width: 100%;
 }
 
 .sl-card::before {

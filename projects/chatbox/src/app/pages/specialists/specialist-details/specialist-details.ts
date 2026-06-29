@@ -8,6 +8,7 @@ import { timeout } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 import { EvaluationService } from '../../../services/evaluation.service';
 import { Evaluation, EvaluationReviewView } from '../../../models/evaluation.model';
+import { HumChat } from '../../../services/hum-chat';
 
 @Component({
   selector: 'app-specialist-details',
@@ -35,6 +36,8 @@ export class SpecialistDetails implements OnInit {
   evaluationError = '';
   showDeleteModal = false;
   reviewToast = '';
+  contactError = '';
+  isStartingConversation = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,6 +45,7 @@ export class SpecialistDetails implements OnInit {
     private specialistService: SpecialistService,
     private evaluationService: EvaluationService,
     private authService: AuthService,
+    private humChat: HumChat,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -224,6 +228,35 @@ export class SpecialistDetails implements OnInit {
 
   private getSpecialistMongoId(): string {
     return this.specialist?.mongoId || this.specialist?.specialistId || '';
+  }
+
+  startConversation() {
+    if (!this.specialist || this.isStartingConversation) return;
+
+    const entrepreneurId = this.authService.currentUser?.id || '';
+    const specialistId = this.getSpecialistMongoId();
+
+    if (!entrepreneurId || !specialistId) {
+      this.contactError = 'Conversation could not be started because an identifier is missing.';
+      return;
+    }
+
+    this.contactError = '';
+    this.isStartingConversation = true;
+    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
+    this.humChat.startConversation(entrepreneurId, specialistId).subscribe({
+      next: conversation => {
+        this.isStartingConversation = false;
+        this.router.navigate(['/conversations'], {
+          queryParams: { conversationId: conversation.id }
+        });
+      },
+      error: () => {
+        this.isStartingConversation = false;
+        this.contactError = 'Conversation could not be started. Please try again.';
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   deleteSpecialist() {

@@ -98,7 +98,7 @@
        <div class="flex-1 bg-gray-50 border border-color rounded-lg p-1.5 focus-within transition-all shadow-sm">
          <textarea [(ngModel)]="newMessage" (keyup.enter)="sendMessage()" class="w-full text-sm resize-none custom-scrollbar outline-none bg-transparent pt-2 px-2" placeholder="Write a message..." rows="1" style="min-height: 24px; max-height: 120px;"></textarea>
        </div>
-       <button (click)="sendMessage()" class="btn btn-indigo mb-1 rounded-lg p-2.5 flex items-center justify-center send-btn shadow-md" [disabled]="!newMessage.trim()">
+       <button (click)="sendMessage()" class="btn btn-indigo mb-1 rounded-lg p-2.5 flex items-center justify-center send-btn shadow-md" [disabled]="!newMessage.trim() || !connectionReady || isSending">
          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
        </button>
     </div>

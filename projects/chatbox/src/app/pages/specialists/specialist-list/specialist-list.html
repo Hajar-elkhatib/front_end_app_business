@@ -57,8 +57,10 @@
   </div>
 
   <div class="sl-grid" *ngIf="!isLoading && !loadError && filteredSpecialists.length > 0">
-    <a *ngFor="let spec of filteredSpecialists; let i = index"
-       class="sl-card" [routerLink]="['/specialists', spec.userId || spec.id]">
+    <button *ngFor="let spec of filteredSpecialists; let i = index"
+       type="button"
+       class="sl-card"
+       (click)="openSpecialist(spec)">
       <div class="sl-card-top">
         <div class="sl-avatar" [ngClass]="['indigo','purple','emerald','sky','amber','rose'][i % 6]">
           {{spec.avatarUrl}}
@@ -87,6 +89,6 @@
           <span class="sl-rating-num">{{spec.averageRating}}</span>
         </div>
       </footer>
-    </a>
+    </button>
   </div>
 </div>

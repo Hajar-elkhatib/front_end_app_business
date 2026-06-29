@@ -13,3 +13,11 @@
 .tabular-nums { font-variant-numeric: tabular-nums; }
 .transition-colors { transition: background-color 0.15s ease; }
 .hover-bg-gray:hover { background-color: var(--bg-secondary); }
+.dashboard-link-card {
+  color: inherit;
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  text-align: left;
+  width: 100%;
+}

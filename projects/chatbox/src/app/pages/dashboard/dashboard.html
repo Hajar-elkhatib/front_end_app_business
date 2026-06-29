@@ -7,7 +7,8 @@
     </div>
     <div class="dash-header-actions">
       <a routerLink="/projects/create" class="btn btn-indigo">New Project</a>
-      <a routerLink="/specialists" class="btn btn-secondary">Find Specialists</a>
+      <button type="button" class="btn btn-secondary" (click)="openSpecialists()">Find Specialists</button>
+      <button type="button" class="btn btn-secondary" (click)="openConversations()">Conversations</button>
     </div>
   </header>
 
@@ -108,7 +109,8 @@
       <nav class="dash-links" aria-label="Dashboard shortcuts">
         <a routerLink="/projects/create">Create a project</a>
         <a routerLink="/projects">Review all projects</a>
-        <a routerLink="/specialists">Browse specialists</a>
+        <button type="button" (click)="openSpecialists()">Browse specialists</button>
+        <button type="button" (click)="openConversations()">Open conversations</button>
       </nav>
     </aside>
   </section>

@@ -1,8 +1,12 @@
-import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChatService } from '../../services/chat.service';
-import { Conversation, ChatMessage } from '../../models/chat.model';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { HumChat } from '../../services/hum-chat';
+import { AuthService } from '../../services/auth.service';
+import { SpecialistService } from '../../services/specialist.service';
+import { Conversation, ConversationMessage, SendMessageRequest } from '../../models/chat.model';
 
 @Component({
   selector: 'app-chat',
@@ -11,27 +15,83 @@ import { Conversation, ChatMessage } from '../../models/chat.model';
   templateUrl: './chat.html',
   styleUrls: ['./chat.css']
 })
-export class Chat implements OnInit, AfterViewChecked {
+export class Chat implements OnInit, AfterViewChecked, OnDestroy {
   @ViewChild('scrollMe') private myScrollContainer!: ElementRef;
 
   conversations: Conversation[] = [];
-  messages: ChatMessage[] = [];
+  messages: ConversationMessage[] = [];
   activeConversation: Conversation | null = null;
   newMessage = '';
   isTyping = false;
   isLoading = true;
+  isSending = false;
+  connectionReady = false;
 
-  constructor(private chatService: ChatService, private cdr: ChangeDetectorRef) {}
+  private messageSubscription?: Subscription;
+  private connectionSubscription?: Subscription;
+
+  constructor(
+    private humChat: HumChat,
+    private authService: AuthService,
+    private specialistService: SpecialistService,
+    private route: ActivatedRoute,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
-    this.chatService.getConversations().subscribe(convos => {
+    const currentUser = this.authService.currentUser;
+    if (!currentUser?.id) {
+      this.isLoading = false;
+      return;
+    }
+
+    if (this.authService.userRole === 'specialist') {
+      this.specialistService.getProfile(currentUser.id).subscribe({
+        next: specialist => {
+          const specialistId = specialist.mongoId || specialist.specialistId || specialist.id;
+          this.initializeHumanChat(specialistId, currentUser.role);
+        },
+        error: () => this.initializeHumanChat(currentUser.id, currentUser.role)
+      });
+      return;
+    }
+
+    this.initializeHumanChat(currentUser.id, currentUser.role);
+  }
+
+  private initializeHumanChat(userId: string, role: string) {
+    this.humChat.setCurrentUser(userId, role);
+
+    this.messageSubscription = this.humChat.onMessage().subscribe(message => {
+      if (message.conversationId !== this.activeConversation?.id) return;
+      this.messages = [...this.messages.filter(existing => existing.id !== message.id), message];
+      this.updateConversationPreview(message);
+      this.isSending = false;
+      this.cdr.markForCheck();
+      this.scrollToBottom();
+    });
+
+    this.connectionSubscription = this.humChat.isConnected().subscribe(isConnected => {
+      this.connectionReady = isConnected;
+      this.cdr.markForCheck();
+    });
+
+    this.humChat.getConversations().subscribe(convos => {
       this.conversations = convos;
       this.isLoading = false;
       if (convos.length > 0) {
-        this.selectConversation(convos[0]);
+        const requestedConversationId = this.route.snapshot.queryParamMap.get('conversationId');
+        const requestedConversation = convos.find(convo => convo.id === requestedConversationId);
+        this.selectConversation(requestedConversation || convos[0]);
       }
       this.cdr.markForCheck();
     });
+  }
+
+  ngOnDestroy() {
+    this.messageSubscription?.unsubscribe();
+    this.connectionSubscription?.unsubscribe();
+    this.humChat.disconnect();
   }
 
   ngAfterViewChecked() {
@@ -40,7 +100,8 @@ export class Chat implements OnInit, AfterViewChecked {
 
   selectConversation(convo: Conversation) {
     this.activeConversation = convo;
-    this.chatService.getMessages(convo.id).subscribe(msgs => {
+    this.humChat.connect(convo.id);
+    this.humChat.getMessages(convo.id).subscribe(msgs => {
       this.messages = msgs;
       this.cdr.markForCheck();
       this.scrollToBottom();
@@ -48,19 +109,40 @@ export class Chat implements OnInit, AfterViewChecked {
   }
 
   sendMessage() {
-    if (!this.newMessage.trim() || !this.activeConversation) return;
-    
-    this.chatService.sendMessage(this.activeConversation.id, this.newMessage).subscribe(msg => {
-      this.messages.push(msg);
-      this.newMessage = '';
-      this.cdr.markForCheck();
-      this.scrollToBottom();
-    });
+    const content = this.newMessage.trim();
+    if (!content || !this.activeConversation || this.isSending) return;
+
+    const request: SendMessageRequest = {
+      conversationId: this.activeConversation.id,
+      senderId: this.humChat.getCurrentUserId(),
+      role: this.humChat.getCurrentUserRole(),
+      senderType: this.humChat.getCurrentUserRole(),
+      content
+    };
+
+    this.isSending = true;
+    this.newMessage = '';
+    this.humChat.sendMessageWS(request);
+    this.cdr.markForCheck();
   }
 
   scrollToBottom(): void {
     try {
       this.myScrollContainer.nativeElement.scrollTop = this.myScrollContainer.nativeElement.scrollHeight;
     } catch(err) { }
+  }
+
+  private updateConversationPreview(message: ConversationMessage): void {
+    this.conversations = this.conversations.map(conversation => {
+      if (conversation.id !== message.conversationId) return conversation;
+
+      return {
+        ...conversation,
+        lastMessage: {
+          text: message.content,
+          timestamp: message.timestamp
+        }
+      };
+    });
   }
 }

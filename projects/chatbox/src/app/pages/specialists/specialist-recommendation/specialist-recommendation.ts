@@ -1,11 +1,13 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AiSpecialistRecommendation } from '../../../models/analysis.model';
 import { Project } from '../../../models/project.model';
 import { AnalysisService } from '../../../services/analysis.service';
 import { ProjectService } from '../../../services/project.service';
+import { AuthService } from '../../../services/auth.service';
+import { HumChat } from '../../../services/hum-chat';
 
 @Component({
   selector: 'app-specialist-recommendation',
@@ -40,7 +42,9 @@ import { ProjectService } from '../../../services/project.service';
           <strong class="match">{{item.recommendedScore | number:'1.0-1'}}% match</strong>
           <div class="actions">
             <a class="btn btn-secondary" [routerLink]="['/specialists', item.specialistId]">View Profile</a>
-            <a class="btn btn-indigo" [routerLink]="['/conversations']">Contact</a>
+            <button class="btn btn-indigo" type="button" (click)="startConversation(item)" [disabled]="startingSpecialistId === item.specialistId">
+              {{startingSpecialistId === item.specialistId ? 'Opening...' : 'Contact'}}
+            </button>
           </div>
         </article>
       </div>
@@ -54,12 +58,16 @@ export class SpecialistRecommendation implements OnInit {
   private route = inject(ActivatedRoute);
   private analysisService = inject(AnalysisService);
   private projectService = inject(ProjectService);
+  private authService = inject(AuthService);
+  private humChat = inject(HumChat);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
   projectId = this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('projectId') || '';
   projects: Project[] = [];
   results: AiSpecialistRecommendation[] = [];
   isLoading = false;
   error = '';
+  startingSpecialistId = '';
 
   ngOnInit() {
     this.projectService.getProjects().subscribe({
@@ -81,5 +89,32 @@ export class SpecialistRecommendation implements OnInit {
   formatSkills(skills?: string[] | string): string {
     if (Array.isArray(skills)) return skills.join(', ');
     return skills || 'Project expertise, strategy, market';
+  }
+
+  startConversation(item: AiSpecialistRecommendation) {
+    const entrepreneurId = this.authService.currentUser?.id || '';
+    const specialistId = item.specialistId || '';
+
+    if (!entrepreneurId || !specialistId) {
+      this.error = 'Conversation could not be started because an identifier is missing.';
+      return;
+    }
+
+    this.error = '';
+    this.startingSpecialistId = specialistId;
+    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
+    this.humChat.startConversation(entrepreneurId, specialistId, this.projectId || undefined).subscribe({
+      next: conversation => {
+        this.startingSpecialistId = '';
+        this.router.navigate(['/conversations'], {
+          queryParams: { conversationId: conversation.id }
+        });
+      },
+      error: () => {
+        this.startingSpecialistId = '';
+        this.error = 'Conversation could not be started. Please try again.';
+        this.cdr.markForCheck();
+      }
+    });
   }
 }

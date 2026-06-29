@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SpecialistService } from '../../../services/specialist.service';
 import { Specialist } from '../../../models/specialist.model';
@@ -16,6 +16,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 export class SpecialistList implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   specialists: Specialist[] = [];
   filteredSpecialists: Specialist[] = [];
@@ -97,5 +98,11 @@ export class SpecialistList implements OnInit {
 
   getRatingStars(rating: number): number[] {
     return Array(Math.floor(rating)).fill(0);
+  }
+
+  openSpecialist(specialist: Specialist) {
+    const id = specialist.userId || specialist.id || specialist.mongoId || specialist.specialistId;
+    if (!id) return;
+    this.router.navigate(['/specialists', id]);
   }
 }

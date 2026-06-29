@@ -234,15 +234,19 @@
   gap: 0.45rem;
 }
 
-.dash-links a {
+.dash-links a,
+.dash-links button {
+  background: transparent;
   border-radius: var(--r-md);
   color: var(--text-secondary);
   font-size: 0.88rem;
   font-weight: 600;
   padding: 0.58rem 0.65rem;
+  text-align: left;
 }
 
 .dash-links a:hover,
+.dash-links button:hover,
 .dash-row-action a:hover,
 .dash-project-cell a:hover {
   background: var(--bg-tertiary);

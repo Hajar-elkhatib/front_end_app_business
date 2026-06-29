@@ -186,6 +186,16 @@ export class MainLayout implements OnInit {
     });
   }
 
+  navigateTo(route: string, event?: Event) {
+    event?.stopPropagation();
+    this.closeDropdowns();
+    this.router.navigate([route]);
+  }
+
+  isRouteActive(route: string): boolean {
+    return this.router.url.split('?')[0] === route;
+  }
+
   @HostListener('document:keydown.control.k', ['$event'])
   focusSearch(event: Event) {
     event.preventDefault();

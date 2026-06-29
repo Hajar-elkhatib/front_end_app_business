@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project.model';
 
@@ -13,6 +13,7 @@ import { Project } from '../../models/project.model';
 })
 export class Dashboard implements OnInit {
   private projectService = inject(ProjectService);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   projects: Project[] = [];
@@ -52,6 +53,14 @@ export class Dashboard implements OnInit {
         this.cdr.markForCheck();
       }
     });
+  }
+
+  openSpecialists() {
+    this.router.navigate(['/specialists']);
+  }
+
+  openConversations() {
+    this.router.navigate(['/conversations']);
   }
 
   getStatusClass(status?: string): string {
