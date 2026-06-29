@@ -2,24 +2,25 @@
   <header class="admin-header">
     <div>
       <p class="admin-kicker">Admin</p>
-      <h1>Dashboard</h1>
-      <p class="admin-copy">Live platform overview from Spring Boot and MongoDB.</p>
+      <h1>{{mode === 'complaints' ? 'Complaints' : 'Dashboard'}}</h1>
+      <p class="admin-copy">{{mode === 'complaints' ? 'Load, filter, update, and remove complaints from the Spring Boot backend.' : 'Live platform overview from Spring Boot and MongoDB.'}}</p>
     </div>
-    <button type="button" class="admin-refresh" (click)="loadSummary()" [disabled]="isLoading">Refresh</button>
+    <button type="button" class="admin-refresh" (click)="loadCurrentView()" [disabled]="isLoading">Refresh</button>
   </header>
 
   <p *ngIf="errorMessage" class="admin-error">{{errorMessage}}</p>
-  <div *ngIf="isLoading" class="table-empty">Loading dashboard...</div>
+  <div *ngIf="isLoading" class="table-empty">Loading {{mode}}...</div>
 
-  <ng-container *ngIf="!isLoading && summary as data">
+  <ng-container *ngIf="!isLoading && mode === 'dashboard' && summary as data">
     <div class="metric-grid">
       <article class="metric-card"><span>Total Users</span><strong>{{data.totalUsers}}</strong></article>
+      <article class="metric-card"><span>Pending Specialists</span><strong>{{data.pendingSpecialistRequests}}</strong></article>
+      <article class="metric-card"><span>Total Assignments</span><strong>{{data.totalAssignments ?? (data.matchedRequests + data.pendingSpecialistRequests)}}</strong></article>
+      <article class="metric-card"><span>Total Reviews</span><strong>{{data.totalReviews ?? data.generatedReports}}</strong></article>
+      <article class="metric-card"><span>Projects</span><strong>{{data.totalProjects}}</strong></article>
+      <article class="metric-card"><span>Complaints</span><strong>{{data.pendingRequests.length}}</strong></article>
       <article class="metric-card"><span>Entrepreneurs</span><strong>{{data.totalEntrepreneurs}}</strong></article>
       <article class="metric-card"><span>Specialists</span><strong>{{data.totalSpecialists}}</strong></article>
-      <article class="metric-card"><span>Total Projects</span><strong>{{data.totalProjects}}</strong></article>
-      <article class="metric-card"><span>Analyzed Projects</span><strong>{{data.analyzedProjects}}</strong></article>
-      <article class="metric-card"><span>Pending Requests</span><strong>{{data.pendingSpecialistRequests}}</strong></article>
-      <article class="metric-card"><span>Generated Reports</span><strong>{{data.generatedReports}}</strong></article>
     </div>
 
     <div class="admin-two-col">
@@ -33,42 +34,47 @@
       </section>
 
       <section class="admin-panel">
-        <div class="panel-title">Projects by Sector</div>
-        <div *ngIf="!data.projectsBySector.length" class="table-empty compact">No sectors yet.</div>
-        <div *ngFor="let item of data.projectsBySector" class="summary-row">
-          <span>{{item.label}}</span>
-          <strong>{{item.count}}</strong>
+        <div class="panel-title">Complaints by Status</div>
+        <div *ngIf="!data.pendingRequests.length" class="table-empty compact">No complaints yet.</div>
+        <div *ngFor="let item of data.pendingRequests" class="summary-row">
+          <span>{{item.status}}</span>
+          <strong>{{item.id}}</strong>
         </div>
       </section>
     </div>
+  </ng-container>
 
-    <div class="admin-two-col">
-      <section class="admin-panel">
-        <div class="panel-title">Recent Projects</div>
-        <div *ngIf="!data.recentProjects.length" class="table-empty compact">No projects yet.</div>
-        <a *ngFor="let project of data.recentProjects" class="summary-row linked" [routerLink]="['/admin/projects', project.id]">
-          <span>{{project.title || 'Untitled project'}}</span>
-          <em>{{project.analysisStatus}}</em>
-        </a>
-      </section>
-
-      <section class="admin-panel">
-        <div class="panel-title">Pending Specialist Requests</div>
-        <div *ngIf="!data.pendingRequests.length" class="table-empty compact">No pending requests.</div>
-        <a *ngFor="let request of data.pendingRequests" class="summary-row linked" routerLink="/admin/support-requests">
-          <span>{{request.project || 'Project'}}</span>
-          <em>{{request.status}}</em>
-        </a>
-      </section>
+  <ng-container *ngIf="!isLoading && mode === 'complaints'">
+    <div class="filters">
+      <select class="input" [(ngModel)]="complaintStatus" (ngModelChange)="loadComplaints()">
+        <option value="">All statuses</option>
+        <option value="Pending">Pending</option>
+        <option value="In Progress">In Progress</option>
+        <option value="Resolved">Resolved</option>
+      </select>
     </div>
-
-    <section class="admin-panel">
-      <div class="panel-title">Recent Reports</div>
-      <div *ngIf="!data.recentReports.length" class="table-empty compact">No reports generated yet.</div>
-      <div *ngFor="let report of data.recentReports" class="summary-row">
-        <span>{{report.title}}</span>
-        <em>{{report.reportType || 'Report'}}</em>
-      </div>
-    </section>
+    <div *ngIf="!complaints.length" class="table-empty">No complaints match these filters.</div>
+    <div *ngIf="complaints.length" class="table-scroll">
+      <table class="admin-table">
+        <thead><tr><th>Subject</th><th>User</th><th>Category</th><th>Priority</th><th>Status</th><th>Admin Response</th><th>Actions</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let complaint of complaints">
+            <td>{{complaint.subject}}</td>
+            <td>{{complaint.userId || '-'}}</td>
+            <td>{{complaint.category}}</td>
+            <td>{{complaint.priority}}</td>
+            <td><span class="badge-pill badge-neutral">{{complaint.status}}</span></td>
+            <td>
+              <textarea class="input" rows="2" [(ngModel)]="complaintResponses[complaint.id]" placeholder="Admin response"></textarea>
+            </td>
+            <td class="actions">
+              <button class="admin-action" type="button" (click)="updateComplaint(complaint, 'In Progress', complaintResponses[complaint.id] || '')">In Progress</button>
+              <button class="admin-action" type="button" (click)="updateComplaint(complaint, 'Resolved', complaintResponses[complaint.id] || '')">Resolve</button>
+              <button class="admin-danger" type="button" (click)="deleteComplaint(complaint)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </ng-container>
 </section>

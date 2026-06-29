@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ProjectService } from '../../../services/project.service';
+import { AssignmentService } from '../../../services/assignment.service';
+import { AuthService } from '../../../services/auth.service';
 import { Project } from '../../../models/project.model';
 import { ProjectCard } from '../project-card/project-card';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
@@ -16,6 +18,8 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 })
 export class ProjectList implements OnInit {
   private projectService = inject(ProjectService);
+  private assignmentService = inject(AssignmentService);
+  private authService = inject(AuthService);
   private cdr = inject(ChangeDetectorRef);
   private route = inject(ActivatedRoute);
 
@@ -65,13 +69,48 @@ export class ProjectList implements OnInit {
 
   loadProjects() {
     this.isLoading = true;
-    this.projectService.getProjects().subscribe(data => {
-      this.projects = data;
-      this.filteredProjects = data;
-      this.categories = ['All', ...new Set(data.map(project => project.sector).filter(Boolean))];
-      this.calculateStats();
-      this.applyFiltersAndSort();
-      this.isLoading = false;
+    this.projectService.refreshProjects().subscribe({
+      next: data => {
+        this.projects = data;
+        this.filteredProjects = data;
+        this.categories = ['All', ...new Set(data.map(project => project.sector).filter(Boolean))];
+        this.refreshAssignmentState();
+        this.calculateStats();
+        this.applyFiltersAndSort();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.projects = [];
+        this.filteredProjects = [];
+        this.categories = ['All'];
+        this.calculateStats();
+        this.applyFiltersAndSort();
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  private refreshAssignmentState() {
+    const entrepreneurId = this.authService.currentUser?.id;
+    if (!entrepreneurId) {
+      return;
+    }
+
+    this.assignmentService.getEntrepreneurAssignments(entrepreneurId).subscribe(assignments => {
+      const pendingProjectIds = new Set(
+        assignments
+          .filter(assignment => assignment.status === 'PENDING' || assignment.status === 'ACCEPTED')
+          .map(assignment => assignment.projectId)
+      );
+
+      this.projects = this.projects.map(project => ({
+        ...project,
+        assignmentPending: pendingProjectIds.has(project.id),
+        assignmentStatus: pendingProjectIds.has(project.id) ? 'PENDING' : project.assignmentStatus
+      }));
+      this.filteredProjects = this.projects;
       this.cdr.markForCheck();
     });
   }

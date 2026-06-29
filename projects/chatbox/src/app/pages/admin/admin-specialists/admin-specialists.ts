@@ -14,6 +14,7 @@ import { AdminService, AdminSpecialist } from '../../../services/admin.service';
         <button class="admin-refresh" type="button" (click)="loadSpecialists()">Refresh</button>
       </header>
       <div class="filters">
+        <select class="input" [(ngModel)]="view" (ngModelChange)="loadSpecialists()"><option value="all">All Specialists</option><option value="pending">Pending Specialists</option><option value="verified">Verified Specialists</option></select>
         <input class="input" placeholder="Expertise or skill" [(ngModel)]="expertise" (ngModelChange)="loadSpecialists()" />
         <select class="input" [(ngModel)]="approvalStatus" (ngModelChange)="loadSpecialists()"><option value="">All approvals</option><option>PENDING</option><option>APPROVED</option><option>REJECTED</option><option>SUSPENDED</option></select>
         <select class="input" [(ngModel)]="active" (ngModelChange)="loadSpecialists()"><option value="">All statuses</option><option value="true">Active</option><option value="false">Inactive</option></select>
@@ -33,8 +34,8 @@ import { AdminService, AdminSpecialist } from '../../../services/admin.service';
               <td><span class="badge-pill" [class.badge-good]="specialist.approvalStatus === 'APPROVED'" [class.badge-warn]="specialist.approvalStatus === 'PENDING'" [class.badge-bad]="specialist.approvalStatus === 'REJECTED' || specialist.approvalStatus === 'SUSPENDED'">{{specialist.approvalStatus}}</span></td>
               <td><span class="badge-pill" [class.badge-good]="specialist.active" [class.badge-bad]="!specialist.active">{{specialist.active ? 'Active' : 'Inactive'}}</span></td>
               <td class="actions">
-                <button class="admin-action" type="button" (click)="setApproval(specialist, 'APPROVED')">Approve</button>
-                <button class="admin-action" type="button" (click)="setApproval(specialist, 'REJECTED')">Reject</button>
+                <button class="admin-action" type="button" (click)="confirm(specialist)">Confirm</button>
+                <button class="admin-danger" type="button" (click)="reject(specialist)">Reject</button>
                 <button class="admin-danger" type="button" (click)="setActive(specialist, false)">Suspend</button>
                 <button class="admin-action" type="button" (click)="setActive(specialist, true)">Reactivate</button>
               </td>
@@ -49,6 +50,7 @@ import { AdminService, AdminSpecialist } from '../../../services/admin.service';
 export class AdminSpecialists implements OnInit {
   private adminService = inject(AdminService);
   specialists: AdminSpecialist[] = [];
+  view: 'all' | 'pending' | 'verified' = 'pending';
   approvalStatus = '';
   active = '';
   expertise = '';
@@ -59,16 +61,28 @@ export class AdminSpecialists implements OnInit {
 
   loadSpecialists() {
     this.isLoading = true;
-    this.adminService.getSpecialists({ approvalStatus: this.approvalStatus, active: this.active, expertise: this.expertise }).subscribe({
+    const source$ = this.view === 'pending'
+      ? this.adminService.getPendingSpecialists()
+      : this.view === 'verified'
+        ? this.adminService.getVerifiedSpecialists()
+        : this.adminService.getSpecialists({ approvalStatus: this.approvalStatus, active: this.active, expertise: this.expertise });
+    source$.subscribe({
       next: specialists => { this.specialists = specialists; this.isLoading = false; },
       error: () => { this.errorMessage = 'Specialists could not be loaded.'; this.isLoading = false; }
     });
   }
 
-  setApproval(specialist: AdminSpecialist, approvalStatus: string) {
-    this.adminService.updateSpecialistApproval(specialist.id, approvalStatus).subscribe({
-      next: updated => Object.assign(specialist, updated),
-      error: () => this.errorMessage = 'Specialist approval could not be updated.'
+  confirm(specialist: AdminSpecialist) {
+    this.adminService.confirmSpecialist(specialist.id).subscribe({
+      next: () => this.loadSpecialists(),
+      error: () => this.errorMessage = 'Specialist confirmation could not be updated.'
+    });
+  }
+
+  reject(specialist: AdminSpecialist) {
+    this.adminService.rejectSpecialist(specialist.id).subscribe({
+      next: () => this.loadSpecialists(),
+      error: () => this.errorMessage = 'Specialist rejection could not be updated.'
     });
   }
 

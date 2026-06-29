@@ -32,7 +32,11 @@ import { AdminService, AdminUser } from '../../../services/admin.service';
               <td><span class="badge-pill badge-neutral">{{user.role}}</span></td>
               <td><span class="badge-pill" [class.badge-good]="user.active" [class.badge-bad]="!user.active">{{user.active ? 'Active' : 'Inactive'}}</span></td>
               <td>{{user.createdAt | date:'mediumDate'}}</td>
-              <td><button class="admin-action" type="button" (click)="toggleUser(user)">{{user.active ? 'Deactivate' : 'Activate'}}</button></td>
+              <td class="actions">
+                <button class="admin-danger" type="button" (click)="banUser(user)" [disabled]="user.banned">Ban</button>
+                <button class="admin-action" type="button" (click)="unbanUser(user)" [disabled]="!user.banned">Unban</button>
+                <button class="admin-danger" type="button" (click)="deleteUser(user)">Delete</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -68,10 +72,24 @@ export class AdminUsers implements OnInit {
     });
   }
 
-  toggleUser(user: AdminUser) {
-    this.adminService.updateUserStatus(user.id, !user.active).subscribe({
-      next: updated => user.active = updated.active,
-      error: () => this.errorMessage = 'User status could not be updated.'
+  banUser(user: AdminUser) {
+    this.adminService.banUser(user.id).subscribe({
+      next: () => this.loadUsers(),
+      error: () => this.errorMessage = 'User could not be banned.'
+    });
+  }
+
+  unbanUser(user: AdminUser) {
+    this.adminService.unbanUser(user.id).subscribe({
+      next: () => this.loadUsers(),
+      error: () => this.errorMessage = 'User could not be unbanned.'
+    });
+  }
+
+  deleteUser(user: AdminUser) {
+    this.adminService.deleteUser(user.id).subscribe({
+      next: () => this.loadUsers(),
+      error: () => this.errorMessage = 'User could not be deleted.'
     });
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, of, tap } from 'rxjs';
 import { AuthService } from './auth.service';
 import { environment } from '../../environments/environment';
 import { Evaluation, EvaluationRequest, EvaluationReviewView, EvaluationSummary } from '../models/evaluation.model';
@@ -55,6 +55,23 @@ export class EvaluationService {
     return this.http.get<Evaluation>(`${this.baseUrl}/${encodeURIComponent(id)}`).pipe(
       map(response => this.mapEvaluation(response))
     );
+  }
+
+  getEvaluation(entrepreneurId: string, specialistId: string): Observable<Evaluation | null> {
+    return this.http.get<Evaluation>(`${this.baseUrl}/${encodeURIComponent(entrepreneurId)}/${encodeURIComponent(specialistId)}`).pipe(
+      map(response => this.mapEvaluation(response)),
+      catchError(() => of(null))
+    );
+  }
+
+  updateEvaluation(entrepreneurId: string, specialistId: string, score: number): Observable<Evaluation> {
+    return this.http.put<Evaluation>(`${this.baseUrl}/${encodeURIComponent(entrepreneurId)}/${encodeURIComponent(specialistId)}`, { score }).pipe(
+      map(response => this.mapEvaluation(response))
+    );
+  }
+
+  deleteEvaluationByPair(entrepreneurId: string, specialistId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/${encodeURIComponent(entrepreneurId)}/${encodeURIComponent(specialistId)}`);
   }
 
   getEvaluationsBySpecialist(specialistId: string): Observable<Evaluation[]> {
@@ -136,6 +153,7 @@ export class EvaluationService {
     return {
       ...evaluation,
       id: String(evaluation.id || ''),
+      assignmentId: evaluation.assignmentId ? String(evaluation.assignmentId) : undefined,
       projectId: evaluation.projectId ? String(evaluation.projectId) : undefined,
       specialistId: String(evaluation.specialistId || ''),
       entrepreneurId: String(evaluation.entrepreneurId || ''),
@@ -149,6 +167,7 @@ export class EvaluationService {
 
   private toRequestBody(evaluation: EvaluationRequest): EvaluationRequest {
     return {
+      assignmentId: evaluation.assignmentId ? String(evaluation.assignmentId) : undefined,
       projectId: evaluation.projectId ? String(evaluation.projectId) : undefined,
       specialistId: String(evaluation.specialistId),
       entrepreneurId: String(evaluation.entrepreneurId),

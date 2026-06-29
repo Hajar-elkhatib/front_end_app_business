@@ -54,4 +54,6 @@ export interface Project {
   tags?: string[];
   aiScores?: any;
   analysisSummary?: string;
+  assignmentStatus?: string;
+  assignmentPending?: boolean;
 }

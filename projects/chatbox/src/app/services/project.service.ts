@@ -85,6 +85,21 @@ export class ProjectService {
       return of([]);
     }
 
+    return this.refreshProjects();
+  }
+
+  refreshProjects(): Observable<Project[]> {
+    const currentUser = this.authService.currentUser;
+    if (!currentUser || !currentUser.id) {
+      return of([]);
+    }
+
+    if (currentUser.role === 'specialist') {
+      this.loadedProjectsUserId = currentUser.id;
+      this.projectsSubject.next([]);
+      return of([]);
+    }
+
     return this.http.get<any[]>(`${this.baseUrl}/entrepreneur/${currentUser.id}`).pipe(
       map(list => list.map(p => this.mapResponseToProject(p))),
       tap(projects => {

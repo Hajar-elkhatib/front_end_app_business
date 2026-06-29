@@ -43,23 +43,73 @@
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="sd-stats">
-      <div class="sd-stat">
-        <div class="sd-stat-val">${{specialist.hourlyRate}}</div>
-        <div class="sd-stat-label">Hourly Rate</div>
-      </div>
-      <div class="sd-stat">
-        <div class="sd-stat-val">{{averageRating}}</div>
-        <div class="sd-stat-label">Rating</div>
-      </div>
-      <div class="sd-stat">
-        <div class="sd-stat-val">{{reviewCount}}</div>
-        <div class="sd-stat-label">Reviews</div>
-      </div>
-      <div class="sd-stat">
-        <div class="sd-stat-val">{{specialist.responseRate || 0}}%</div>
-        <div class="sd-stat-label">Response Rate</div>
+    <!-- Evaluation -->
+    <div class="sd-card sd-evaluation-card">
+      <div class="sd-evaluation-grid">
+        <div class="sd-evaluation-col sd-evaluation-col-left">
+          <h3>OVERALL RATING</h3>
+          <div class="sd-evaluation-score">{{averageRating}}</div>
+          <div class="sd-rating-stars" [attr.aria-label]="'Average rating ' + averageRating + ' out of 5'">
+            <svg *ngFor="let star of evaluationStars; let i = index" class="sd-rating-star" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                class="sd-rating-star-empty"
+                d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              ></path>
+              <path
+                class="sd-rating-star-fill"
+                d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                [style.clip-path]="'inset(0 ' + ((1 - ratingFill(i + 1)) * 100) + '% 0 0)'"
+                fill="#f59e0b"
+              ></path>
+            </svg>
+          </div>
+          <p class="sd-evaluation-meta">({{evaluationCount}} evaluations)</p>
+        </div>
+
+        <div class="sd-evaluation-divider" aria-hidden="true"></div>
+
+        <div class="sd-evaluation-col sd-evaluation-col-right">
+          <h3>YOUR EVALUATION</h3>
+          <div class="sd-star-picker sd-evaluation-stars" [class.readonly]="!canEvaluate">
+            <button
+              *ngFor="let star of evaluationStars"
+              type="button"
+              class="sd-star-button"
+              [disabled]="!canEvaluate"
+              (click)="selectEvaluation(star)"
+              [attr.aria-label]="'Rate ' + star + ' stars'"
+              [attr.aria-pressed]="selectedEvaluationScore >= star"
+            >
+              <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  class="sd-rating-star-empty"
+                  d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                ></path>
+                <path
+                  class="sd-rating-star-fill"
+                  d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                  [style.clip-path]="'inset(0 ' + ((1 - userRatingFill(star)) * 100) + '% 0 0)'"
+                  [attr.fill]="selectedEvaluationScore >= star ? '#f59e0b' : '#f59e0b'"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <p class="sd-evaluation-note" *ngIf="canEvaluate">Share your experience with {{specialist.fullName}}</p>
+          <p class="sd-evaluation-note sd-evaluation-note-muted" *ngIf="!canEvaluate">
+            <span class="sd-lock">🔒</span>
+            You can rate this specialist after completing a project with them.
+          </p>
+          <div class="sd-evaluation-actions" *ngIf="canEvaluate && hasEvaluation">
+            <button type="button" class="sd-review-link danger" (click)="deleteEvaluation()">Remove evaluation</button>
+          </div>
+          <p class="sd-evaluation-message" *ngIf="evaluationMessage">{{evaluationMessage}}</p>
+        </div>
       </div>
     </div>
 
@@ -83,10 +133,6 @@
           <div class="sd-card-head">
             <div>
               <h3>Reviews ({{reviewCount}})</h3>
-              <div class="sd-average" *ngIf="hasReviews">
-                <span class="sd-average-score">{{averageRating | number:'1.1-1'}}</span>
-                <span class="sd-average-text">Average rating</span>
-              </div>
             </div>
           </div>
           <div *ngIf="!hasReviews" class="sd-calendar-placeholder">
@@ -98,34 +144,17 @@
               <span class="sd-review-author">{{reviewerDisplay(r)}}</span>
               <span class="sd-review-date">{{createdAtDisplay(r)}}</span>
             </div>
-            <div class="sd-review-stars">
-              <svg *ngFor="let s of ratingStars; let i = index" [class.sd-star]="i < r.rating" [class.sd-star-empty]="i >= r.rating" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            </div>
             <p class="sd-review-text">{{r.comment}}</p>
-            <div class="sd-review-actions">
-              <button *ngIf="canDeleteReview(r)" type="button" class="sd-review-link" (click)="startEditReview(r)">Edit</button>
-              <button *ngIf="canDeleteReview(r)" type="button" class="sd-review-link danger" (click)="deleteReview(r)">Delete</button>
+            <div class="sd-review-actions" *ngIf="canManageReview(r)">
+              <button type="button" class="sd-review-link" (click)="startEditReview(r)">Edit</button>
+              <button type="button" class="sd-review-link danger" (click)="deleteReview(r)">Delete</button>
             </div>
           </div>
         </div>
 
-        <div class="sd-card">
+        <div class="sd-card" *ngIf="canSubmitReview">
           <h3>{{editingReviewId ? 'Edit Review' : 'Submit Review'}}</h3>
           <form [formGroup]="reviewForm" (ngSubmit)="saveReview()" style="display: grid; gap: 1rem;">
-            <label style="display: grid; gap: 0.4rem;">
-              <span class="sd-form-label">Reviewer name</span>
-              <input class="input" type="text" formControlName="reviewerName" placeholder="Enter reviewer name">
-            </label>
-
-            <label style="display: grid; gap: 0.4rem;">
-              <span class="sd-form-label">Star rating</span>
-              <div class="sd-star-picker" (mouseleave)="setHoverRating(0)">
-                <button type="button" *ngFor="let star of ratingStars" class="sd-star-button" (mouseenter)="setHoverRating(star)" (click)="setRating(star)">
-                  <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="star <= (hoverRating || selectedRating) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </button>
-              </div>
-            </label>
-
             <label style="display: grid; gap: 0.4rem;">
               <span class="sd-form-label">Comment</span>
               <textarea class="input" rows="3" formControlName="comment" placeholder="Share your feedback"></textarea>
@@ -139,6 +168,11 @@
             <p *ngIf="evaluationError" style="color: var(--danger); font-size: 0.85rem;">{{evaluationError}}</p>
             <p *ngIf="evaluationSuccess" style="color: #047857; font-size: 0.85rem;">{{evaluationSuccess}}</p>
           </form>
+        </div>
+
+        <div class="sd-card" *ngIf="!canSubmitReview">
+          <h3>Submit Review</h3>
+          <p class="sd-bio">Review access appears after an entrepreneur completes an assignment with this specialist.</p>
         </div>
 
       </div>

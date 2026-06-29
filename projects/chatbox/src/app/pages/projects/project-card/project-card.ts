@@ -29,6 +29,14 @@ export class ProjectCard {
     return (status || 'DRAFT').replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, letter => letter.toUpperCase());
   }
 
+  showAssignmentButton(): boolean {
+    return (this.project?.projectStatus || '').toUpperCase() === 'VALIDATED';
+  }
+
+  getAssignmentButtonLabel(): string {
+    return this.project?.assignmentPending ? 'Assignment Pending' : 'Assign Specialist';
+  }
+
   onDeleteClick(event: Event) {
     event.stopPropagation();
     event.preventDefault();

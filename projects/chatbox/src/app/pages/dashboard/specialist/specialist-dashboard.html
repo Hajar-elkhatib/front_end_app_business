@@ -1,58 +1,72 @@
+<div class="assignment-toast" *ngIf="showToast">{{toastMessage}}</div>
+
 <div class="mb-10">
-  <h1 class="text-3xl font-semibold mb-2 tracking-tight">Specialist Dashboard</h1>
-  <p class="text-secondary text-sm">Manage availability, conversations, evaluations, and assigned projects.</p>
+  <h1 class="text-3xl font-semibold mb-2 tracking-tight">Assigned Projects</h1>
+  <p class="text-secondary text-sm">Review pending requests and manage your active projects without leaving the existing specialist workspace.</p>
 </div>
 
-<div class="grid grid-cols-3 gap-6 mb-10">
-  <button type="button" (click)="openAvailability()" class="card premium-glow p-6 dashboard-link-card">
-    <span class="text-xs font-semibold text-muted uppercase tracking-widest">Availability</span>
-    <div class="text-lg font-semibold">Manage schedule</div>
-  </button>
-  <button type="button" (click)="openConversations()" class="card premium-glow p-6 dashboard-link-card">
-    <span class="text-xs font-semibold text-muted uppercase tracking-widest">Conversations</span>
-    <div class="text-lg font-semibold">Open messages</div>
-  </button>
-  <button type="button" (click)="openEvaluations()" class="card premium-glow p-6 dashboard-link-card">
-    <span class="text-xs font-semibold text-muted uppercase tracking-widest">Evaluations</span>
-    <div class="text-lg font-semibold">View reviews</div>
-  </button>
-</div>
-
-<div class="projects-section">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-lg font-semibold tracking-tight">Assigned Projects</h2>
+<div class="card p-6 mb-8">
+  <div class="section-header">
+    <div>
+      <h2>Pending Requests</h2>
+      <p>Accept or reject new project requests from entrepreneurs.</p>
+    </div>
   </div>
 
-  <div *ngIf="isLoading" class="card dashboard-state text-center">
+  <div *ngIf="isLoading" class="dashboard-state text-center">
     <div class="spinner"></div>
-    <p class="text-muted text-sm">Loading assigned projects...</p>
+    <p class="text-muted text-sm">Loading requests...</p>
   </div>
 
-  <div *ngIf="!isLoading && assignedProjects.length === 0" class="card dashboard-state text-center">
-    <h3 class="font-semibold mb-2">No assigned projects</h3>
-    <p class="text-muted text-sm">Les projets attribues apparaitront ici.</p>
+  <div *ngIf="!isLoading && pendingAssignments.length === 0" class="empty-state">
+    <p>No pending assignment requests right now.</p>
   </div>
 
-  <div class="card p-0 overflow-hidden border-subtle" *ngIf="!isLoading && assignedProjects.length > 0">
-    <table class="w-full text-left border-collapse table-auto">
-      <thead>
-        <tr class="bg-gray-50 border-b border-gray">
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Project</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Sector</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Status</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted text-right"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let project of assignedProjects" class="border-b border-gray hover-bg-gray transition-colors">
-          <td class="py-4 px-6 font-medium text-sm">{{project.title}}</td>
-          <td class="py-4 px-6 text-secondary text-sm">{{project.sector || '-'}}</td>
-          <td class="py-4 px-6 text-muted text-sm">{{project.projectStatus || 'DRAFT'}}</td>
-          <td class="py-4 px-6 text-right">
-            <a [routerLink]="['/projects', project.id]" class="btn btn-secondary text-xs">Details</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+  <div *ngIf="!isLoading && pendingAssignments.length > 0" class="assignment-list">
+    <article *ngFor="let assignment of pendingAssignments" class="assignment-card">
+      <div class="assignment-main">
+        <div class="assignment-meta">
+          <span [class]="getStatusClass(assignment.status)">{{getStatusLabel(assignment.status)}}</span>
+          <h3>{{getProjectTitle(assignment)}}</h3>
+          <p class="assignment-text"><strong>Entrepreneur:</strong> {{getEntrepreneurName(assignment)}}</p>
+          <p class="assignment-text" *ngIf="assignment.message"><strong>Message:</strong> {{assignment.message}}</p>
+          <p class="assignment-text"><strong>Assigned:</strong> {{formatDate(assignment.createdAt)}}</p>
+        </div>
+        <div class="assignment-actions">
+          <button class="btn btn-secondary text-xs" type="button" (click)="respondToAssignment(assignment, 'REJECTED')" [disabled]="isUpdatingAssignmentId === assignment.id">Reject</button>
+          <button class="btn btn-primary text-xs" type="button" (click)="respondToAssignment(assignment, 'ACCEPTED')" [disabled]="isUpdatingAssignmentId === assignment.id">Accept</button>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<div class="card p-6">
+  <div class="section-header">
+    <div>
+      <h2>Active Projects</h2>
+      <p>Continue working with accepted projects and mark them complete when done.</p>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && activeAssignments.length === 0" class="empty-state">
+    <p>No active projects yet.</p>
+  </div>
+
+  <div *ngIf="!isLoading && activeAssignments.length > 0" class="assignment-list">
+    <article *ngFor="let assignment of activeAssignments" class="assignment-card">
+      <div class="assignment-main">
+        <div class="assignment-meta">
+          <span [class]="getStatusClass(assignment.status)">{{getStatusLabel(assignment.status)}}</span>
+          <h3>{{getProjectTitle(assignment)}}</h3>
+          <p class="assignment-text"><strong>Entrepreneur:</strong> {{getEntrepreneurName(assignment)}}</p>
+          <p class="assignment-text"><strong>Started:</strong> {{formatDate(assignment.createdAt)}}</p>
+        </div>
+        <div class="assignment-actions">
+          <a routerLink="/conversations" class="btn btn-secondary text-xs">Chat</a>
+          <button class="btn btn-primary text-xs" type="button" (click)="markAsDone(assignment)" [disabled]="isUpdatingAssignmentId === assignment.id">Mark as Done</button>
+        </div>
+      </div>
+    </article>
   </div>
 </div>

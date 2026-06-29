@@ -77,7 +77,7 @@ export const routes: Routes = [
 
       { path: 'specialist/profile', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/profile/specialist-profile/specialist-profile').then(m => m.SpecialistProfile) },
       { path: 'specialist/availability', canActivate: [roleGuard], data: { roles: ['specialist'], title: 'Availability Management', kicker: 'Specialist', description: 'Manage available dates, time windows, session limits, and status.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
-      { path: 'specialist/assigned-projects', canActivate: [roleGuard], data: { roles: ['specialist'], title: 'Assigned Projects', kicker: 'Specialist', description: 'Your assigned and recommended projects will appear here.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
+      { path: 'specialist/assigned-projects', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
       { path: 'specialist/conversations', redirectTo: 'conversations', pathMatch: 'full' },
       { path: 'specialist/evaluations', canActivate: [roleGuard], data: { roles: ['specialist'], title: 'Evaluations', kicker: 'Specialist', description: 'Entrepreneur evaluations and review history.' }, loadComponent: () => import('./pages/workspace/empty-workspace-page').then(m => m.EmptyWorkspacePage) },
 
