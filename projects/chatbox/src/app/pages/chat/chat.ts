@@ -92,7 +92,7 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
             || this.route.snapshot.queryParamMap.get('conversationId');
           if (requestedConversationId) {
             this.humChat.getConversation(requestedConversationId).subscribe({
-              next: conversation => {
+              next: (conversation: Conversation) => {
                 this.conversations = [conversation];
                 this.selectConversation(conversation);
                 this.cdr.markForCheck();
@@ -150,7 +150,7 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
     this.isSending = true;
     this.newMessage = '';
     this.humChat.sendMessage(request).subscribe({
-      next: message => {
+      next: (message: ConversationMessage) => {
         this.messages = [...this.messages, message];
         this.updateConversationPreview(message);
         this.isSending = false;

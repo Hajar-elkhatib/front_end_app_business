@@ -46,8 +46,6 @@ export class SpecialistDetails implements OnInit {
   hasEvaluation = false;
   evaluationMessage = '';
   evaluationMessageType: 'success' | 'error' | '' = '';
-  contactError = '';
-  isStartingConversation = false;
   private toastTimer: number | undefined;
   private evaluationRequestInFlight = false;
 
@@ -473,31 +471,6 @@ export class SpecialistDetails implements OnInit {
     return this.matchesSpecialist(assignment, specialistId) && assignment.canEvaluate === true;
   }
 
-  startConversation() {
-    const entrepreneurId = this.authService.currentUser?.id || '';
-    const specialistId = this.getSpecialistMongoId();
-
-    if (!entrepreneurId || !specialistId) {
-      this.contactError = 'Conversation could not be started because an identifier is missing.';
-      return;
-    }
-
-    this.contactError = '';
-    this.isStartingConversation = true;
-    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
-    this.humChat.startConversation(entrepreneurId, specialistId).subscribe({
-      next: conversation => {
-        this.isStartingConversation = false;
-        this.router.navigate(['/dashboard/entrepreneur/conversations', conversation.id]);
-      },
-      error: () => {
-        this.isStartingConversation = false;
-        this.contactError = 'Conversation could not be started. Please try again.';
-        this.cdr.markForCheck();
-      }
-    });
-  }
-
   deleteSpecialist() {
     if (this.specialist) {
       this.specialistService.deleteSpecialist(this.specialist.id).subscribe(() => {
@@ -512,11 +485,26 @@ export class SpecialistDetails implements OnInit {
       return;
     }
 
+    const entrepreneurId = this.authService.currentUser?.id || '';
+    const specialistId = this.getSpecialistMongoId();
+    if (!entrepreneurId || !specialistId) {
+      this.contactError = 'Conversation could not be started because an identifier is missing.';
+      return;
+    }
+
     this.isStartingConversation = true;
     this.contactError = '';
-    this.router.navigate(['/conversations']).finally(() => {
-      this.isStartingConversation = false;
-      this.cdr.markForCheck();
+    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
+    this.humChat.startConversation(entrepreneurId, specialistId).subscribe({
+      next: conversation => {
+        this.isStartingConversation = false;
+        this.router.navigate(['/dashboard/entrepreneur/conversations', conversation.id]);
+      },
+      error: () => {
+        this.isStartingConversation = false;
+        this.contactError = 'Conversation could not be started. Please try again.';
+        this.cdr.markForCheck();
+      }
     });
   }
 }

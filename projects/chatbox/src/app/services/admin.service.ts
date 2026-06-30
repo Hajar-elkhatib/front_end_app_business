@@ -7,29 +7,54 @@ export interface AdminUser {
   id: string;
   fullName: string;
   email: string;
+  password: string;
   role: string;
-  phone?: string;
-  active: boolean;
-  banned?: boolean;
+  phone: string;
+  banned: boolean;
   createdAt: string;
 }
 
 export interface AdminProject {
   id: string;
-  title: string;
   entrepreneurId: string;
-  entrepreneur?: AdminUser;
-  sector?: string;
-  country?: string;
-  createdAt?: string;
-  analysisStatus: string;
-  finalScore?: number;
-  riskLevel?: string;
-  reportCount?: number;
-  latestAnalysis?: AdminAnalysis;
-  reports?: AdminReport[];
-  supportRequest?: AdminSupportRequest;
-  [key: string]: unknown;
+  title: string;
+  description: string;
+  projectStage: string | null;
+  problem: string | null;
+  solution: string | null;
+  projectStatus: string;
+  sector: string;
+  country: string;
+  countryCode: string;
+  region: string;
+  city: string | null;
+  targetMarketScope: string | null;
+  targetCustomers: string | null;
+  founderExperienceYears: number;
+  fundingRounds: number;
+  teamSize: number;
+  marketSizeBillion: number;
+  marketGrowthRatePercent: number;
+  productTractionUsers: number;
+  burnRateMillion: number;
+  revenueMillion: number;
+  investorType: string;
+  competitionLevel: string;
+  searchTrendScore: number;
+  userWordBank: boolean;
+  opinions: string;
+  hasPrototype: boolean;
+  estimatedInitialBudget: number;
+  expectedMonthlyExpenses: number;
+  currency: string | null;
+  usersOrCustomers: number;
+  monthlyRevenue: number;
+  monthlyExpenses: number;
+  fundingStatus: string | null;
+  mainChallenges: string | null;
+  expectedSupportNeeds: string | null;
+  customerFeedbacks: string | null;
+  createdAt: string;
 }
 
 export interface AdminAnalysis {
@@ -80,20 +105,18 @@ export interface AdminSpecialist {
   createdAt?: string;
 }
 
-export type ComplaintStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
-
 export interface AdminComplaint {
   id: string;
-  userId?: string;
-  projectId?: string;
+  userId: string;
   subject: string;
+  body: string;
   description: string;
   category: string;
-  priority: string;
-  status: ComplaintStatus | string;
-  adminResponse?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  status: string;
+  chatType: string;
+  adminResponse?: string | null;
+  createdAt: string;
+  resolvedAt?: string | null;
 }
 
 export interface AdminSupportRequest {
@@ -114,29 +137,27 @@ export interface AdminSupportRequest {
 
 export interface DashboardSummary {
   totalUsers: number;
-  totalEntrepreneurs: number;
   totalSpecialists: number;
-  totalAssignments?: number;
-  totalReviews?: number;
-  totalEvaluations?: number;
-  totalComplaints?: number;
-  bannedUsers?: number;
-  pendingSpecialists?: number;
-  verifiedSpecialists?: number;
+  totalEntrepreneurs: number;
+  pendingSpecialists: number;
+  verifiedSpecialists: number;
+  bannedUsers: number;
   totalProjects: number;
   draftProjects: number;
-  analyzedProjects: number;
-  projectsInProgress: number;
-  failedAnalyses: number;
-  generatedReports: number;
-  pendingSpecialistRequests: number;
-  matchedRequests: number;
-  projectsBySector: { label: string; count: number }[];
-  projectsByStatus: { label: string; count: number }[];
-  recentProjects: AdminProject[];
-  recentUsers: AdminUser[];
-  recentReports: AdminReport[];
-  pendingRequests: AdminSupportRequest[];
+  submittedProjects: number;
+  analyzingProjects: number;
+  validatedProjects: number;
+  inProgressProjects: number;
+  completedProjects: number;
+  rejectedProjects: number;
+  totalComplaints: number;
+  openComplaints: number;
+  inProgressComplaints: number;
+  resolvedComplaints: number;
+  closedComplaints: number;
+  totalAssignments: number;
+  totalReviews: number;
+  totalEvaluations: number;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -152,16 +173,12 @@ export class AdminService {
     return this.getDashboardSummary();
   }
 
-  getUsers(filters: { search?: string; role?: string; active?: string } = {}): Observable<AdminUser[]> {
-    return this.http.get<AdminUser[]>(`${this.baseUrl}/users`, { params: this.params(filters) });
+  getUsers(): Observable<AdminUser[]> {
+    return this.http.get<AdminUser[]>(`${this.baseUrl}/users`);
   }
 
   getUser(userId: string): Observable<AdminUser> {
     return this.http.get<AdminUser>(`${this.baseUrl}/users/${encodeURIComponent(userId)}`);
-  }
-
-  updateUserStatus(userId: string, active: boolean): Observable<AdminUser> {
-    return this.http.patch<AdminUser>(`${this.baseUrl}/users/${userId}/status`, { active });
   }
 
   banUser(userId: string): Observable<AdminUser> {
@@ -180,16 +197,12 @@ export class AdminService {
     return this.http.get<AdminUser[]>(`${this.baseUrl}/entrepreneurs`);
   }
 
-  getProjects(filters: { search?: string; status?: string; sector?: string; risk?: string } = {}): Observable<AdminProject[]> {
+  getProjects(filters: { search?: string; status?: string; sector?: string } = {}): Observable<AdminProject[]> {
     return this.http.get<AdminProject[]>(`${this.baseUrl}/projects`, { params: this.params(filters) });
   }
 
   getProject(projectId: string): Observable<AdminProject> {
     return this.http.get<AdminProject>(`${this.baseUrl}/projects/${projectId}`);
-  }
-
-  archiveProject(projectId: string): Observable<AdminProject> {
-    return this.http.patch<AdminProject>(`${this.baseUrl}/projects/${projectId}/archive`, {});
   }
 
   getReports(): Observable<AdminReport[]> {
@@ -240,7 +253,7 @@ export class AdminService {
     return this.http.post<AdminSupportRequest>(`${this.baseUrl}/support-requests/${requestId}/assign-specialist`, { specialistId, adminNote });
   }
 
-  getComplaints(filters: { status?: ComplaintStatus | string } = {}): Observable<AdminComplaint[]> {
+  getComplaints(filters: { status?: string } = {}): Observable<AdminComplaint[]> {
     const status = filters.status?.trim();
     if (status) {
       return this.http.get<AdminComplaint[]>(`${this.baseUrl}/complaints/status/${encodeURIComponent(status)}`);
@@ -248,7 +261,7 @@ export class AdminService {
     return this.http.get<AdminComplaint[]>(`${this.baseUrl}/complaints`);
   }
 
-  updateComplaint(complaintId: string, data: { status?: ComplaintStatus | string; adminResponse?: string }): Observable<AdminComplaint> {
+  updateComplaint(complaintId: string, data: { status?: string }): Observable<AdminComplaint> {
     return this.http.put<AdminComplaint>(`${this.baseUrl}/complaints/${encodeURIComponent(complaintId)}`, data);
   }
 

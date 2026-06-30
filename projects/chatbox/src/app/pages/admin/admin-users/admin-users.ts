@@ -23,24 +23,24 @@ interface ConfirmState {
           <h1>Users</h1>
           <p class="admin-copy">Search, filter, and manage platform accounts (ban, unban, delete).</p>
         </div>
-        <button class="admin-refresh" type="button" (click)="loadUsers()" [disabled]="isLoading || isProcessing">
+        <button class="admin-refresh" type="button" (click)="loadUsers()" [disabled]="isLoading">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
           Refresh
         </button>
       </header>
 
       <div class="filters">
-        <input class="input" type="search" placeholder="Search name or email" [(ngModel)]="search" (ngModelChange)="loadUsers()" aria-label="Search users" />
-        <select class="input" [(ngModel)]="role" (ngModelChange)="loadUsers()" aria-label="Filter by role">
+        <input class="input" type="search" placeholder="Search name or email" [(ngModel)]="search" (ngModelChange)="applyFilters()" aria-label="Search users" />
+        <select class="input" [(ngModel)]="role" (ngModelChange)="applyFilters()" aria-label="Filter by role">
           <option value="">All roles</option>
           <option value="ENTREPRENEUR">Entrepreneur</option>
           <option value="SPECIALIST">Specialist</option>
           <option value="ADMIN">Admin</option>
         </select>
-        <select class="input" [(ngModel)]="active" (ngModelChange)="loadUsers()" aria-label="Filter by status">
+        <select class="input" [(ngModel)]="banned" (ngModelChange)="applyFilters()" aria-label="Filter by status">
           <option value="">All statuses</option>
-          <option value="true">Active</option>
-          <option value="false">Inactive</option>
+          <option value="false">Active</option>
+          <option value="true">Banned</option>
         </select>
       </div>
 
@@ -81,15 +81,15 @@ interface ConfirmState {
               <td>{{user.email}}</td>
               <td><span class="badge-pill badge-neutral">{{user.role | lowercase}}</span></td>
               <td>
-                <span class="badge-pill" [class.badge-good]="user.active && !user.banned" [class.badge-bad]="!user.active || user.banned">
-                  {{user.banned ? 'Banned' : (user.active ? 'Active' : 'Inactive')}}
+                <span class="badge-pill" [class.badge-good]="!user.banned" [class.badge-bad]="user.banned">
+                  {{user.banned ? 'Banned' : 'Active'}}
                 </span>
               </td>
               <td>{{user.createdAt | date:'mediumDate'}}</td>
               <td class="actions">
-                <button *ngIf="!user.banned" class="admin-danger" type="button" (click)="requestBan(user)" [disabled]="isProcessing || user.role === 'ADMIN'">Ban</button>
-                <button *ngIf="user.banned" class="admin-action" type="button" (click)="unbanUser(user)" [disabled]="isProcessing">Unban</button>
-                <button class="admin-danger" type="button" (click)="requestDelete(user)" [disabled]="isProcessing || user.role === 'ADMIN'">Delete</button>
+                <button *ngIf="!user.banned" class="admin-danger" type="button" (click)="requestBan(user)" [disabled]="loadingUserId === user.id || user.role === 'ADMIN'">Ban</button>
+                <button *ngIf="user.banned" class="admin-action" type="button" (click)="unbanUser(user)" [disabled]="loadingUserId === user.id">Unban</button>
+                <button class="admin-danger" type="button" (click)="requestDelete(user)" [disabled]="loadingUserId === user.id || user.role === 'ADMIN'">Delete</button>
               </td>
             </tr>
           </tbody>
@@ -132,11 +132,12 @@ export class AdminUsers implements OnInit, OnDestroy {
   private toastTimers: ReturnType<typeof setTimeout>[] = [];
 
   users: AdminUser[] = [];
+  allUsers: AdminUser[] = [];
   search = '';
   role = '';
-  active = '';
+  banned = '';
   isLoading = true;
-  isProcessing = false;
+  loadingUserId: string | null = null;
   errorMessage = '';
 
   toasts: Toast[] = [];
@@ -161,10 +162,40 @@ export class AdminUsers implements OnInit, OnDestroy {
   loadUsers() {
     this.isLoading = true;
     this.errorMessage = '';
-    this.adminService.getUsers({ search: this.search, role: this.role, active: this.active }).subscribe({
-      next: users => { this.users = users; this.isLoading = false; },
-      error: () => { this.errorMessage = 'Users could not be loaded.'; this.isLoading = false; }
+    this.adminService.getUsers().subscribe({
+      next: users => {
+        this.allUsers = users;
+        this.applyFilters();
+        this.isLoading = false;
+      },
+      error: () => {
+        this.errorMessage = 'Users could not be loaded.';
+        this.isLoading = false;
+      }
     });
+  }
+
+  applyFilters() {
+    let filtered = [...this.allUsers];
+
+    if (this.search) {
+      const searchLower = this.search.toLowerCase();
+      filtered = filtered.filter(u =>
+        u.fullName.toLowerCase().includes(searchLower) ||
+        u.email.toLowerCase().includes(searchLower)
+      );
+    }
+
+    if (this.role) {
+      filtered = filtered.filter(u => u.role === this.role);
+    }
+
+    if (this.banned) {
+      const isBanned = this.banned === 'true';
+      filtered = filtered.filter(u => u.banned === isBanned);
+    }
+
+    this.users = filtered;
   }
 
   requestBan(user: AdminUser) {
@@ -178,31 +209,31 @@ export class AdminUsers implements OnInit, OnDestroy {
 
   private executeBan(user: AdminUser) {
     this.confirm.open = false;
-    this.isProcessing = true;
+    this.loadingUserId = user.id;
     this.adminService.banUser(user.id).subscribe({
-      next: () => {
+      next: (updatedUser) => {
+        this.updateUserInList(updatedUser);
         this.showToast('success', `${user.fullName} has been banned.`);
-        this.loadUsers();
-        this.isProcessing = false;
+        this.loadingUserId = null;
       },
       error: () => {
         this.showToast('error', 'Failed to ban user.');
-        this.isProcessing = false;
+        this.loadingUserId = null;
       }
     });
   }
 
   unbanUser(user: AdminUser) {
-    this.isProcessing = true;
+    this.loadingUserId = user.id;
     this.adminService.unbanUser(user.id).subscribe({
-      next: () => {
+      next: (updatedUser) => {
+        this.updateUserInList(updatedUser);
         this.showToast('success', `${user.fullName} has been unbanned.`);
-        this.loadUsers();
-        this.isProcessing = false;
+        this.loadingUserId = null;
       },
       error: () => {
         this.showToast('error', 'Failed to unban user.');
-        this.isProcessing = false;
+        this.loadingUserId = null;
       }
     });
   }
@@ -218,18 +249,24 @@ export class AdminUsers implements OnInit, OnDestroy {
 
   private executeDelete(user: AdminUser) {
     this.confirm.open = false;
-    this.isProcessing = true;
+    this.loadingUserId = user.id;
     this.adminService.deleteUser(user.id).subscribe({
       next: () => {
+        this.allUsers = this.allUsers.filter(u => u.id !== user.id);
+        this.users = this.users.filter(u => u.id !== user.id);
         this.showToast('success', 'User deleted successfully.');
-        this.loadUsers();
-        this.isProcessing = false;
+        this.loadingUserId = null;
       },
       error: () => {
         this.showToast('error', 'Failed to delete user.');
-        this.isProcessing = false;
+        this.loadingUserId = null;
       }
     });
+  }
+
+  private updateUserInList(updatedUser: AdminUser) {
+    this.allUsers = this.allUsers.map(u => u.id === updatedUser.id ? updatedUser : u);
+    this.applyFilters();
   }
 
   cancelConfirm() { this.confirm.open = false; }

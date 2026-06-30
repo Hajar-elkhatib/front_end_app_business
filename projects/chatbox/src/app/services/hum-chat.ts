@@ -38,6 +38,12 @@ export class HumChat {
     this.connectedSubject.next(false);
   }
 
+  getConversation(conversationId: string): Observable<Conversation> {
+    return this.http.get<Conversation>(`${this.apiUrl}/conversations/${conversationId}`).pipe(
+      map(conversation => this.mapConversation(conversation))
+    );
+  }
+
   disconnect(): void {
     this.connectedSubject.next(false);
   }
@@ -48,6 +54,13 @@ export class HumChat {
 
   isConnected(): Observable<boolean> {
     return this.connectedSubject.asObservable();
+  }
+
+  sendMessage(request: SendMessageRequest): Observable<ConversationMessage> {
+    return this.http.post<ConversationMessage>(
+      `${this.apiUrl}/conversations/${request.conversationId}/messages`,
+      request
+    ).pipe(map(message => this.mapMessage(message)));
   }
 
   sendMessageWS(request: SendMessageRequest): void {
