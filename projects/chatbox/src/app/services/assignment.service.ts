@@ -19,7 +19,11 @@ export class AssignmentService {
   }
 
   respondToAssignment(id: string, payload: AssignmentResponseRequest): Observable<ProjectAssignmentResponse> {
-    return this.http.put<ProjectAssignmentResponse>(`${this.baseUrl}/${encodeURIComponent(id)}/respond`, payload).pipe(
+    const body = {
+      status: payload.status || payload.response,
+      responseMessage: payload.responseMessage || payload.message || ''
+    };
+    return this.http.put<ProjectAssignmentResponse>(`${this.baseUrl}/${encodeURIComponent(id)}/respond`, body).pipe(
       map(response => this.normalizeAssignment(response))
     );
   }

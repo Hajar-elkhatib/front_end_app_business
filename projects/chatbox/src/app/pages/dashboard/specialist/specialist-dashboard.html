@@ -1,58 +1,315 @@
-<div class="mb-10">
-  <h1 class="text-3xl font-semibold mb-2 tracking-tight">Specialist Dashboard</h1>
-  <p class="text-secondary text-sm">Manage availability, conversations, evaluations, and assigned projects.</p>
+<div class="dashboard-head mb-8">
+  <div>
+    <h1 class="text-3xl font-semibold mb-2 tracking-tight">Specialist Dashboard</h1>
+    <p class="text-secondary text-sm">Manage requests, active consulting work, availability, and conversations.</p>
+  </div>
+  <button type="button" class="btn btn-secondary" (click)="openConversationPage()">Open full chat</button>
 </div>
 
-<div class="grid grid-cols-3 gap-6 mb-10">
-  <button type="button" (click)="openAvailability()" class="card premium-glow p-6 dashboard-link-card">
-    <span class="text-xs font-semibold text-muted uppercase tracking-widest">Availability</span>
-    <div class="text-lg font-semibold">Manage schedule</div>
-  </button>
-  <button type="button" (click)="openConversations()" class="card premium-glow p-6 dashboard-link-card">
-    <span class="text-xs font-semibold text-muted uppercase tracking-widest">Conversations</span>
-    <div class="text-lg font-semibold">Open messages</div>
-  </button>
-  <button type="button" (click)="openEvaluations()" class="card premium-glow p-6 dashboard-link-card">
-    <span class="text-xs font-semibold text-muted uppercase tracking-widest">Evaluations</span>
-    <div class="text-lg font-semibold">View reviews</div>
-  </button>
+<div *ngIf="errorMessage" class="notice notice-error mb-6">{{errorMessage}}</div>
+<div *ngIf="successMessage" class="notice notice-success mb-6">{{successMessage}}</div>
+
+<div *ngIf="isLoading" class="card dashboard-state text-center">
+  <div class="spinner"></div>
+  <p class="text-muted text-sm">Loading specialist workspace...</p>
 </div>
 
-<div class="projects-section">
-  <div class="flex items-center justify-between mb-6">
-    <h2 class="text-lg font-semibold tracking-tight">Assigned Projects</h2>
+<ng-container *ngIf="!isLoading">
+  <section class="card profile-card premium-glow mb-8" *ngIf="specialist">
+    <div class="profile-main">
+      <div class="profile-avatar">{{specialist.avatarUrl || specialist.fullName.charAt(0)}}</div>
+      <div>
+        <div class="profile-title-row">
+          <h2>{{specialist.fullName}}</h2>
+          <span class="status-pill" [ngClass]="badgeClass(specialist.availabilityStatus)">{{specialist.availabilityStatus || 'AVAILABLE'}}</span>
+          <span class="status-pill status-info" *ngIf="specialist.verified">Verified</span>
+          <span class="status-pill status-warn" *ngIf="specialist.pendingConfirmation">Awaiting Admin Approval</span>
+        </div>
+        <p class="text-secondary">{{specialist.profession}} · {{specialist.expertiseDomain}}</p>
+        <p class="profile-bio">{{specialist.bio || 'No bio added yet.'}}</p>
+        <div class="profile-meta">
+          <span>{{specialist.location || 'Location not set'}}</span>
+          <span>{{specialist.languages.length ? specialist.languages.join(', ') : 'Languages not set'}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="profile-stats">
+      <div>
+        <span class="stat-label">Hourly Rate</span>
+        <strong>{{specialist.hourlyRate || 0}} MAD</strong>
+      </div>
+      <div>
+        <span class="stat-label">Rating</span>
+        <strong class="stars">
+          <span *ngFor="let star of ratingStars" [class.filled]="isStarFilled(star)">★</span>
+          <small>{{specialist.averageRating | number:'1.1-1'}}</small>
+        </strong>
+      </div>
+      <div>
+        <span class="stat-label">Completed</span>
+        <strong>{{completedCount}}</strong>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid grid-cols-4 gap-6 mb-8 dashboard-actions">
+    <button type="button" class="card dashboard-link-card" [class.active]="activeTab === 'overview'" (click)="setTab('overview')">
+      <span class="text-xs font-semibold text-muted uppercase tracking-widest">Overview</span>
+      <div class="text-lg font-semibold">Summary</div>
+    </button>
+    <button type="button" class="card dashboard-link-card" [class.active]="activeTab === 'assignments'" (click)="setTab('assignments')">
+      <span class="text-xs font-semibold text-muted uppercase tracking-widest">Assignments</span>
+      <div class="text-lg font-semibold">{{pendingAssignments.length}} pending</div>
+    </button>
+    <button type="button" class="card dashboard-link-card" [class.active]="activeTab === 'availability'" (click)="setTab('availability')">
+      <span class="text-xs font-semibold text-muted uppercase tracking-widest">Availability</span>
+      <div class="text-lg font-semibold">{{availabilitySlots.length}} slots</div>
+    </button>
+    <button type="button" class="card dashboard-link-card" [class.active]="activeTab === 'messaging'" (click)="setTab('messaging')">
+      <span class="text-xs font-semibold text-muted uppercase tracking-widest">Messaging</span>
+      <div class="text-lg font-semibold">{{conversations.length}} chats</div>
+    </button>
+    <button type="button" class="card dashboard-link-card" [class.active]="activeTab === 'completed'" (click)="setTab('completed')">
+      <span class="text-xs font-semibold text-muted uppercase tracking-widest">Evaluations</span>
+      <div class="text-lg font-semibold">{{reviewCount}} reviews</div>
+    </button>
   </div>
 
-  <div *ngIf="isLoading" class="card dashboard-state text-center">
-    <div class="spinner"></div>
-    <p class="text-muted text-sm">Loading assigned projects...</p>
-  </div>
+  <section *ngIf="activeTab === 'overview'" class="section-grid">
+    <div class="card section-card">
+      <h2>Pending Requests</h2>
+      <p class="text-muted text-sm mb-4">Requests waiting for your decision.</p>
+      <div class="compact-list" *ngIf="pendingAssignments.length; else noPendingOverview">
+        <button type="button" *ngFor="let item of pendingAssignments.slice(0, 3)" (click)="setTab('assignments')">
+          <strong>{{item.projectTitle}}</strong>
+          <span>{{item.entrepreneurName}}</span>
+        </button>
+      </div>
+      <ng-template #noPendingOverview><div class="empty-small">No pending requests.</div></ng-template>
+    </div>
+    <div class="card section-card">
+      <h2>Active Work</h2>
+      <p class="text-muted text-sm mb-4">Assignments currently in progress.</p>
+      <div class="compact-list" *ngIf="activeAssignments.length; else noActiveOverview">
+        <button type="button" *ngFor="let item of activeAssignments.slice(0, 3)" (click)="setTab('assignments')">
+          <strong>{{item.projectTitle}}</strong>
+          <span>{{item.slotLabel}}</span>
+        </button>
+      </div>
+      <ng-template #noActiveOverview><div class="empty-small">No active assignments.</div></ng-template>
+    </div>
+  </section>
 
-  <div *ngIf="!isLoading && assignedProjects.length === 0" class="card dashboard-state text-center">
-    <h3 class="font-semibold mb-2">No assigned projects</h3>
-    <p class="text-muted text-sm">Les projets attribues apparaitront ici.</p>
-  </div>
+  <section *ngIf="activeTab === 'assignments'" class="section-stack">
+    <div class="section-header">
+      <h2>Pending Assignment Requests</h2>
+      <span class="text-muted text-sm">{{pendingAssignments.length}} request{{pendingAssignments.length === 1 ? '' : 's'}}</span>
+    </div>
+    <div class="assignment-grid" *ngIf="pendingAssignments.length; else noPending">
+      <article class="card assignment-card" *ngFor="let item of pendingAssignments">
+        <div class="assignment-top">
+          <div>
+            <h3>{{item.projectTitle}}</h3>
+            <p>{{item.entrepreneurName}}</p>
+          </div>
+          <span class="status-pill" [ngClass]="badgeClass(item.status)">{{item.status}}</span>
+        </div>
+        <p class="message-preview">{{item.message || 'No message provided.'}}</p>
+        <div class="slot-line">{{item.slotLabel}}</div>
+        <input class="input" [(ngModel)]="rejectMessage" placeholder="Optional rejection message">
+        <div class="card-actions">
+          <button class="btn btn-indigo" type="button" (click)="acceptAssignment(item)">Accept</button>
+          <button class="btn btn-secondary" type="button" (click)="rejectAssignment(item)">Reject</button>
+        </div>
+      </article>
+    </div>
+    <ng-template #noPending><div class="card empty-state">No pending assignment requests.</div></ng-template>
 
-  <div class="card p-0 overflow-hidden border-subtle" *ngIf="!isLoading && assignedProjects.length > 0">
-    <table class="w-full text-left border-collapse table-auto">
-      <thead>
-        <tr class="bg-gray-50 border-b border-gray">
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Project</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Sector</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted">Status</th>
-          <th class="py-3 px-6 text-xs font-semibold uppercase tracking-wider text-muted text-right"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let project of assignedProjects" class="border-b border-gray hover-bg-gray transition-colors">
-          <td class="py-4 px-6 font-medium text-sm">{{project.title}}</td>
-          <td class="py-4 px-6 text-secondary text-sm">{{project.sector || '-'}}</td>
-          <td class="py-4 px-6 text-muted text-sm">{{project.projectStatus || 'DRAFT'}}</td>
-          <td class="py-4 px-6 text-right">
-            <a [routerLink]="['/projects', project.id]" class="btn btn-secondary text-xs">Details</a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-</div>
+    <div class="section-header mt-section">
+      <h2>Active Assignments</h2>
+      <span class="text-muted text-sm">{{activeAssignments.length}} active</span>
+    </div>
+    <div class="card p-0 overflow-hidden border-subtle" *ngIf="activeAssignments.length; else noActive">
+      <table class="w-full text-left border-collapse table-auto">
+        <thead>
+          <tr class="bg-gray-50 border-b">
+            <th>Project</th>
+            <th>Entrepreneur</th>
+            <th>Assigned</th>
+            <th>Status</th>
+            <th class="text-right"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of activeAssignments" class="border-b hover-bg-gray">
+            <td>{{item.projectTitle}}</td>
+            <td>{{item.entrepreneurName}}</td>
+            <td>{{formatDate(item.createdAt)}}</td>
+            <td><span class="status-pill" [ngClass]="badgeClass(item.status)">{{item.status}}</span></td>
+            <td class="text-right"><button class="btn btn-secondary text-xs" type="button" (click)="markDone(item)">Mark as done</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noActive><div class="card empty-state">No active assignments.</div></ng-template>
+  </section>
+
+  <section *ngIf="activeTab === 'availability'" class="section-stack">
+    <div class="section-header">
+      <h2>Availability Slots</h2>
+      <span class="text-muted text-sm">Open slots can be cancelled or deleted.</span>
+    </div>
+    <div class="card p-0 overflow-hidden border-subtle slot-table" *ngIf="availabilitySlots.length; else noSlots">
+      <table class="w-full text-left border-collapse table-auto">
+        <thead>
+          <tr class="bg-gray-50 border-b">
+            <th>Date</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Max Sessions</th>
+            <th>Status</th>
+            <th class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let slot of availabilitySlots" class="border-b hover-bg-gray">
+            <td>{{formatDate(slot.availableDate)}}</td>
+            <td>{{slot.startTime}}</td>
+            <td>{{slot.endTime}}</td>
+            <td>{{slot.maxSessions}}</td>
+            <td><span class="status-pill" [ngClass]="badgeClass(slot.status)">{{slot.status}}</span></td>
+            <td class="text-right table-actions">
+              <button class="btn btn-secondary text-xs" type="button" [disabled]="slot.status !== 'OPEN'" (click)="cancelSlot(slot)">Cancel</button>
+              <button class="btn btn-danger text-xs" type="button" [disabled]="slot.status !== 'OPEN'" (click)="deleteSlot(slot)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noSlots><div class="card empty-state">No availability slots yet.</div></ng-template>
+
+    <form class="card slot-form" [formGroup]="slotForm" (ngSubmit)="addSlot()">
+      <div>
+        <h2>Add Slot</h2>
+        <p class="text-muted text-sm">Create an OPEN slot entrepreneurs can request.</p>
+      </div>
+      <label>
+        Date
+        <input class="input" type="date" formControlName="availableDate">
+      </label>
+      <label>
+        Start
+        <input class="input" type="time" formControlName="startTime">
+      </label>
+      <label>
+        End
+        <input class="input" type="time" formControlName="endTime">
+      </label>
+      <label>
+        Max Sessions
+        <input class="input" type="number" min="1" formControlName="maxSessions">
+      </label>
+      <button class="btn btn-indigo" type="submit" [disabled]="isSavingSlot">{{isSavingSlot ? 'Adding...' : 'Add Slot'}}</button>
+    </form>
+  </section>
+
+  <section *ngIf="activeTab === 'messaging'" class="card chat-shell">
+    <aside class="conversation-list">
+      <div class="section-header">
+        <h2>Messages</h2>
+        <span class="connection-dot" [class.online]="connectionReady"></span>
+      </div>
+      <button type="button" class="conversation-item" *ngFor="let conversation of conversations" [class.active]="activeConversation?.id === conversation.id" (click)="selectConversation(conversation)">
+        <strong>{{conversation.name}}</strong>
+        <span>{{conversation.lastMessage?.text || 'No messages yet'}}</span>
+      </button>
+      <div class="empty-small" *ngIf="!conversations.length">No conversations yet.</div>
+    </aside>
+    <div class="chat-panel" *ngIf="activeConversation; else noConversation">
+      <header>
+        <div>
+          <h2>{{activeConversation.name}}</h2>
+          <p class="text-muted text-sm">Project {{activeConversation.projectId || '-'}}</p>
+        </div>
+        <button class="btn btn-secondary text-xs" type="button" (click)="openConversationPage()">Full chat</button>
+      </header>
+      <div class="message-list" #messageScroll>
+        <div class="message-row" *ngFor="let message of messages" [class.mine]="message.senderId === 'current' || message.role === 'SPECIALIST'">
+          <div class="message-bubble">
+            <p>{{message.content}}</p>
+            <small>{{formatDateTime(message.timestamp)}}</small>
+          </div>
+        </div>
+      </div>
+      <div class="chat-compose">
+        <input class="input" [(ngModel)]="newMessage" placeholder="Write a message..." (keyup.enter)="sendMessage()">
+        <button class="btn btn-indigo" type="button" (click)="sendMessage()" [disabled]="isSending || !newMessage.trim()">Send</button>
+      </div>
+    </div>
+    <ng-template #noConversation>
+      <div class="empty-state chat-empty">Select a conversation to start messaging.</div>
+    </ng-template>
+  </section>
+
+  <section *ngIf="activeTab === 'completed'" class="section-stack">
+    <div class="section-header">
+      <h2>Evaluations & Reviews</h2>
+      <span class="text-muted text-sm">{{completedAssignments.length}} completed assignment{{completedAssignments.length === 1 ? '' : 's'}}</span>
+    </div>
+
+    <div class="evaluation-summary">
+      <article class="card eval-stat">
+        <span class="stat-label">Average Score</span>
+        <strong>{{averageScore | number:'1.1-1'}} / 5</strong>
+      </article>
+      <article class="card eval-stat">
+        <span class="stat-label">Reviews</span>
+        <strong>{{reviewCount}}</strong>
+      </article>
+      <article class="card eval-stat">
+        <span class="stat-label">Completed Projects</span>
+        <strong>{{completedAssignments.length}}</strong>
+      </article>
+    </div>
+
+    <div class="review-grid" *ngIf="reviews.length; else noReviews">
+      <article class="card review-card" *ngFor="let review of reviews">
+        <div class="review-head">
+          <div>
+            <strong>{{review.reviewerName}}</strong>
+            <span>{{formatDate(review.createdAt)}}</span>
+          </div>
+          <span class="status-pill status-info">{{review.rating | number:'1.0-1'}} / 5</span>
+        </div>
+        <p>{{review.comment || 'No comment provided.'}}</p>
+      </article>
+    </div>
+    <ng-template #noReviews><div class="card empty-state">No score or review has been submitted yet.</div></ng-template>
+
+    <div class="section-header mt-section">
+      <h2>Completed Assignments</h2>
+      <span class="text-muted text-sm">Review and evaluation become available after done.</span>
+    </div>
+    <div class="card p-0 overflow-hidden border-subtle" *ngIf="completedAssignments.length; else noCompleted">
+      <table class="w-full text-left border-collapse table-auto">
+        <thead>
+          <tr class="bg-gray-50 border-b">
+            <th>Project</th>
+            <th>Entrepreneur</th>
+            <th>Completed</th>
+            <th>Review</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of completedAssignments" class="border-b hover-bg-gray">
+            <td>{{item.projectTitle}}</td>
+            <td>{{item.entrepreneurName}}</td>
+            <td>{{formatDate(item.doneAt || item.updatedAt)}}</td>
+            <td><span class="status-pill status-info">Review enabled</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noCompleted><div class="card empty-state">No completed assignments yet.</div></ng-template>
+  </section>
+</ng-container>

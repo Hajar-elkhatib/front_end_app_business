@@ -50,6 +50,7 @@ export class AuthService {
           localStorage.setItem('nexus_token', response.token);
           const user = this.mapLoginResponseToUser(response, email);
           localStorage.setItem('nexus_user', JSON.stringify(user));
+          this.persistSpecialistIdentity(response);
           this.currentUserSubject.next(user);
         }
       })
@@ -87,13 +88,14 @@ export class AuthService {
   }
 
   private mapLoginResponseToUser(response: LoginResponse, email: string): User {
+    const responseUser = response.user || {};
     return {
-      id: response.userId,
-      fullName: response.fullName,
-      email: response.email || email,
-      role: this.normalizeRole(response.role),
-      phone: '',
-      createdAt: ''
+      id: String(response.userId || response.id || responseUser.id || responseUser.userId || ''),
+      fullName: String(response.fullName || response.name || responseUser.fullName || email),
+      email: String(response.email || responseUser.email || email),
+      role: this.normalizeRole(response.role || response.userRole || response.roles || responseUser.role || responseUser.userRole || responseUser.roles),
+      phone: responseUser.phone || '',
+      createdAt: responseUser.createdAt || ''
     };
   }
 
@@ -104,7 +106,21 @@ export class AuthService {
     };
   }
 
-  private normalizeRole(role?: string): string {
-    return (role || '').replace(/^ROLE_/i, '').toLowerCase();
+  private normalizeRole(role?: string | string[]): string {
+    const rawRole = Array.isArray(role) ? role[0] : role;
+    const normalized = String(rawRole || '').replace(/^ROLE_/i, '').toLowerCase();
+    if (normalized.includes('specialist')) return 'specialist';
+    if (normalized.includes('entrepreneur')) return 'entrepreneur';
+    if (normalized.includes('admin')) return 'admin';
+    return normalized;
+  }
+
+  private persistSpecialistIdentity(response: LoginResponse): void {
+    const responseUser = response.user || {};
+    const specialistId = response.specialistId || response.mongoId || responseUser.specialistId || responseUser.mongoId;
+
+    if (specialistId) {
+      localStorage.setItem('specialistId', String(specialistId));
+    }
   }
 }

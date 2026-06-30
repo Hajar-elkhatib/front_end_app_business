@@ -38,6 +38,13 @@ export class SpecialistService {
     return this.getProfile(id);
   }
 
+  getSpecialist(id: string): Observable<Specialist> {
+    return this.http.get<any>(`${this.baseUrl}/${encodeURIComponent(id)}`).pipe(
+      map(specialist => this.mapSpecialist(specialist)),
+      tap(specialist => this.upsertSpecialist(specialist))
+    );
+  }
+
   getProfile(userId: string): Observable<Specialist> {
     return this.http.get<any>(`${this.baseUrl}/${encodeURIComponent(userId)}/profile`).pipe(
       map(specialist => this.mapSpecialist(specialist)),
@@ -216,6 +223,8 @@ export class SpecialistService {
       available: (specialist.availabilityStatus || 'AVAILABLE') === 'AVAILABLE',
       bio: specialist.bio || '',
       completedProjects: Number(specialist.completedProjects || 0),
+      pendingConfirmation: !!specialist.pendingConfirmation,
+      verified: !!specialist.verified,
       avatarUrl: (specialist.fullName || 'N').charAt(0).toUpperCase()
     };
   }

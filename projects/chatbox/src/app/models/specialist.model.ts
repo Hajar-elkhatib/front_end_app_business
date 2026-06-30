@@ -24,6 +24,8 @@ export interface Specialist extends User {
 
   bio: string;
   completedProjects: number;
+  pendingConfirmation?: boolean;
+  verified?: boolean;
 
   avatarUrl?: string;
   yearsExperience?: number;

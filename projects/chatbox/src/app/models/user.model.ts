@@ -22,9 +22,23 @@ export interface AuthResponse {
 
 export interface LoginResponse {
   token: string;
-  userId: string;
-  role: string;
-  fullName: string;
+  userId?: string;
+  id?: string;
+  role?: string;
+  userRole?: string;
+  roles?: string[] | string;
+  fullName?: string;
+  name?: string;
   email?: string;
+  specialistId?: string;
+  mongoId?: string;
+  user?: Partial<User> & {
+    userId?: string;
+    role?: string;
+    userRole?: string;
+    roles?: string[] | string;
+    specialistId?: string;
+    mongoId?: string;
+  };
 }
 

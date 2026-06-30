@@ -40,7 +40,7 @@ export class Login {
       next: () => {
         this.isLoading = false;
         this.cdr.markForCheck();
-        this.router.navigate([this.authService.getDashboardRoute()]);
+        this.router.navigateByUrl(this.authService.getDashboardRoute());
       },
       error: (err) => {
         this.isLoading = false;

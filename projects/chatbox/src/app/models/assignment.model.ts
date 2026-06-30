@@ -46,10 +46,13 @@ export interface AssignmentRequest {
   projectId: string;
   specialistId: string;
   entrepreneurId: string;
+  availabilityId?: string;
   message?: string;
 }
 
 export interface AssignmentResponseRequest {
+  status?: 'ACCEPTED' | 'REJECTED';
   response?: 'ACCEPTED' | 'REJECTED';
   message?: string;
+  responseMessage?: string;
 }
