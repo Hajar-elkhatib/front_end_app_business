@@ -111,6 +111,12 @@
             <strong>{{item.specialistName || ('Recommended specialist #' + item.rank)}}</strong>
             <span>{{item.recommendedScore | number:'1.0-1'}}% match</span>
             <p>{{item.reason || 'This profile matches the project needs.'}}</p>
+            <div class="recommendation-actions" *ngIf="canMessageSpecialist(item)">
+              <button class="btn btn-secondary" type="button" (click)="viewSpecialist(item)">View Profile</button>
+              <button class="btn btn-indigo" type="button" (click)="messageSpecialist(item)" [disabled]="startingSpecialistId === item.specialistId">
+                {{startingSpecialistId === item.specialistId ? 'Opening...' : 'Message'}}
+              </button>
+            </div>
           </div>
         </div>
         <ng-template #noSpecialists>

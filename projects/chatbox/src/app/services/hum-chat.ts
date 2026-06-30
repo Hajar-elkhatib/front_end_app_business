@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, BehaviorSubject, map } from 'rxjs';
-import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
+import { Client, IFrame, IMessage, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import { environment } from '../../environments/environment';
 import { Conversation, ConversationMessage, SendMessageRequest } from '../models/chat.model';
@@ -56,7 +56,7 @@ export class HumChat {
       onDisconnect: () => {
         this.connectedSubject.next(false);
       },
-      onStompError: (frame) => {
+      onStompError: (frame: IFrame) => {
         console.error('WebSocket error:', frame);
       }
     });
@@ -91,12 +91,17 @@ export class HumChat {
     }
   }
 
-  getConversations(): Observable<Conversation[]> {
-    if (this.currentUserRole === 'SPECIALIST') {
-      return this.getConversationsBySpecialist(this.currentUserId);
-    }
+  sendMessage(request: SendMessageRequest): Observable<ConversationMessage> {
+    return this.http.post<ConversationMessage>(
+      `${this.apiUrl}/conversations/${encodeURIComponent(request.conversationId)}/messages`,
+      request
+    ).pipe(map(message => this.mapMessage(message)));
+  }
 
-    return this.getConversationsByEntrepreneur(this.currentUserId);
+  getConversations(): Observable<Conversation[]> {
+    return this.http.get<Conversation[]>(
+      `${this.apiUrl}/conversations/my?userId=${encodeURIComponent(this.currentUserId)}&role=${encodeURIComponent(this.currentUserRole)}`
+    ).pipe(map(conversations => conversations.map(conversation => this.mapConversation(conversation))));
   }
 
   getConversationsBySpecialist(specialistId: string): Observable<Conversation[]> {
@@ -121,11 +126,19 @@ export class HumChat {
       entrepreneurId: string,
       specialistId: string,
       projectId?: string): Observable<Conversation> {
-    let url = `${this.apiUrl}/conversations?entrepreneurId=${entrepreneurId}&specialistId=${specialistId}`;
-    if (projectId) url += `&projectId=${projectId}`;
-    return this.http.post<Conversation>(url, {}).pipe(
+    return this.http.post<Conversation>(`${this.apiUrl}/conversations/start`, {
+      entrepreneurId,
+      specialistId,
+      projectId
+    }).pipe(
       map(conversation => this.mapConversation(conversation))
     );
+  }
+
+  getConversation(conversationId: string): Observable<Conversation> {
+    return this.http.get<Conversation>(
+      `${this.apiUrl}/conversations/${encodeURIComponent(conversationId)}`
+    ).pipe(map(conversation => this.mapConversation(conversation)));
   }
 
   private subscribeToConversation(conversationId: string): void {
@@ -140,18 +153,22 @@ export class HumChat {
     );
   }
 
-  private mapConversation(conversation: Conversation): Conversation {
+  private mapConversation(conversation: any): Conversation {
     const otherRole = this.currentUserRole === 'SPECIALIST' ? 'Entrepreneur' : 'Specialist';
     const otherId = this.currentUserRole === 'SPECIALIST'
       ? conversation.entrepreneurId
       : conversation.specialistId;
+    const lastMessage = typeof conversation.lastMessage === 'string'
+      ? { text: conversation.lastMessage, timestamp: conversation.lastMessageAt || conversation.updatedAt || conversation.createdAt }
+      : conversation.lastMessage;
 
     return {
       ...conversation,
       name: conversation.name || `${otherRole} ${this.shortId(otherId)}`,
       avatarUrl: conversation.avatarUrl || otherRole.charAt(0),
       isOnline: conversation.isOnline ?? false,
-      unreadCount: conversation.unreadCount ?? 0
+      unreadCount: conversation.unreadCount ?? 0,
+      lastMessage
     };
   }
 

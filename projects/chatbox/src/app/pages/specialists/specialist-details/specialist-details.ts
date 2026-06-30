@@ -10,6 +10,7 @@ import { AssignmentService } from '../../../services/assignment.service';
 import { ProjectAssignmentResponse } from '../../../models/assignment.model';
 import { Review, ReviewService } from '../../../services/review.service';
 import { EvaluationService } from '../../../services/evaluation.service';
+import { HumChat } from '../../../services/hum-chat';
 
 @Component({
   selector: 'app-specialist-details',
@@ -43,6 +44,8 @@ export class SpecialistDetails implements OnInit {
   hasEvaluation = false;
   evaluationMessage = '';
   evaluationMessageType: 'success' | 'error' | '' = '';
+  contactError = '';
+  isStartingConversation = false;
   private toastTimer: number | undefined;
   private evaluationRequestInFlight = false;
 
@@ -54,6 +57,7 @@ export class SpecialistDetails implements OnInit {
     private assignmentService: AssignmentService,
     private evaluationService: EvaluationService,
     private authService: AuthService,
+    private humChat: HumChat,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -465,6 +469,31 @@ export class SpecialistDetails implements OnInit {
 
   private isEvaluationEligibleAssignment(assignment: ProjectAssignmentResponse, specialistId: string): boolean {
     return this.matchesSpecialist(assignment, specialistId) && assignment.canEvaluate === true;
+  }
+
+  startConversation() {
+    const entrepreneurId = this.authService.currentUser?.id || '';
+    const specialistId = this.getSpecialistMongoId();
+
+    if (!entrepreneurId || !specialistId) {
+      this.contactError = 'Conversation could not be started because an identifier is missing.';
+      return;
+    }
+
+    this.contactError = '';
+    this.isStartingConversation = true;
+    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
+    this.humChat.startConversation(entrepreneurId, specialistId).subscribe({
+      next: conversation => {
+        this.isStartingConversation = false;
+        this.router.navigate(['/dashboard/entrepreneur/conversations', conversation.id]);
+      },
+      error: () => {
+        this.isStartingConversation = false;
+        this.contactError = 'Conversation could not be started. Please try again.';
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   deleteSpecialist() {

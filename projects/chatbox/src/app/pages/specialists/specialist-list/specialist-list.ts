@@ -103,6 +103,6 @@ export class SpecialistList implements OnInit {
   openSpecialist(specialist: Specialist) {
     const id = specialist.userId || specialist.id || specialist.mongoId || specialist.specialistId;
     if (!id) return;
-    this.router.navigate(['/specialists', id]);
+    this.router.navigate(['/dashboard/entrepreneur/specialists', id]);
   }
 }

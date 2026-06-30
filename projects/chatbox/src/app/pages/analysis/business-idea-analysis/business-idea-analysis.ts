@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {
   BusinessIdeaAnalysis as BusinessIdeaAnalysisModel,
@@ -12,6 +12,8 @@ import {
 import { AnalysisService } from '../../../services/analysis.service';
 import { ProjectService } from '../../../services/project.service';
 import { ReportService } from '../../../services/report.service';
+import { AuthService } from '../../../services/auth.service';
+import { HumChat } from '../../../services/hum-chat';
 import { Project } from '../../../models/project.model';
 import { Report } from '../../../models/report.model';
 
@@ -26,7 +28,10 @@ export class BusinessIdeaAnalysis implements OnInit {
   private analysisService = inject(AnalysisService);
   private projectService = inject(ProjectService);
   private reportService = inject(ReportService);
+  private authService = inject(AuthService);
+  private humChat = inject(HumChat);
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   projectId = '';
@@ -51,6 +56,7 @@ export class BusinessIdeaAnalysis implements OnInit {
   errorMessage = '';
   secondaryWarning = '';
   isProjectsLoading = false;
+  startingSpecialistId = '';
 
   ngOnInit() {
     this.projectId = this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('projectId') || '';
@@ -319,6 +325,40 @@ export class BusinessIdeaAnalysis implements OnInit {
       return value.length ? value.join('\n') : fallback;
     }
     return value && value.trim() ? value : fallback;
+  }
+
+  canMessageSpecialist(item: AiSpecialistRecommendation): boolean {
+    return !!(item.specialistId && item.specialistId.trim());
+  }
+
+  viewSpecialist(item: AiSpecialistRecommendation) {
+    if (!item.specialistId) return;
+    this.router.navigate(['/dashboard/entrepreneur/specialists', item.specialistId]);
+  }
+
+  messageSpecialist(item: AiSpecialistRecommendation) {
+    const entrepreneurId = this.authService.currentUser?.id || '';
+    const specialistId = item.specialistId || '';
+
+    if (!this.projectId || !entrepreneurId || !specialistId) {
+      this.secondaryWarning = 'This specialist cannot be contacted yet because the profile is not linked.';
+      return;
+    }
+
+    this.secondaryWarning = '';
+    this.startingSpecialistId = specialistId;
+    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
+    this.humChat.startConversation(entrepreneurId, specialistId, this.projectId).subscribe({
+      next: conversation => {
+        this.startingSpecialistId = '';
+        this.router.navigate(['/dashboard/entrepreneur/conversations', conversation.id]);
+      },
+      error: () => {
+        this.startingSpecialistId = '';
+        this.secondaryWarning = 'The conversation could not be opened. Please try again.';
+        this.cdr.markForCheck();
+      }
+    });
   }
 
   private normalizeBusinessValidation(result: any): BusinessIdeaAnalysisModel {

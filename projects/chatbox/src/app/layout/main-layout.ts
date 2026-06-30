@@ -65,6 +65,21 @@ export class MainLayout implements OnInit {
     return '/profile/entrepreneur';
   }
 
+  get specialistRecommendationsRoute(): string {
+    return '/dashboard/entrepreneur/specialist-recommendations';
+  }
+
+  get specialistsRoute(): string {
+    return '/dashboard/entrepreneur/specialists';
+  }
+
+  get conversationsRoute(): string {
+    if (this.isSpecialist) {
+      return '/dashboard/specialist/conversations';
+    }
+    return '/dashboard/entrepreneur/conversations';
+  }
+
   get isAdmin(): boolean {
     return this.authService.userRole === 'admin';
   }
@@ -187,13 +202,15 @@ export class MainLayout implements OnInit {
   }
 
   navigateTo(route: string, event?: Event) {
+    event?.preventDefault();
     event?.stopPropagation();
     this.closeDropdowns();
-    this.router.navigate([route]);
+    void this.router.navigateByUrl(route);
   }
 
   isRouteActive(route: string): boolean {
-    return this.router.url.split('?')[0] === route;
+    const current = this.router.url.split('?')[0];
+    return current === route || this.sameNavigationGroup(current, route);
   }
 
   @HostListener('document:keydown.control.k', ['$event'])
@@ -232,7 +249,7 @@ export class MainLayout implements OnInit {
         { label: 'Specialist dashboard', description: 'Your specialist workspace', route: '/dashboard/specialist' },
         { label: 'Assigned projects', description: 'Recommended and assigned work', route: '/specialist/assigned-projects' },
         { label: 'Availability', description: 'Manage available time slots', route: '/specialist/availability' },
-        { label: 'Conversations', description: 'Messages with entrepreneurs', route: '/conversations' },
+        { label: 'Conversations', description: 'Messages with entrepreneurs', route: '/dashboard/specialist/conversations' },
         { label: 'Evaluations', description: 'Reviews and scores', route: '/specialist/evaluations' },
         { label: 'Profile', description: 'Specialist profile', route: '/profile/specialist' }
       ];
@@ -247,11 +264,26 @@ export class MainLayout implements OnInit {
       { label: 'Sentiment analysis', description: 'Opinion and review analysis', route: '/analysis/sentiment' },
       { label: 'Reports', description: 'Generated project reports', route: '/reports' },
       { label: 'AI assistant', description: 'Chatbot and RAG', route: '/chatbot' },
-      { label: 'Specialists', description: 'Browse specialists', route: '/specialists' },
-      { label: 'Specialist recommendations', description: 'Matched specialists', route: '/specialist-recommendations' },
-      { label: 'Conversations', description: 'Messages with specialists', route: '/conversations' },
+      { label: 'Specialists', description: 'Browse specialists', route: '/dashboard/entrepreneur/specialists' },
+      { label: 'Specialist recommendations', description: 'Matched specialists', route: '/dashboard/entrepreneur/specialist-recommendations' },
+      { label: 'Conversations', description: 'Messages with specialists', route: '/dashboard/entrepreneur/conversations' },
       { label: 'Complaints', description: 'Create and track complaints', route: '/complaints' },
       { label: 'Profile', description: 'Entrepreneur profile', route: '/profile/entrepreneur' }
     ];
+  }
+
+  private sameNavigationGroup(current: string, route: string): boolean {
+    const aliases: Record<string, string[]> = {
+      '/dashboard/entrepreneur/specialist-recommendations': ['/specialist-recommendations'],
+      '/dashboard/entrepreneur/specialists': ['/specialists'],
+      '/dashboard/entrepreneur/conversations': ['/conversations', '/entrepreneur/conversations'],
+      '/dashboard/specialist/conversations': ['/conversations', '/specialist/conversations']
+    };
+
+    const routeAliases = aliases[route] || [];
+    return routeAliases.some(alias => current === alias || current.startsWith(`${alias}/`))
+      || (route === '/dashboard/entrepreneur/specialists' && current.startsWith('/dashboard/entrepreneur/specialists/'))
+      || (route === '/dashboard/entrepreneur/conversations' && current.startsWith('/dashboard/entrepreneur/conversations/'))
+      || (route === '/dashboard/specialist/conversations' && current.startsWith('/dashboard/specialist/conversations/'));
   }
 }

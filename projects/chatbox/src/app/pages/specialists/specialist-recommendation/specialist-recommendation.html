@@ -44,7 +44,7 @@
       </div>
       <small>Skills: {{formatSkills(item.skills)}}</small>
       <div class="actions">
-        <a class="btn btn-secondary" [routerLink]="['/specialists', item.specialistId]">View Profile</a>
+        <a class="btn btn-secondary" [routerLink]="['/dashboard/entrepreneur/specialists', item.specialistId]">View Profile</a>
         <button class="btn btn-indigo" type="button" (click)="openAssignModal(item)" [disabled]="isAssigning || item.isAssigned || !projectId">
           {{item.isAssigned ? 'Assignment Pending' : 'Assign'}}
         </button>
