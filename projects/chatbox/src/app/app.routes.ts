@@ -44,7 +44,7 @@ export const routes: Routes = [
       { path: 'admin/specialists', canActivate: [roleGuard], data: { roles: ['admin'] }, loadComponent: () => import('./pages/admin/admin-specialists/admin-specialists').then(m => m.AdminSpecialists) },
       { path: 'admin/support-requests', canActivate: [roleGuard], data: { roles: ['admin'] }, loadComponent: () => import('./pages/admin/admin-support-requests/admin-support-requests').then(m => m.AdminSupportRequests) },
       { path: 'admin/entrepreneurs', redirectTo: 'admin/users', pathMatch: 'full' },
-      { path: 'admin/complaints', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'complaints' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
+      { path: 'admin/complaints', canActivate: [roleGuard], data: { roles: ['admin'] }, loadComponent: () => import('./pages/admin/admin-complaints/admin-complaints').then(m => m.AdminComplaints) },
       { path: 'admin/reports', canActivate: [roleGuard], data: { roles: ['admin'] }, loadComponent: () => import('./pages/admin/admin-reports/admin-reports').then(m => m.AdminReports) },
       { path: 'admin/ai-models', canActivate: [roleGuard], data: { roles: ['admin'], collection: 'ml_models' }, loadComponent: () => import('./pages/admin/admin-dashboard/admin-dashboard').then(m => m.AdminDashboard) },
 

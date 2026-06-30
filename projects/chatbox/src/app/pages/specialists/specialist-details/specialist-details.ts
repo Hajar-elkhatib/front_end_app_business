@@ -999,7 +999,6 @@ export class SpecialistDetails implements OnInit {
       }
     });
   }
-
   deleteSpecialist() {
     if (this.specialist) {
       this.specialistService.deleteSpecialist(this.specialist.id).subscribe(() => {

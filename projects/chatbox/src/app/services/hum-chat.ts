@@ -84,6 +84,20 @@ export class HumChat {
     this.stompClient.activate();
   }
 
+  getConversation(conversationId: string): Observable<Conversation> {
+    return this.http.get<any>(`${this.apiUrl}/conversations/${conversationId}`).pipe(
+      switchMap(conversation => this.enrichConversationList([conversation])),
+      map(conversations => {
+        const conversation = conversations[0];
+        if (!conversation) {
+          throw new Error('Conversation not found.');
+        }
+
+        return conversation;
+      })
+    );
+  }
+
   disconnect(): void {
     this.activeSubscription?.unsubscribe();
     this.activeSubscription = undefined;
@@ -138,12 +152,20 @@ export class HumChat {
   }
 
   sendMessage(request: SendMessageRequest): Observable<ConversationMessage> {
-    return new Observable<ConversationMessage>(subscriber => {
-      if (!this.stompClient?.connected) {
-        subscriber.error(new Error('Chat is not connected.'));
-        return;
-      }
+    if (!this.stompClient?.connected) {
+      return this.http.post<ConversationMessage>(
+        `${this.apiUrl}/conversations/${request.conversationId}/messages`,
+        request
+      ).pipe(
+        map(message => this.mapMessage(message)),
+        tap(message => {
+          this.applyConversationActivity(message);
+          this.messageSubject.next(message);
+        })
+      );
+    }
 
+    return new Observable<ConversationMessage>(subscriber => {
       const role = this.normalizeRole(request.role || request.senderType);
       const subscription = this.onMessage().subscribe({
         next: message => {
@@ -235,19 +257,6 @@ export class HumChat {
     return this.http.post<any>(`${this.apiUrl}/conversations?${params.join('&')}`, null).pipe(
       switchMap(conversation => this.enrichConversationList([conversation])),
       map(conversations => conversations[0])
-    );
-  }
-
-  getConversation(conversationId: string): Observable<Conversation> {
-    return this.getConversations().pipe(
-      map(conversations => {
-        const conversation = conversations.find(item => item.id === conversationId);
-        if (!conversation) {
-          throw new Error('Conversation not found.');
-        }
-
-        return conversation;
-      })
     );
   }
 

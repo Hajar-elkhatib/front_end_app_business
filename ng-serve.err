@@ -2391,3 +2391,162 @@
         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
 
 [39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "getConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/services/hum-chat.ts:182:4:
+[37m      182 │     [32mgetConversation[37m(conversationId) {
+          ╵     [32m~~~~~~~~~~~~~~~[0m
+
+  The original member "getConversation" is here:
+
+    projects/chatbox/src/app/services/hum-chat.ts:72:4:
+[37m      72 │     [32mgetConversation[37m(conversationId) {
+         ╵     [32m~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:169:0:
+[37m      169 │ [32m<<<<<<<[37m HEAD
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:172:0:
+[37m      172 │ [32m=======[37m
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:176:0:
+[37m      176 │ [32m>>>>>>>[37m 3920cd95402e23d0a3f7c77cd8e7d839024f0c64
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:78:0:
+[37m      78 │ [32m<<<<<<<[37m HEAD
+         ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:82:0:
+[37m      82 │ [32m=======[37m
+         ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:83:0:
+[37m      83 │ [32m>>>>>>>[37m 3920cd95402e23d0a3f7c77cd8e7d839024f0c64
+         ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:895:0:
+[37m      895 │ [32m<<<<<<<[37m HEAD
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1007:0:
+[37m      1007 │ [32m=======[37m
+           ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1008:0:
+[37m      1008 │ [32m>>>>>>>[37m 3920cd95402e23d0a3f7c77cd8e7d839024f0c64
+           ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1017:0:
+[37m      1017 │ [32m<<<<<<<[37m HEAD
+           ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1018:0:
+[37m      1018 │ [32m=======[37m
+           ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1047:0:
+[37m      1047 │ [32m>>>>>>>[37m 3920cd95402e23d0a3f7c77cd8e7d839024f0c64
+           ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:87:2:
+[37m      87 │   [32mgetConversation[37m(conversationId: string): Observable<Conversation> {
+         ╵   [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:111:0:
+[37m      111 │ [32m<<<<<<<[37m HEAD
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:136:0:
+[37m      136 │ [32m=======[37m
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:142:0:
+[37m      142 │ [32m>>>>>>>[37m 3920cd95402e23d0a3f7c77cd8e7d839024f0c64
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:255:2:
+[37m      255 │   [32mgetConversation[37m(conversationId: string): Observable<Conversatio...
+          ╵   [32m~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "getConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/services/hum-chat.ts:184:4:
+[37m      184 │     [32mgetConversation[37m(conversationId) {
+          ╵     [32m~~~~~~~~~~~~~~~[0m
+
+  The original member "getConversation" is here:
+
+    projects/chatbox/src/app/services/hum-chat.ts:72:4:
+[37m      72 │     [32mgetConversation[37m(conversationId) {
+         ╵     [32m~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:87:2:
+[37m      87 │   [32mgetConversation[37m(conversationId: string): Observable<Conversation> {
+         ╵   [32m~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:255:2:
+[37m      255 │   [32mgetConversation[37m(conversationId: string): Observable<Conversatio...
+          ╵   [32m~~~~~~~~~~~~~~~[0m
+
+[39m[22m

@@ -16,26 +16,23 @@ import { AdminProject, AdminService } from '../../../services/admin.service';
       </header>
       <div class="filters">
         <input class="input" placeholder="Search projects" [(ngModel)]="search" (ngModelChange)="loadProjects()" />
-        <select class="input" [(ngModel)]="status" (ngModelChange)="loadProjects()"><option value="">All statuses</option><option>DRAFT</option><option>ANALYZING</option><option>ANALYZED</option><option>ANALYSIS_FAILED</option><option>ARCHIVED</option></select>
+        <select class="input" [(ngModel)]="status" (ngModelChange)="loadProjects()"><option value="">All statuses</option><option>DRAFT</option><option>SUBMITTED</option><option>ANALYZING</option><option>VALIDATED</option><option>COMPLETED</option><option>REJECTED</option></select>
         <input class="input" placeholder="Sector" [(ngModel)]="sector" (ngModelChange)="loadProjects()" />
-        <select class="input" [(ngModel)]="risk" (ngModelChange)="loadProjects()"><option value="">All risks</option><option>HIGH RISK</option><option>NEEDS VALIDATION</option><option>PROMISING</option></select>
       </div>
       <p *ngIf="errorMessage" class="admin-error">{{errorMessage}}</p>
       <div *ngIf="isLoading" class="table-empty">Loading projects...</div>
       <div *ngIf="!isLoading && !projects.length" class="table-empty">No projects match these filters.</div>
       <div *ngIf="!isLoading && projects.length" class="table-scroll">
         <table class="admin-table">
-          <thead><tr><th>Project Name</th><th>Entrepreneur</th><th>Sector</th><th>Created At</th><th>Analysis Status</th><th>Final Score</th><th>Risk Level</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Project Name</th><th>Entrepreneur ID</th><th>Sector</th><th>Created At</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody>
             <tr *ngFor="let project of projects">
               <td>{{project.title || 'Untitled project'}}</td>
-              <td>{{project.entrepreneur?.fullName || project.entrepreneurId}}</td>
+              <td>{{project.entrepreneurId}}</td>
               <td>{{project.sector || '-'}}</td>
               <td>{{project.createdAt | date:'mediumDate'}}</td>
-              <td><span class="badge-pill badge-neutral">{{project.analysisStatus}}</span></td>
-              <td>{{project.finalScore ?? '-'}}</td>
-              <td><span *ngIf="project.riskLevel" class="badge-pill" [class.badge-bad]="project.riskLevel === 'HIGH RISK'" [class.badge-warn]="project.riskLevel === 'NEEDS VALIDATION'" [class.badge-good]="project.riskLevel === 'PROMISING'">{{project.riskLevel}}</span></td>
-              <td class="actions"><a class="admin-action" [routerLink]="['/admin/projects', project.id]">View</a><button class="admin-danger" type="button" (click)="archive(project)" [disabled]="project.analysisStatus === 'ARCHIVED'">Archive</button></td>
+              <td><span class="badge-pill badge-neutral">{{project.projectStatus}}</span></td>
+              <td class="actions"><a class="admin-action" [routerLink]="['/admin/projects', project.id]">View</a></td>
             </tr>
           </tbody>
         </table>
@@ -50,7 +47,6 @@ export class AdminProjects implements OnInit {
   search = '';
   status = '';
   sector = '';
-  risk = '';
   isLoading = true;
   errorMessage = '';
 
@@ -58,16 +54,9 @@ export class AdminProjects implements OnInit {
 
   loadProjects() {
     this.isLoading = true;
-    this.adminService.getProjects({ search: this.search, status: this.status, sector: this.sector, risk: this.risk }).subscribe({
+    this.adminService.getProjects({ search: this.search, status: this.status, sector: this.sector }).subscribe({
       next: projects => { this.projects = projects; this.isLoading = false; },
       error: () => { this.errorMessage = 'Projects could not be loaded.'; this.isLoading = false; }
-    });
-  }
-
-  archive(project: AdminProject) {
-    this.adminService.archiveProject(project.id).subscribe({
-      next: updated => project.analysisStatus = updated.analysisStatus,
-      error: () => this.errorMessage = 'Project could not be archived.'
     });
   }
 }
