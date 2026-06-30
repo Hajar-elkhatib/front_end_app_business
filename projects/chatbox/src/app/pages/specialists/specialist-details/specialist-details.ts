@@ -67,14 +67,14 @@ export class SpecialistDetails implements OnInit {
   reviewToast = '';
   canSubmitReview = false;
   canEvaluate = false;
+  isStartingConversation = false;
+  contactError = '';
   selectedEvaluationScore = 0;
   averageEvaluationScore = 0;
   evaluationCount = 0;
   hasEvaluation = false;
   evaluationMessage = '';
   evaluationMessageType: 'success' | 'error' | '' = '';
-  contactError = '';
-  isStartingConversation = false;
   isRequestingSlot = false;
   slotRequestMessage = '';
   slotRequestMessageType: 'success' | 'error' | '' = '';

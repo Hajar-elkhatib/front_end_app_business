@@ -904,3 +904,47 @@ Component update sent to client(s).
 Application bundle generation complete. [7.867 seconds] - 2026-06-30T21:09:32.623Z
 
 Component update sent to client(s).
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [12.635 seconds] - 2026-06-30T21:33:44.016Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [25.841 seconds] - 2026-06-30T21:40:15.709Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+Application bundle generation failed. [0.006 seconds] - 2026-06-30T21:42:17.004Z
+
+[33m>[39m Changes detected. Rebuilding...
+[32m√[39m Changes detected. Rebuilding...
+[1mInitial chunk files[22m[2m | [22m[1mNames[22m                 [2m | [22m [1mRaw size[22m
+[32mmain.js[39m            [2m | [22m[2mmain[22m                  [2m | [22m [36m16.32 kB[39m[2m | [22m
+[32mstyles.css[39m         [2m | [22m[2mstyles[22m                [2m | [22m [36m10.21 kB[39m[2m | [22m
+[32mchunk-XPNLFBKA.js[39m  [2m | [22m[2m-[22m                     [2m | [22m  [36m4.95 kB[39m[2m | [22m
+[32mchunk-CZJLB7T5.js[39m  [2m | [22m[2m-[22m                     [2m | [22m  [36m1.08 kB[39m[2m | [22m
+[32mchunk-26G433F6.js[39m  [2m | [22m[2m-[22m                     [2m | [22m[36m241 bytes[39m[2m | [22m
+
+[1m [22m                  [2m | [22m[1mInitial total[22m         [2m | [22m [1m32.81 kB[22m
+
+[1mLazy chunk files[22m   [2m | [22m[1mNames[22m                 [2m | [22m [1mRaw size[22m
+[32mchunk-TAPTKJOW.js[39m  [2m | [22m[2mspecialist-details[22m    [2m | [22m[36m153.92 kB[39m[2m | [22m
+[32mchunk-C6WB6V3N.js[39m  [2m | [22m[2mspecialist-dashboard[22m  [2m | [22m[36m130.76 kB[39m[2m | [22m
+[32mchunk-PE3IYRP7.js[39m  [2m | [22m[2madmin-dashboard[22m       [2m | [22m[36m118.81 kB[39m[2m | [22m
+[32mchunk-LHWE5XGI.js[39m  [2m | [22m[2mmain-layout[22m           [2m | [22m [36m88.66 kB[39m[2m | [22m
+[32mchunk-P3JNEEIB.js[39m  [2m | [22m[2mregister[22m              [2m | [22m [36m79.94 kB[39m[2m | [22m
+[32mchunk-IXXW4CFJ.js[39m  [2m | [22m[2mproject-form[22m          [2m | [22m [36m79.30 kB[39m[2m | [22m
+[32mchunk-3PNR2JQ6.js[39m  [2m | [22m[2madmin-specialists[22m     [2m | [22m [36m74.02 kB[39m[2m | [22m
+[32mchunk-MJY2DR3S.js[39m  [2m | [22m[2mproject-list[22m          [2m | [22m [36m70.06 kB[39m[2m | [22m
+[32mchunk-POIMXKKH.js[39m  [2m | [22m[2madmin-users[22m           [2m | [22m [36m65.93 kB[39m[2m | [22m
+[32mchunk-QB7LSEYL.js[39m  [2m | [22m[2mai-chatbot[22m            [2m | [22m [36m65.46 kB[39m[2m | [22m
+[32mchunk-OEF6LBGS.js[39m  [2m | [22m[2mproject-details[22m       [2m | [22m [36m59.50 kB[39m[2m | [22m
+[32mchunk-LUZJ3UHH.js[39m  [2m | [22m[2madmin-reports[22m         [2m | [22m [36m58.51 kB[39m[2m | [22m
+[32mchunk-WYS2LDUC.js[39m  [2m | [22m[2mbusiness-idea-analysis[22m[2m | [22m [36m57.91 kB[39m[2m | [22m
+[32mchunk-LDSPKWHJ.js[39m  [2m | [22m[2mentrepreneur-profile[22m  [2m | [22m [36m57.11 kB[39m[2m | [22m
+[32mchunk-RQQ7Z3YA.js[39m  [2m | [22m[2mlanding[22m               [2m | [22m [36m54.59 kB[39m[2m | [22m
+[2m...and 27 more lazy chunks files. Use "--verbose" to show all the files.[22m
+
+Application bundle generation complete. [51.120 seconds] - 2026-06-30T21:50:05.033Z
+
+Page reload sent to client(s).

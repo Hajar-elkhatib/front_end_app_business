@@ -219,9 +219,10 @@ export class HumChat {
   }
 
   startConversation(
-      entrepreneurId: string,
-      specialistId: string,
-      projectId?: string): Observable<Conversation> {
+    entrepreneurId: string,
+    specialistId: string,
+    projectId?: string
+  ): Observable<Conversation> {
     const params = [
       `entrepreneurId=${encodeURIComponent(entrepreneurId)}`,
       `specialistId=${encodeURIComponent(specialistId)}`
@@ -340,6 +341,7 @@ export class HumChat {
     const unreadCount = !isCurrentUserMessage && !isActiveConversation
       ? Number(currentConversation.unreadCount || 0) + 1
       : 0;
+
     if (isActiveConversation || isCurrentUserMessage) {
       this.setSeenTimestamp(message.conversationId, message.timestamp);
     }

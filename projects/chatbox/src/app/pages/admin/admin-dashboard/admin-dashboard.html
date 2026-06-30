@@ -3,78 +3,314 @@
     <div>
       <p class="admin-kicker">Admin</p>
       <h1>{{mode === 'complaints' ? 'Complaints' : 'Dashboard'}}</h1>
-      <p class="admin-copy">{{mode === 'complaints' ? 'Load, filter, update, and remove complaints from the Spring Boot backend.' : 'Live platform overview from Spring Boot and MongoDB.'}}</p>
+      <p class="admin-copy">{{mode === 'complaints'
+        ? 'Manage, respond to, and resolve platform complaints.'
+        : 'Live platform overview — pulled from the Spring Boot backend.'}}</p>
     </div>
-    <button type="button" class="admin-refresh" (click)="loadCurrentView()" [disabled]="isLoading">Refresh</button>
+    <button type="button" class="admin-refresh" (click)="loadCurrentView()" [disabled]="isLoading">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Refresh
+    </button>
   </header>
 
-  <p *ngIf="errorMessage" class="admin-error">{{errorMessage}}</p>
-  <div *ngIf="isLoading" class="table-empty">Loading {{mode}}...</div>
+  <!-- Error state -->
+  <div *ngIf="errorMessage" class="admin-error">
+    <span>{{errorMessage}}</span>
+    <button type="button" class="error-retry" (click)="loadCurrentView()">Retry</button>
+  </div>
 
-  <ng-container *ngIf="!isLoading && mode === 'dashboard' && summary as data">
-    <div class="metric-grid">
-      <article class="metric-card"><span>Total Users</span><strong>{{data.totalUsers}}</strong></article>
-      <article class="metric-card"><span>Pending Specialists</span><strong>{{data.pendingSpecialistRequests}}</strong></article>
-      <article class="metric-card"><span>Total Assignments</span><strong>{{data.totalAssignments ?? (data.matchedRequests + data.pendingSpecialistRequests)}}</strong></article>
-      <article class="metric-card"><span>Total Reviews</span><strong>{{data.totalReviews ?? data.generatedReports}}</strong></article>
-      <article class="metric-card"><span>Projects</span><strong>{{data.totalProjects}}</strong></article>
-      <article class="metric-card"><span>Complaints</span><strong>{{data.pendingRequests.length}}</strong></article>
-      <article class="metric-card"><span>Entrepreneurs</span><strong>{{data.totalEntrepreneurs}}</strong></article>
-      <article class="metric-card"><span>Specialists</span><strong>{{data.totalSpecialists}}</strong></article>
+  <!-- ══════════════════════════════════════════════════════
+       DASHBOARD MODE
+  ══════════════════════════════════════════════════════ -->
+  <ng-container *ngIf="mode === 'dashboard'">
+
+    <!-- Skeleton -->
+    <div *ngIf="isLoading" class="skeleton-grid">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]"></div>
     </div>
 
-    <div class="admin-two-col">
-      <section class="admin-panel">
-        <div class="panel-title">Projects by Status</div>
-        <div *ngIf="!data.projectsByStatus.length" class="table-empty compact">No project statuses yet.</div>
-        <div *ngFor="let item of data.projectsByStatus" class="summary-row">
-          <span>{{item.label}}</span>
-          <strong>{{item.count}}</strong>
-        </div>
-      </section>
+    <ng-container *ngIf="!isLoading && summary as data">
 
-      <section class="admin-panel">
-        <div class="panel-title">Complaints by Status</div>
-        <div *ngIf="!data.pendingRequests.length" class="table-empty compact">No complaints yet.</div>
-        <div *ngFor="let item of data.pendingRequests" class="summary-row">
-          <span>{{item.status}}</span>
-          <strong>{{item.id}}</strong>
+      <!-- 10 stat cards -->
+      <div class="stat-grid">
+        <article *ngFor="let card of statCards" class="stat-card" [attr.data-accent]="card.accent">
+          <div class="stat-card-top">
+            <span class="stat-icon" [attr.data-accent]="card.accent">
+              <!-- Users -->
+              <svg *ngIf="card.icon==='users'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <!-- Briefcase -->
+              <svg *ngIf="card.icon==='briefcase'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+              <!-- Star -->
+              <svg *ngIf="card.icon==='star'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <!-- Clock -->
+              <svg *ngIf="card.icon==='clock'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <!-- Check-circle -->
+              <svg *ngIf="card.icon==='check-circle'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <!-- Ban -->
+              <svg *ngIf="card.icon==='ban'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+              <!-- Folder -->
+              <svg *ngIf="card.icon==='folder'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              <!-- Alert -->
+              <svg *ngIf="card.icon==='alert'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <!-- File-text -->
+              <svg *ngIf="card.icon==='file-text'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <!-- Award -->
+              <svg *ngIf="card.icon==='award'" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+            </span>
+            <span class="stat-label">{{card.label}}</span>
+          </div>
+          <strong class="stat-value">{{card.value | number}}</strong>
+          <span *ngIf="card.sub" class="stat-sub">{{card.sub}}</span>
+        </article>
+      </div>
+
+      <!-- Main layout: chart left, donut + users right -->
+      <div class="dash-main-row">
+        <div class="dash-main-left">
+
+          <!-- Bar chart -->
+          <section class="admin-panel dash-chart-panel">
+            <div class="panel-title">Platform Activity</div>
+            <div class="bar-chart" aria-label="Platform metrics bar chart">
+              <div class="bar-chart-bars">
+                <div class="bar-col" *ngFor="let bar of chartBars">
+                  <div class="bar-fill" [style.height.%]="bar.pct" [title]="bar.label + ': ' + bar.value">
+                    <span class="bar-tip">{{bar.value}}</span>
+                  </div>
+                  <span class="bar-label">{{bar.label}}</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Recent projects -->
+          <section class="admin-panel dash-table-panel">
+            <div class="panel-title">Recent Projects</div>
+            <div *ngIf="!data.recentProjects.length" class="table-empty compact">No recent projects yet.</div>
+            <div *ngIf="data.recentProjects.length" class="table-scroll">
+              <table class="admin-table">
+                <thead><tr><th>Project</th><th>Sector</th><th>Risk</th><th>Status</th><th>Score</th></tr></thead>
+                <tbody>
+                  <tr *ngFor="let p of data.recentProjects">
+                    <td>{{p.title}}</td>
+                    <td>{{p.sector || '—'}}</td>
+                    <td>
+                      <span class="badge-pill"
+                        [class.badge-bad]="p.riskLevel==='HIGH'"
+                        [class.badge-warn]="p.riskLevel==='MEDIUM'"
+                        [class.badge-good]="p.riskLevel==='LOW'"
+                        [class.badge-neutral]="!p.riskLevel">{{p.riskLevel || '—'}}</span>
+                    </td>
+                    <td><span class="badge-pill badge-neutral">{{p.analysisStatus}}</span></td>
+                    <td>{{p.finalScore != null ? (p.finalScore | number:'1.0-1') : '—'}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
-      </section>
-    </div>
+
+        <div class="dash-main-right">
+          <!-- Donut -->
+          <section class="admin-panel dash-donut-panel">
+            <div class="panel-title">Project Status</div>
+            <div class="donut-wrap">
+              <svg class="donut-svg" viewBox="0 0 120 120" aria-hidden="true">
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--border-subtle)" stroke-width="16"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="var(--indigo-600)" stroke-width="16"
+                  [attr.stroke-dasharray]="donut.inProgressArc + ' ' + donut.total"
+                  [attr.stroke-dashoffset]="donut.offset" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#22c55e" stroke-width="16"
+                  [attr.stroke-dasharray]="donut.analyzedArc + ' ' + donut.total"
+                  [attr.stroke-dashoffset]="donut.analyzedOffset" stroke-linecap="round"/>
+                <circle cx="60" cy="60" r="50" fill="none" stroke="#f97316" stroke-width="16"
+                  [attr.stroke-dasharray]="donut.draftArc + ' ' + donut.total"
+                  [attr.stroke-dashoffset]="donut.draftOffset" stroke-linecap="round"/>
+                <text x="60" y="56" text-anchor="middle" class="donut-label-main">{{data.totalProjects}}</text>
+                <text x="60" y="70" text-anchor="middle" class="donut-label-sub">Projects</text>
+              </svg>
+            </div>
+            <div class="donut-legend">
+              <div class="legend-row"><span class="legend-dot" style="background:var(--indigo-600)"></span><span>In Progress</span><strong>{{data.projectsInProgress}}</strong></div>
+              <div class="legend-row"><span class="legend-dot" style="background:#22c55e"></span><span>Analyzed</span><strong>{{data.analyzedProjects}}</strong></div>
+              <div class="legend-row"><span class="legend-dot" style="background:#f97316"></span><span>Draft</span><strong>{{data.draftProjects}}</strong></div>
+            </div>
+          </section>
+
+          <!-- Recent users -->
+          <section class="admin-panel dash-users-panel">
+            <div class="panel-title">Recent Users</div>
+            <div *ngIf="!data.recentUsers.length" class="table-empty compact">No recent users yet.</div>
+            <div *ngFor="let user of data.recentUsers" class="user-row">
+              <span class="user-avatar" [attr.aria-label]="user.fullName">{{userInitials(user.fullName)}}</span>
+              <div class="user-info">
+                <span class="user-name">{{user.fullName || 'Unnamed'}}</span>
+                <span class="user-role">{{user.role | lowercase}}</span>
+              </div>
+              <span class="badge-pill" [class.badge-good]="user.active" [class.badge-bad]="!user.active">
+                {{user.active ? 'Active' : 'Inactive'}}
+              </span>
+            </div>
+          </section>
+        </div>
+      </div>
+    </ng-container>
   </ng-container>
 
-  <ng-container *ngIf="!isLoading && mode === 'complaints'">
-    <div class="filters">
-      <select class="input" [(ngModel)]="complaintStatus" (ngModelChange)="loadComplaints()">
-        <option value="">All statuses</option>
-        <option value="Pending">Pending</option>
-        <option value="In Progress">In Progress</option>
-        <option value="Resolved">Resolved</option>
-      </select>
+  <!-- ══════════════════════════════════════════════════════
+       COMPLAINTS MODE
+  ══════════════════════════════════════════════════════ -->
+  <ng-container *ngIf="mode === 'complaints'">
+
+    <!-- Skeleton -->
+    <div *ngIf="isLoading" class="skeleton-grid skeleton-grid-sm">
+      <div class="skeleton-card" *ngFor="let i of [1,2,3,4]"></div>
     </div>
-    <div *ngIf="!complaints.length" class="table-empty">No complaints match these filters.</div>
-    <div *ngIf="complaints.length" class="table-scroll">
-      <table class="admin-table">
-        <thead><tr><th>Subject</th><th>User</th><th>Category</th><th>Priority</th><th>Status</th><th>Admin Response</th><th>Actions</th></tr></thead>
-        <tbody>
-          <tr *ngFor="let complaint of complaints">
-            <td>{{complaint.subject}}</td>
-            <td>{{complaint.userId || '-'}}</td>
-            <td>{{complaint.category}}</td>
-            <td>{{complaint.priority}}</td>
-            <td><span class="badge-pill badge-neutral">{{complaint.status}}</span></td>
-            <td>
-              <textarea class="input" rows="2" [(ngModel)]="complaintResponses[complaint.id]" placeholder="Admin response"></textarea>
-            </td>
-            <td class="actions">
-              <button class="admin-action" type="button" (click)="updateComplaint(complaint, 'In Progress', complaintResponses[complaint.id] || '')">In Progress</button>
-              <button class="admin-action" type="button" (click)="updateComplaint(complaint, 'Resolved', complaintResponses[complaint.id] || '')">Resolve</button>
-              <button class="admin-danger" type="button" (click)="deleteComplaint(complaint)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+
+    <ng-container *ngIf="!isLoading">
+      <!-- Status summary cards -->
+      <div class="complaint-summary-row">
+        <div class="complaint-stat" [class.active]="complaintStatus === 'OPEN'" (click)="complaintStatus='OPEN'; loadComplaints()">
+          <span class="cs-count">{{complaintCounts.open}}</span><span class="cs-label">Open</span>
+        </div>
+        <div class="complaint-stat cs-progress" [class.active]="complaintStatus === 'IN_PROGRESS'" (click)="complaintStatus='IN_PROGRESS'; loadComplaints()">
+          <span class="cs-count">{{complaintCounts.inProgress}}</span><span class="cs-label">In Progress</span>
+        </div>
+        <div class="complaint-stat cs-resolved" [class.active]="complaintStatus === 'RESOLVED'" (click)="complaintStatus='RESOLVED'; loadComplaints()">
+          <span class="cs-count">{{complaintCounts.resolved}}</span><span class="cs-label">Resolved</span>
+        </div>
+        <div class="complaint-stat cs-closed" [class.active]="complaintStatus === 'CLOSED'" (click)="complaintStatus='CLOSED'; loadComplaints()">
+          <span class="cs-count">{{complaintCounts.closed}}</span><span class="cs-label">Closed</span>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="complaint-filters">
+        <input id="complaint-search" class="input" type="search" placeholder="Search subject, description…"
+          [(ngModel)]="complaintSearch" (ngModelChange)="applyComplaintSearch()" aria-label="Search complaints"/>
+        <select id="complaint-status-filter" class="input" [(ngModel)]="complaintStatus" (ngModelChange)="loadComplaints()" aria-label="Filter by status">
+          <option *ngFor="let opt of statusOptions" [value]="opt.value">{{opt.label}}</option>
+        </select>
+      </div>
+
+      <div *ngIf="!filteredComplaints.length" class="table-empty">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin:0 auto 0.75rem;display:block;opacity:.35"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        No complaints match these filters.
+      </div>
+
+      <div *ngIf="filteredComplaints.length" class="table-scroll">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Subject</th><th>Category</th><th>Priority</th><th>Status</th><th>User</th><th>Created</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of filteredComplaints">
+              <td class="complaint-subject">{{c.subject}}</td>
+              <td>{{c.category}}</td>
+              <td>
+                <span class="badge-pill"
+                  [class.badge-bad]="c.priority==='HIGH'||c.priority==='URGENT'"
+                  [class.badge-warn]="c.priority==='MEDIUM'"
+                  [class.badge-neutral]="c.priority==='LOW'">{{c.priority}}</span>
+              </td>
+              <td>
+                <span class="badge-pill"
+                  [class.badge-neutral]="c.status==='OPEN'"
+                  [class.badge-warn]="c.status==='IN_PROGRESS'"
+                  [class.badge-good]="c.status==='RESOLVED'"
+                  [class.badge-bad]="c.status==='CLOSED'">{{c.status}}</span>
+              </td>
+              <td>{{c.userId || '—'}}</td>
+              <td>{{c.createdAt | date:'mediumDate'}}</td>
+              <td class="actions">
+                <button class="admin-action" type="button" (click)="openComplaintDetail(c)">Details</button>
+                <button class="admin-danger" type="button" (click)="requestDeleteComplaint(c)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
   </ng-container>
 </section>
+
+<!-- ══════════════════════════════════════════════════════
+     COMPLAINT DETAIL MODAL
+══════════════════════════════════════════════════════ -->
+<div *ngIf="selectedComplaint" class="modal-backdrop" (click)="closeComplaintDetail()">
+  <div class="modal-panel" (click)="$event.stopPropagation()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-header">
+      <h2 id="modal-title" class="modal-title">Complaint Details</h2>
+      <button class="modal-close" type="button" (click)="closeComplaintDetail()" aria-label="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-field"><label class="modal-lbl">Subject</label><p>{{selectedComplaint.subject}}</p></div>
+      <div class="modal-field"><label class="modal-lbl">Description</label><p class="modal-desc">{{selectedComplaint.description}}</p></div>
+      <div class="modal-row">
+        <div class="modal-field"><label class="modal-lbl">Category</label><p>{{selectedComplaint.category}}</p></div>
+        <div class="modal-field"><label class="modal-lbl">Priority</label>
+          <span class="badge-pill"
+            [class.badge-bad]="selectedComplaint.priority==='HIGH'||selectedComplaint.priority==='URGENT'"
+            [class.badge-warn]="selectedComplaint.priority==='MEDIUM'"
+            [class.badge-neutral]="selectedComplaint.priority==='LOW'">{{selectedComplaint.priority}}</span>
+        </div>
+        <div class="modal-field"><label class="modal-lbl">Status</label>
+          <span class="badge-pill"
+            [class.badge-neutral]="selectedComplaint.status==='OPEN'"
+            [class.badge-warn]="selectedComplaint.status==='IN_PROGRESS'"
+            [class.badge-good]="selectedComplaint.status==='RESOLVED'"
+            [class.badge-bad]="selectedComplaint.status==='CLOSED'">{{selectedComplaint.status}}</span>
+        </div>
+      </div>
+      <div class="modal-field">
+        <label class="modal-lbl" [for]="'modal-response-' + selectedComplaint.id">Admin Response</label>
+        <textarea class="input modal-textarea"
+          [id]="'modal-response-' + selectedComplaint.id"
+          rows="3"
+          [(ngModel)]="complaintResponses[selectedComplaint.id]"
+          placeholder="Write your response…"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="admin-action" type="button" [disabled]="isSaving || selectedComplaint.status==='IN_PROGRESS'"
+        (click)="requestUpdateComplaint(selectedComplaint, 'IN_PROGRESS')">In Progress</button>
+      <button class="admin-action" type="button" [disabled]="isSaving || selectedComplaint.status==='RESOLVED'"
+        (click)="requestUpdateComplaint(selectedComplaint, 'RESOLVED')">Resolve</button>
+      <button class="admin-action" type="button" [disabled]="isSaving || selectedComplaint.status==='CLOSED'"
+        (click)="requestUpdateComplaint(selectedComplaint, 'CLOSED')">Close</button>
+      <button class="admin-danger" type="button" (click)="requestDeleteComplaint(selectedComplaint)">Delete</button>
+      <button class="btn-ghost" type="button" (click)="closeComplaintDetail()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     CONFIRMATION DIALOG
+══════════════════════════════════════════════════════ -->
+<div *ngIf="confirm.open" class="modal-backdrop" (click)="cancelConfirm()">
+  <div class="modal-panel modal-panel-sm" (click)="$event.stopPropagation()" role="alertdialog" aria-modal="true">
+    <div class="modal-header">
+      <h2 class="modal-title">{{confirm.title}}</h2>
+    </div>
+    <div class="modal-body"><p>{{confirm.body}}</p></div>
+    <div class="modal-footer">
+      <button class="btn-ghost" type="button" (click)="cancelConfirm()">Cancel</button>
+      <button type="button" [class.admin-danger]="confirm.danger" [class.admin-action]="!confirm.danger"
+        (click)="confirm.onConfirm()">{{confirm.confirmLabel}}</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TOASTS
+══════════════════════════════════════════════════════ -->
+<div class="toast-stack" aria-live="polite" aria-atomic="false">
+  <div *ngFor="let toast of toasts" class="toast"
+    [class.toast-success]="toast.type==='success'" [class.toast-error]="toast.type==='error'" role="alert">
+    <span class="toast-icon">{{toast.type==='success' ? '✓' : '✕'}}</span>
+    <span class="toast-msg">{{toast.message}}</span>
+    <button class="toast-close" type="button" (click)="dismissToast(toast.id)" aria-label="Dismiss">×</button>
+  </div>
+</div>

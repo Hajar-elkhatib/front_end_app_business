@@ -1364,3 +1364,1030 @@
           ╵                                [32m~~~~~~~~~~~~~[0m
 
 [39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "contactError" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:852:4:
+[37m      852 │     [32mcontactError[37m = '';
+          ╵     [32m~~~~~~~~~~~~[0m
+
+  The original member "contactError" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:845:4:
+[37m      845 │     [32mcontactError[37m = '';
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "isStartingConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:853:4:
+[37m      853 │     [32misStartingConversation[37m = false;
+          ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  The original member "isStartingConversation" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:844:4:
+[37m      844 │     [32misStartingConversation[37m = false;
+          ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "startConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1659:4:
+[37m      1659 │     [32mstartConversation[37m() {
+           ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+  The original member "startConversation" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1629:4:
+[37m      1629 │     [32mstartConversation[37m() {
+           ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2300: Duplicate identifier 'contactError'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:78:2:
+[37m      78 │   [32mcontactError[37m = '';
+         ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2300: Duplicate identifier 'isStartingConversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:79:2:
+[37m      79 │   [32misStartingConversation[37m = false;
+         ╵   [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:980:2:
+[37m      980 │   [32mstartConversation[37m() {
+          ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1014:2:
+[37m      1014 │   [32mstartConversation[37m() {
+           ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:3:0:
+[37m      3 │ [32m<<<<<<<[37m HEAD
+        ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:7:0:
+[37m      7 │ [32m=======[37m
+        ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:9:0:
+[37m      9 │ [32m>>>>>>>[37m c0518be54cf16c11801a99d5e503e8b26c120f94
+        ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:106:0:
+[37m      106 │ [32m<<<<<<<[37m HEAD
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'stompClient' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:107:13:
+[37m      107 │     if (this.[32mstompClient[37m?.connected) {
+          ╵              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'stompClient' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:108:11:
+[37m      108 │       this.[32mstompClient[37m.publish({
+          ╵            [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'stompClient' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:117:16:
+[37m      117 │       if (!this.[32mstompClient[37m?.connected) {
+          ╵                 [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:158:0:
+[37m      158 │ [32m=======[37m
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:168:0:
+[37m      168 │ [32m>>>>>>>[37m c0518be54cf16c11801a99d5e503e8b26c120f94
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:211:0:
+[37m      211 │ [32m<<<<<<<[37m HEAD
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'stompClient' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:241:33:
+[37m      241 │     if (!conversationId || !this.[32mstompClient[37m?.connected) return;
+          ╵                                  [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'activeSubscription' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:243:9:
+[37m      243 │     this.[32mactiveSubscription[37m?.unsubscribe();
+          ╵          [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'activeSubscription' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:244:9:
+[37m      244 │     this.[32mactiveSubscription[37m = this.stompClient.subscribe(
+          ╵          [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'stompClient' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:244:35:
+[37m      244 │     this.activeSubscription = this.[32mstompClient[37m.subscribe(
+          ╵                                    [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'activeConversationId' does not exist on type 'HumChat'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:326:65:
+[37m      326 │ ...versation = message.conversationId === this.[32mactiveConversationId[37m;
+          ╵                                                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:407:0:
+[37m      407 │ [32m=======[37m
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:416:0:
+[37m      416 │ [32m>>>>>>>[37m c0518be54cf16c11801a99d5e503e8b26c120f94
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:421:0:
+[37m      421 │ [32m<<<<<<<[37m HEAD
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:426:0:
+[37m      426 │ [32m=======[37m
+          ╵ [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS1185: Merge conflict marker encountered.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:427:0:
+[37m      427 │ [32m>>>>>>>[37m c0518be54cf16c11801a99d5e503e8b26c120f94
+          ╵ [32m~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "contactError" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:852:4:
+[37m      852 │     [32mcontactError[37m = '';
+          ╵     [32m~~~~~~~~~~~~[0m
+
+  The original member "contactError" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:845:4:
+[37m      845 │     [32mcontactError[37m = '';
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "isStartingConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:853:4:
+[37m      853 │     [32misStartingConversation[37m = false;
+          ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  The original member "isStartingConversation" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:844:4:
+[37m      844 │     [32misStartingConversation[37m = false;
+          ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "startConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1659:4:
+[37m      1659 │     [32mstartConversation[37m() {
+           ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+  The original member "startConversation" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1629:4:
+[37m      1629 │     [32mstartConversation[37m() {
+           ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:7:24:
+[37m      7 │ import { HumChat } from [32m'../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:255:74:
+[37m      255 │ ...iption = this.humChat.conversations$.subscribe([32mconversations[37m => {
+          ╵                                                   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'total' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:256:59:
+[37m      256 │ ...ount = conversations.reduce(([32mtotal[37m, conversation) => total + N...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:256:66:
+[37m      256 │ ...ersations.reduce((total, [32mconversation[37m) => total + Number(conve...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:290:12:
+[37m      290 │       next: [32mconversations[37m => {
+          ╵             [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'total' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:291:61:
+[37m      291 │ ...ount = conversations.reduce(([32mtotal[37m, conversation) => total + N...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:291:68:
+[37m      291 │ ...ersations.reduce((total, [32mconversation[37m) => total + Number(conve...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:16:24:
+[37m      16 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:350:4:
+[37m      350 │     [32mthis.humChat[37m.setCurrentUser(entrepreneurId, this.authService....
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:351:4:
+[37m      351 │     [32mthis.humChat[37m.startConversation(entrepreneurId, specialistId, ...
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:352:12:
+[37m      352 │       next: [32mconversation[37m => {
+          ╵             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:6:24:
+[37m      6 │ import { HumChat } from [32m'../../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'message' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:67:66:
+[37m      67 │ ...sageSubscription = this.humChat.onMessage().subscribe([32mmessage[37m => {
+         ╵                                                          [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'isConnected' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:76:71:
+[37m      76 │ ...bscription = this.humChat.isConnected().subscribe([32misConnected[37m => {
+         ╵                                                      [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:81:75:
+[37m      81 │ ...ription = this.humChat.conversations$.subscribe([32mconversations[37m => {
+         ╵                                                    [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:84:53:
+[37m      84 │ ...tion = conversations.find([32mconversation[37m => conversation.id === t...
+         ╵                              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'convos' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:90:12:
+[37m      90 │       next: [32mconvos[37m => {
+         ╵             [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'convo' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:96:52:
+[37m      96 │ ...edConversation = convos.find([32mconvo[37m => convo.id === requestedCon...
+         ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:103:20:
+[37m      103 │               next: [32mconversation[37m => {
+          ╵                     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'msgs' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:141:49:
+[37m      141 │     this.humChat.getMessages(convo.id).subscribe([32mmsgs[37m => {
+          ╵                                                  [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:11:24:
+[37m      11 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:140:4:
+[37m      140 │     [32mthis.humChat[37m.setCurrentUser(this.specialistId || this.userId,...
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:142:31:
+[37m      142 │ ...is.messageSubscription = [32mthis.humChat[37m.onMessage().subscribe(me...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'message' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:142:66:
+[37m      142 │ ...ageSubscription = this.humChat.onMessage().subscribe([32mmessage[37m => {
+          ╵                                                         [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:151:34:
+[37m      151 │ ...connectionSubscription = [32mthis.humChat[37m.isConnected().subscribe(...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'isConnected' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:151:71:
+[37m      151 │ ...scription = this.humChat.isConnected().subscribe([32misConnected[37m => {
+          ╵                                                     [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:156:37:
+[37m      156 │ ...versationsSubscription = [32mthis.humChat[37m.conversations$.subscribe...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:156:75:
+[37m      156 │ ...iption = this.humChat.conversations$.subscribe([32mconversations[37m => {
+          ╵                                                   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:159:53:
+[37m      159 │ ...ion = conversations.find([32mconversation[37m => conversation.id === t...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:177:4:
+[37m      177 │     [32mthis.humChat[37m.disconnect();
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:284:4:
+[37m      284 │     [32mthis.humChat[37m.connect(conversation.id);
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:285:4:
+[37m      285 │     [32mthis.humChat[37m.getMessages(conversation.id).subscribe({
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'messages' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:286:12:
+[37m      286 │       next: [32mmessages[37m => {
+          ╵             [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:318:4:
+[37m      318 │     [32mthis.humChat[37m.sendMessageWS(request);
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:431:23:
+[37m      431 │         conversations: [32mthis.humChat[37m.getConversationsBySpecialist(...
+          ╵                        [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:478:8:
+[37m      478 │         [32mthis.humChat[37m.setCurrentUser(this.specialistId || this.use...
+          ╵         [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:569:4:
+[37m      569 │     [32mthis.humChat[37m.markConversationAsRead(conversationId).subscribe();
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:16:24:
+[37m      16 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2300: Duplicate identifier 'contactError'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:78:2:
+[37m      78 │   [32mcontactError[37m = '';
+         ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2300: Duplicate identifier 'isStartingConversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:79:2:
+[37m      79 │   [32misStartingConversation[37m = false;
+         ╵   [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:980:2:
+[37m      980 │   [32mstartConversation[37m() {
+          ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:993:12:
+[37m      993 │       next: [32mconversation[37m => {
+          ╵             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1014:2:
+[37m      1014 │   [32mstartConversation[37m() {
+           ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:12:24:
+[37m      12 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:189:4:
+[37m      189 │     [32mthis.humChat[37m.setCurrentUser(entrepreneurId, this.authService....
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:190:4:
+[37m      190 │     [32mthis.humChat[37m.startConversation(entrepreneurId, specialistId, ...
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:191:12:
+[37m      191 │       next: [32mconversation[37m => {
+          ╵             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../services/hum-chat"[0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:8:20:
+[37m      8 │ import * as i3 from [32m"../services/hum-chat"[37m;
+        ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:9:24:
+[37m      9 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:5:20:
+[37m      5 │ import * as i1 from [32m"../../services/hum-chat"[37m;
+        ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:11:24:
+[37m      11 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:16:20:
+[37m      16 │ import * as i9 from [32m"../../../services/hum-chat"[37m;
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:8:24:
+[37m      8 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[33m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "contactError" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:852:4:
+[37m      852 │     [32mcontactError[37m = '';
+          ╵     [32m~~~~~~~~~~~~[0m
+
+  The original member "contactError" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:845:4:
+[37m      845 │     [32mcontactError[37m = '';
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "isStartingConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:853:4:
+[37m      853 │     [32misStartingConversation[37m = false;
+          ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  The original member "isStartingConversation" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:844:4:
+[37m      844 │     [32misStartingConversation[37m = false;
+          ╵     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mDuplicate member "startConversation" in class body[0m [duplicate-class-member]
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1659:4:
+[37m      1659 │     [32mstartConversation[37m() {
+           ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+  The original member "startConversation" is here:
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1629:4:
+[37m      1629 │     [32mstartConversation[37m() {
+           ╵     [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:7:24:
+[37m      7 │ import { HumChat } from [32m'../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:255:74:
+[37m      255 │ ...iption = this.humChat.conversations$.subscribe([32mconversations[37m => {
+          ╵                                                   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'total' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:256:59:
+[37m      256 │ ...ount = conversations.reduce(([32mtotal[37m, conversation) => total + N...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:256:66:
+[37m      256 │ ...ersations.reduce((total, [32mconversation[37m) => total + Number(conve...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:290:12:
+[37m      290 │       next: [32mconversations[37m => {
+          ╵             [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'total' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:291:61:
+[37m      291 │ ...ount = conversations.reduce(([32mtotal[37m, conversation) => total + N...
+          ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:291:68:
+[37m      291 │ ...ersations.reduce((total, [32mconversation[37m) => total + Number(conve...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:16:24:
+[37m      16 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:350:4:
+[37m      350 │     [32mthis.humChat[37m.setCurrentUser(entrepreneurId, this.authService....
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:351:4:
+[37m      351 │     [32mthis.humChat[37m.startConversation(entrepreneurId, specialistId, ...
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:352:12:
+[37m      352 │       next: [32mconversation[37m => {
+          ╵             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:6:24:
+[37m      6 │ import { HumChat } from [32m'../../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'message' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:67:66:
+[37m      67 │ ...sageSubscription = this.humChat.onMessage().subscribe([32mmessage[37m => {
+         ╵                                                          [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'isConnected' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:76:71:
+[37m      76 │ ...bscription = this.humChat.isConnected().subscribe([32misConnected[37m => {
+         ╵                                                      [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:81:75:
+[37m      81 │ ...ription = this.humChat.conversations$.subscribe([32mconversations[37m => {
+         ╵                                                    [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:84:53:
+[37m      84 │ ...tion = conversations.find([32mconversation[37m => conversation.id === t...
+         ╵                              [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'convos' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:90:12:
+[37m      90 │       next: [32mconvos[37m => {
+         ╵             [32m~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'convo' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:96:52:
+[37m      96 │ ...edConversation = convos.find([32mconvo[37m => convo.id === requestedCon...
+         ╵                                 [32m~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:103:20:
+[37m      103 │               next: [32mconversation[37m => {
+          ╵                     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'msgs' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:141:49:
+[37m      141 │     this.humChat.getMessages(convo.id).subscribe([32mmsgs[37m => {
+          ╵                                                  [32m~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:11:24:
+[37m      11 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:140:4:
+[37m      140 │     [32mthis.humChat[37m.setCurrentUser(this.specialistId || this.userId,...
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:142:31:
+[37m      142 │ ...is.messageSubscription = [32mthis.humChat[37m.onMessage().subscribe(me...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'message' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:142:66:
+[37m      142 │ ...ageSubscription = this.humChat.onMessage().subscribe([32mmessage[37m => {
+          ╵                                                         [32m~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:151:34:
+[37m      151 │ ...connectionSubscription = [32mthis.humChat[37m.isConnected().subscribe(...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'isConnected' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:151:71:
+[37m      151 │ ...scription = this.humChat.isConnected().subscribe([32misConnected[37m => {
+          ╵                                                     [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:156:37:
+[37m      156 │ ...versationsSubscription = [32mthis.humChat[37m.conversations$.subscribe...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversations' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:156:75:
+[37m      156 │ ...iption = this.humChat.conversations$.subscribe([32mconversations[37m => {
+          ╵                                                   [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:159:53:
+[37m      159 │ ...ion = conversations.find([32mconversation[37m => conversation.id === t...
+          ╵                             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:177:4:
+[37m      177 │     [32mthis.humChat[37m.disconnect();
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:284:4:
+[37m      284 │     [32mthis.humChat[37m.connect(conversation.id);
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:285:4:
+[37m      285 │     [32mthis.humChat[37m.getMessages(conversation.id).subscribe({
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'messages' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:286:12:
+[37m      286 │       next: [32mmessages[37m => {
+          ╵             [32m~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:318:4:
+[37m      318 │     [32mthis.humChat[37m.sendMessageWS(request);
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:431:23:
+[37m      431 │         conversations: [32mthis.humChat[37m.getConversationsBySpecialist(...
+          ╵                        [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:478:8:
+[37m      478 │         [32mthis.humChat[37m.setCurrentUser(this.specialistId || this.use...
+          ╵         [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:569:4:
+[37m      569 │     [32mthis.humChat[37m.markConversationAsRead(conversationId).subscribe();
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:16:24:
+[37m      16 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2300: Duplicate identifier 'contactError'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:78:2:
+[37m      78 │   [32mcontactError[37m = '';
+         ╵   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2300: Duplicate identifier 'isStartingConversation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:79:2:
+[37m      79 │   [32misStartingConversation[37m = false;
+         ╵   [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:980:2:
+[37m      980 │   [32mstartConversation[37m() {
+          ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:993:12:
+[37m      993 │       next: [32mconversation[37m => {
+          ╵             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2393: Duplicate function implementation.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:1014:2:
+[37m      1014 │   [32mstartConversation[37m() {
+           ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2307: Cannot find module '../../../services/hum-chat' or its corresponding type declarations.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:12:24:
+[37m      12 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:189:4:
+[37m      189 │     [32mthis.humChat[37m.setCurrentUser(entrepreneurId, this.authService....
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2571: Object is of type 'unknown'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:190:4:
+[37m      190 │     [32mthis.humChat[37m.startConversation(entrepreneurId, specialistId, ...
+          ╵     [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS7006: Parameter 'conversation' implicitly has an 'any' type.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:191:12:
+[37m      191 │       next: [32mconversation[37m => {
+          ╵             [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../services/hum-chat"[0m
+
+    projects/chatbox/src/app/layout/main-layout.ts:8:20:
+[37m      8 │ import * as i3 from [32m"../services/hum-chat"[37m;
+        ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/analysis/business-idea-analysis/business-idea-analysis.ts:9:24:
+[37m      9 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/chat/chat.ts:5:20:
+[37m      5 │ import * as i1 from [32m"../../services/hum-chat"[37m;
+        ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:11:24:
+[37m      11 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+         ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:16:20:
+[37m      16 │ import * as i9 from [32m"../../../services/hum-chat"[37m;
+         ╵                     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mCould not resolve "../../../services/hum-chat"[0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:8:24:
+[37m      8 │ import { HumChat } from [32m'../../../services/hum-chat'[37m;
+        ╵                         [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m

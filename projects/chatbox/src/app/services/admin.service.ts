@@ -80,6 +80,8 @@ export interface AdminSpecialist {
   createdAt?: string;
 }
 
+export type ComplaintStatus = 'OPEN' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
+
 export interface AdminComplaint {
   id: string;
   userId?: string;
@@ -88,7 +90,7 @@ export interface AdminComplaint {
   description: string;
   category: string;
   priority: string;
-  status: string;
+  status: ComplaintStatus | string;
   adminResponse?: string;
   createdAt?: string;
   updatedAt?: string;
@@ -116,6 +118,11 @@ export interface DashboardSummary {
   totalSpecialists: number;
   totalAssignments?: number;
   totalReviews?: number;
+  totalEvaluations?: number;
+  totalComplaints?: number;
+  bannedUsers?: number;
+  pendingSpecialists?: number;
+  verifiedSpecialists?: number;
   totalProjects: number;
   draftProjects: number;
   analyzedProjects: number;
@@ -233,7 +240,7 @@ export class AdminService {
     return this.http.post<AdminSupportRequest>(`${this.baseUrl}/support-requests/${requestId}/assign-specialist`, { specialistId, adminNote });
   }
 
-  getComplaints(filters: { status?: string } = {}): Observable<AdminComplaint[]> {
+  getComplaints(filters: { status?: ComplaintStatus | string } = {}): Observable<AdminComplaint[]> {
     const status = filters.status?.trim();
     if (status) {
       return this.http.get<AdminComplaint[]>(`${this.baseUrl}/complaints/status/${encodeURIComponent(status)}`);
@@ -241,7 +248,7 @@ export class AdminService {
     return this.http.get<AdminComplaint[]>(`${this.baseUrl}/complaints`);
   }
 
-  updateComplaint(complaintId: string, data: { status?: string; adminResponse?: string }): Observable<AdminComplaint> {
+  updateComplaint(complaintId: string, data: { status?: ComplaintStatus | string; adminResponse?: string }): Observable<AdminComplaint> {
     return this.http.put<AdminComplaint>(`${this.baseUrl}/complaints/${encodeURIComponent(complaintId)}`, data);
   }
 
