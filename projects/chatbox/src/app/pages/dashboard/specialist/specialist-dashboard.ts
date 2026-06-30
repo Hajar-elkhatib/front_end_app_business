@@ -10,10 +10,11 @@ import { AvailabilityService } from '../../../services/availability.service';
 import { EvaluationService } from '../../../services/evaluation.service';
 import { HumChat } from '../../../services/hum-chat';
 import { ProjectService } from '../../../services/project.service';
+import { Review, ReviewService } from '../../../services/review.service';
 import { SpecialistService } from '../../../services/specialist.service';
 import { ProjectAssignmentResponse } from '../../../models/assignment.model';
 import { Conversation, ConversationMessage, SendMessageRequest } from '../../../models/chat.model';
-import { Evaluation, EvaluationReviewView } from '../../../models/evaluation.model';
+import { Evaluation } from '../../../models/evaluation.model';
 import { Project } from '../../../models/project.model';
 import { Availability, Specialist } from '../../../models/specialist.model';
 
@@ -23,6 +24,23 @@ interface EnrichedAssignment extends ProjectAssignmentResponse {
   projectTitle: string;
   entrepreneurName: string;
   slotLabel: string;
+}
+
+interface SpecialistFeedbackView {
+  id: string;
+  reviewerName: string;
+  comment: string;
+  rating: number;
+  createdAt?: Date | string;
+}
+
+interface AvailabilityCalendarDay {
+  dateKey: string;
+  dayNumber: number;
+  inCurrentMonth: boolean;
+  isToday: boolean;
+  isPast: boolean;
+  slots: Availability[];
 }
 
 @Component({
@@ -41,6 +59,7 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
   private specialistService = inject(SpecialistService);
   private humChat = inject(HumChat);
   private projectService = inject(ProjectService);
+  private reviewService = inject(ReviewService);
   private authService = inject(AuthService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -56,8 +75,9 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
   activeAssignments: EnrichedAssignment[] = [];
   completedAssignments: EnrichedAssignment[] = [];
   evaluations: Evaluation[] = [];
-  reviews: EvaluationReviewView[] = [];
+  reviews: SpecialistFeedbackView[] = [];
   availabilitySlots: Availability[] = [];
+  availabilityCalendar: AvailabilityCalendarDay[] = [];
   conversations: Conversation[] = [];
   messages: ConversationMessage[] = [];
   activeConversation: Conversation | null = null;
@@ -70,6 +90,10 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
   isSavingSlot = false;
   isSending = false;
   connectionReady = false;
+  availabilityMonthLabel = '';
+  selectedAvailabilityDateKey = '';
+  readonly weekdayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  private availabilityMonthCursor = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
 
   slotForm = this.fb.group({
     availableDate: ['', Validators.required],
@@ -80,12 +104,30 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
 
   private messageSubscription?: Subscription;
   private connectionSubscription?: Subscription;
+  private conversationsSubscription?: Subscription;
   private shouldScrollMessages = false;
 
   ngOnInit(): void {
     this.route.data.subscribe(data => {
       const tab = data['tab'] as DashboardTab | undefined;
       if (tab) this.activeTab = tab;
+    });
+
+    this.route.queryParamMap.subscribe(params => {
+      const section = params.get('section') as DashboardTab | null;
+      if (section && ['overview', 'assignments', 'availability', 'messaging', 'completed'].includes(section)) {
+        this.activeTab = section;
+      }
+    });
+
+    this.slotForm.controls.availableDate.valueChanges.subscribe(value => {
+      this.selectedAvailabilityDateKey = String(value || '');
+      if (this.selectedAvailabilityDateKey) {
+        const selectedDate = this.toDate(this.selectedAvailabilityDateKey);
+        this.availabilityMonthCursor = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+      }
+      this.buildAvailabilityCalendar();
+      this.cdr.markForCheck();
     });
 
     this.resolveIdentity();
@@ -111,6 +153,14 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
       this.cdr.markForCheck();
     });
 
+    this.conversationsSubscription = this.humChat.conversations$.subscribe(conversations => {
+      this.conversations = conversations;
+      if (this.activeConversation) {
+        this.activeConversation = conversations.find(conversation => conversation.id === this.activeConversation?.id) || this.activeConversation;
+      }
+      this.cdr.markForCheck();
+    });
+
     this.loadDashboard();
   }
 
@@ -123,6 +173,7 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
   ngOnDestroy(): void {
     this.messageSubscription?.unsubscribe();
     this.connectionSubscription?.unsubscribe();
+    this.conversationsSubscription?.unsubscribe();
     this.humChat.disconnect();
   }
 
@@ -182,10 +233,16 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
     }
 
     const value = this.slotForm.getRawValue();
+    const availableDate = String(value.availableDate || '');
+    if (!availableDate || this.isPastDateKey(availableDate)) {
+      this.errorMessage = 'Availability slots can only be opened for today or future dates.';
+      return;
+    }
+
     this.isSavingSlot = true;
     this.availabilityService.addSlot({
       specialistId: this.specialistId,
-      availableDate: String(value.availableDate || ''),
+      availableDate,
       startTime: String(value.startTime || ''),
       endTime: String(value.endTime || ''),
       maxSessions: Number(value.maxSessions || 1)
@@ -211,7 +268,7 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
   }
 
   deleteSlot(slot: Availability): void {
-    if (slot.status !== 'OPEN') return;
+    if (!['OPEN', 'CANCELLED'].includes(String(slot.status || '').toUpperCase())) return;
     this.availabilityService.deleteSlot(slot.id).subscribe({
       next: () => {
         this.successMessage = 'Slot deleted.';
@@ -223,6 +280,7 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
 
   selectConversation(conversation: Conversation): void {
     this.activeConversation = conversation;
+    this.markConversationAsRead(conversation.id);
     this.humChat.connect(conversation.id);
     this.humChat.getMessages(conversation.id).subscribe({
       next: messages => {
@@ -281,6 +339,42 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
     return this.evaluationService.computeAverageScore(this.evaluations);
   }
 
+  get showOverviewChrome(): boolean {
+    return this.activeTab === 'overview';
+  }
+
+  get currentSectionTitle(): string {
+    switch (this.activeTab) {
+      case 'assignments': return 'Assignments';
+      case 'availability': return 'Availability Calendar';
+      case 'messaging': return 'Conversations';
+      case 'completed': return 'Evaluations & Reviews';
+      default: return 'Specialist Dashboard';
+    }
+  }
+
+  get currentSectionDescription(): string {
+    switch (this.activeTab) {
+      case 'assignments': return 'Review incoming project requests and close active work when it is finished.';
+      case 'availability': return 'Open new days from the calendar and manage your published time slots.';
+      case 'messaging': return 'Stay connected with entrepreneurs and keep project conversations moving.';
+      case 'completed': return 'See the feedback, scores, and completed work history attached to your profile.';
+      default: return 'Manage requests, active consulting work, availability, and conversations.';
+    }
+  }
+
+  get selectedAvailabilityDateLabel(): string {
+    if (!this.selectedAvailabilityDateKey) {
+      return 'Choose a day in the calendar, then set the time window and save the slot.';
+    }
+
+    return `Selected day: ${this.formatDate(this.selectedAvailabilityDateKey)}`;
+  }
+
+  get minAvailabilityDate(): string {
+    return this.dayKey(new Date());
+  }
+
   isStarFilled(star: number): boolean {
     return Number(this.specialist?.averageRating || 0) >= star;
   }
@@ -303,6 +397,25 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
     return new Date(value).toLocaleString();
   }
 
+  changeAvailabilityMonth(offset: number): void {
+    const nextMonth = new Date(this.availabilityMonthCursor);
+    nextMonth.setMonth(nextMonth.getMonth() + offset);
+    this.availabilityMonthCursor = new Date(nextMonth.getFullYear(), nextMonth.getMonth(), 1);
+    this.buildAvailabilityCalendar();
+    this.cdr.markForCheck();
+  }
+
+  selectAvailabilityDay(day: AvailabilityCalendarDay): void {
+    if (day.isPast) {
+      return;
+    }
+
+    this.slotForm.patchValue({ availableDate: day.dateKey });
+    this.selectedAvailabilityDateKey = day.dateKey;
+    this.buildAvailabilityCalendar();
+    this.cdr.markForCheck();
+  }
+
   private loadDashboard(showLoading = true): void {
     if (showLoading) this.isLoading = true;
     this.errorMessage = '';
@@ -313,14 +426,16 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
         active: this.assignmentService.getActiveAssignments(this.specialistId).pipe(catchError(() => of([]))),
         allAssignments: this.assignmentService.getSpecialistAssignments(this.specialistId).pipe(catchError(() => of([]))),
         evaluations: this.evaluationService.getSpecialistEvaluations(this.specialistId).pipe(catchError(() => of([]))),
+        writtenReviews: this.reviewService.getSpecialistReviews(this.specialistId).pipe(catchError(() => of([]))),
         slots: this.availabilityService.getBySpecialist(this.specialistId).pipe(catchError(() => of([]))),
         conversations: this.humChat.getConversationsBySpecialist(this.specialistId).pipe(catchError(() => of([])))
       })),
       switchMap(result => {
         this.availabilitySlots = result.slots;
+        this.buildAvailabilityCalendar();
         this.conversations = result.conversations;
         this.evaluations = result.evaluations;
-        this.reviews = this.evaluationService.toReviewViews(result.evaluations).sort((a, b) => {
+        this.reviews = this.buildFeedbackViews(result.writtenReviews, result.evaluations).sort((a, b) => {
           const left = new Date(a.createdAt || 0).getTime();
           const right = new Date(b.createdAt || 0).getTime();
           return right - left;
@@ -371,6 +486,7 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
     this.availabilityService.getBySpecialist(this.specialistId).subscribe({
       next: slots => {
         this.availabilitySlots = slots;
+        this.buildAvailabilityCalendar();
         this.cdr.markForCheck();
       },
       error: () => this.errorMessage = 'Availability could not be refreshed.'
@@ -449,13 +565,116 @@ export class SpecialistDashboard implements OnInit, OnDestroy, AfterViewChecked 
     });
   }
 
+  private markConversationAsRead(conversationId: string): void {
+    this.humChat.markConversationAsRead(conversationId).subscribe();
+  }
+
+  private buildAvailabilityCalendar(): void {
+    const today = new Date();
+    const todayKey = this.dayKey(today);
+    const slotMap = new Map<string, Availability[]>();
+
+    this.availabilitySlots.forEach(slot => {
+      const key = this.dayKey(this.toDate(slot.availableDate));
+      slotMap.set(key, [...(slotMap.get(key) || []), slot]);
+    });
+
+    const selectedDate = this.selectedAvailabilityDateKey ? this.toDate(this.selectedAvailabilityDateKey) : null;
+    if (selectedDate) {
+      this.availabilityMonthCursor = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+    }
+
+    const monthStart = new Date(this.availabilityMonthCursor.getFullYear(), this.availabilityMonthCursor.getMonth(), 1);
+    const monthEnd = new Date(this.availabilityMonthCursor.getFullYear(), this.availabilityMonthCursor.getMonth() + 1, 0);
+    const startOffset = (monthStart.getDay() + 6) % 7;
+    const calendarStart = new Date(monthStart);
+    calendarStart.setDate(monthStart.getDate() - startOffset);
+
+    const endOffset = 6 - ((monthEnd.getDay() + 6) % 7);
+    const calendarEnd = new Date(monthEnd);
+    calendarEnd.setDate(monthEnd.getDate() + endOffset);
+
+    const cells: AvailabilityCalendarDay[] = [];
+    const cursor = new Date(calendarStart);
+
+    while (cursor <= calendarEnd) {
+      const dateKey = this.dayKey(cursor);
+      const currentDate = new Date(cursor);
+      const isPast = currentDate < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      cells.push({
+        dateKey,
+        dayNumber: currentDate.getDate(),
+        inCurrentMonth: currentDate.getMonth() === monthStart.getMonth(),
+        isToday: dateKey === todayKey,
+        isPast,
+        slots: slotMap.get(dateKey) || []
+      });
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    this.availabilityCalendar = cells;
+    this.availabilityMonthLabel = monthStart.toLocaleDateString(undefined, {
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
   private scrollMessagesToBottom(): void {
     const element = this.messageScroll?.nativeElement;
     if (!element) return;
     element.scrollTop = element.scrollHeight;
   }
 
+  private dayKey(value: Date): string {
+    const year = value.getFullYear();
+    const month = String(value.getMonth() + 1).padStart(2, '0');
+    const day = String(value.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  private isPastDateKey(value: string): boolean {
+    return value < this.dayKey(new Date());
+  }
+
+  private toDate(value: Date | string): Date {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime()) ? new Date() : date;
+  }
+
   private shortId(id?: string): string {
     return id ? id.slice(0, 8) : '';
+  }
+
+  private buildFeedbackViews(writtenReviews: Review[], evaluations: Evaluation[]): SpecialistFeedbackView[] {
+    const byEntrepreneur = new Map<string, SpecialistFeedbackView>();
+
+    writtenReviews.forEach(review => {
+      byEntrepreneur.set(review.entrepreneurId, {
+        id: review.id,
+        reviewerName: review.reviewerName || `Entrepreneur ${this.shortId(review.entrepreneurId)}`,
+        comment: review.comment || '',
+        rating: 0,
+        createdAt: review.createdAt
+      });
+    });
+
+    evaluations.forEach(evaluation => {
+      const existing = byEntrepreneur.get(evaluation.entrepreneurId);
+      const base: SpecialistFeedbackView = existing || {
+        id: evaluation.id,
+        reviewerName: evaluation.entrepreneurName || `Entrepreneur ${this.shortId(evaluation.entrepreneurId)}`,
+        comment: '',
+        rating: 0,
+        createdAt: evaluation.createdAt
+      };
+
+      byEntrepreneur.set(evaluation.entrepreneurId, {
+        ...base,
+        rating: Number(evaluation.score || 0),
+        createdAt: base.createdAt || evaluation.createdAt
+      });
+    });
+
+    return [...byEntrepreneur.values()];
   }
 }

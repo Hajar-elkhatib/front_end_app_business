@@ -1,79 +1,96 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AiSpecialistRecommendation } from '../../../models/analysis.model';
+import { ProjectAssignmentResponse } from '../../../models/assignment.model';
 import { Project } from '../../../models/project.model';
+import { Specialist } from '../../../models/specialist.model';
 import { AnalysisService } from '../../../services/analysis.service';
-import { ProjectService } from '../../../services/project.service';
+import { AssignmentService } from '../../../services/assignment.service';
 import { AuthService } from '../../../services/auth.service';
 import { HumChat } from '../../../services/hum-chat';
+import { ProjectService } from '../../../services/project.service';
+import { SpecialistService } from '../../../services/specialist.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-specialist-recommendation',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
-  template: `
-    <section class="mini-page">
-      <header>
-        <p class="kicker">Specialists</p>
-        <h1>Specialist Recommendations</h1>
-        <p>Find the most relevant profiles to support your validation, market work, or strategy.</p>
-      </header>
-      <div class="toolbar">
-        <select class="input" [(ngModel)]="projectId">
-          <option value="">Select a project</option>
-          <option *ngFor="let project of projects" [value]="project.id">{{project.title}}</option>
-        </select>
-        <button class="btn btn-indigo" (click)="run()" [disabled]="!projectId || isLoading">{{isLoading ? 'Searching...' : 'View Recommendations'}}</button>
-      </div>
-      <div class="state" *ngIf="!projectId">Select a project to run the analysis.</div>
-      <div class="state" *ngIf="error">{{error}}</div>
-      <div class="state" *ngIf="projectId && !isLoading && !error && results.length === 0">No recommendation is available for this project yet.</div>
-      <div class="list" *ngIf="results.length > 0">
-        <article *ngFor="let item of results">
-          <div>
-            <strong>{{item.specialistName || ('Recommended specialist #' + item.rank)}}</strong>
-            <span>{{item.expertiseDomain || 'Entrepreneurial support'}}</span>
-          </div>
-          <p>{{item.reason || 'This profile matches the project priorities.'}}</p>
-          <small>Skills: {{formatSkills(item.skills)}}</small>
-          <small>Availability: {{item.availability || 'To confirm'}}</small>
-          <strong class="match">{{item.recommendedScore | number:'1.0-1'}}% match</strong>
-          <div class="actions">
-            <a class="btn btn-secondary" [routerLink]="['/specialists', item.specialistId]">View Profile</a>
-            <button class="btn btn-indigo" type="button" (click)="startConversation(item)" [disabled]="startingSpecialistId === item.specialistId">
-              {{startingSpecialistId === item.specialistId ? 'Opening...' : 'Contact'}}
-            </button>
-          </div>
-        </article>
-      </div>
-    </section>
-  `,
-  styles: [`
-    .mini-page{display:grid;gap:1rem}.kicker{color:var(--indigo-600);font-weight:800;text-transform:uppercase;font-size:.72rem}.toolbar{display:flex;gap:.75rem}.toolbar .input{max-width:360px}.state,article{border:1px solid var(--border-color);background:var(--bg-primary);border-radius:var(--r-md);padding:1rem}.list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:.75rem}article{display:grid;gap:.7rem}article span,article small{display:block;color:var(--text-muted)}.match{color:var(--indigo-600)}.actions{display:flex;gap:.5rem;flex-wrap:wrap}@media(max-width:760px){.toolbar{display:grid}}
-  `]
+  templateUrl: './specialist-recommendation.html',
+  styleUrls: ['./specialist-recommendation.css']
 })
 export class SpecialistRecommendation implements OnInit {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private analysisService = inject(AnalysisService);
   private projectService = inject(ProjectService);
+  private specialistService = inject(SpecialistService);
+  private assignmentService = inject(AssignmentService);
   private authService = inject(AuthService);
   private humChat = inject(HumChat);
-  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+
   projectId = this.route.snapshot.paramMap.get('id') || this.route.snapshot.queryParamMap.get('projectId') || '';
   projects: Project[] = [];
   results: AiSpecialistRecommendation[] = [];
+  specialists: Specialist[] = [];
+  assignments: ProjectAssignmentResponse[] = [];
+  doneAssignments: ProjectAssignmentResponse[] = [];
   isLoading = false;
+  isLoadingAssignments = false;
+  isLoadingDoneAssignments = false;
+  isAssigning = false;
+  contactingSpecialistId = '';
   error = '';
-  startingSpecialistId = '';
+  showAssignModal = false;
+  showToast = false;
+  toastMessage = '';
+  assignmentMessage = '';
+  selectedRecommendation: { specialistId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; reason: string; skills?: string[] | string; recommendedScore: number; isAssigned: boolean; assignmentLabel: string } | null = null;
 
   ngOnInit() {
-    this.projectService.getProjects().subscribe({
-      next: projects => { this.projects = projects || []; this.cdr.markForCheck(); },
-      error: () => { this.projects = []; this.cdr.markForCheck(); }
+    this.projectService.refreshProjects().subscribe({
+      next: projects => {
+        this.projects = projects || [];
+        this.cdr.markForCheck();
+        if (this.projectId) {
+          this.run();
+          this.loadAssignments();
+          this.loadDoneAssignments();
+        }
+      },
+      error: () => {
+        this.projects = [];
+        this.cdr.markForCheck();
+      }
     });
+
+    this.specialistService.getSpecialists().subscribe({
+      next: specialists => {
+        this.specialists = specialists || [];
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.specialists = [];
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  onProjectChange(value: string) {
+    this.projectId = value;
+    if (this.projectId) {
+      this.run();
+      this.loadAssignments();
+      this.loadDoneAssignments();
+    } else {
+      this.results = [];
+      this.error = '';
+      this.assignments = [];
+      this.doneAssignments = [];
+    }
   }
 
   run() {
@@ -81,9 +98,241 @@ export class SpecialistRecommendation implements OnInit {
     this.error = '';
     this.isLoading = true;
     this.analysisService.recommendSpecialists(this.projectId).subscribe({
-      next: result => { this.results = result || []; this.isLoading = false; this.cdr.markForCheck(); },
-      error: () => { this.error = 'Recommendations could not be loaded. Please try again.'; this.isLoading = false; this.cdr.markForCheck(); }
+      next: result => {
+        this.results = result || [];
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.error = 'Recommendations could not be loaded. Please try again.';
+        this.isLoading = false;
+        this.cdr.markForCheck();
+      }
     });
+  }
+
+  openAssignModal(item: { specialistId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; reason: string; skills?: string[] | string; recommendedScore: number; isAssigned: boolean; assignmentLabel: string }) {
+    if (!this.canAssignSelectedProject) {
+      this.error = this.projectAssignmentHint;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    if (item.isAssigned) {
+      this.error = item.assignmentLabel || 'This specialist already has an assignment linked to this project.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.selectedRecommendation = item;
+    this.assignmentMessage = '';
+    this.showAssignModal = true;
+  }
+
+  closeAssignModal() {
+    this.showAssignModal = false;
+    this.selectedRecommendation = null;
+    this.assignmentMessage = '';
+  }
+
+  confirmAssign() {
+    if (!this.selectedRecommendation || !this.projectId) {
+      return;
+    }
+
+    if (!this.canAssignSelectedProject) {
+      this.error = this.projectAssignmentHint;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const entrepreneurId = this.authService.currentUser?.id;
+    if (!entrepreneurId) {
+      this.error = 'You need to be signed in to assign a specialist.';
+      return;
+    }
+
+    this.isAssigning = true;
+    this.assignmentService.assignProject({
+      projectId: this.projectId,
+      entrepreneurId,
+      specialistId: this.selectedRecommendation.specialistId,
+      message: this.assignmentMessage.trim() || undefined
+    }).subscribe({
+      next: () => {
+        this.isAssigning = false;
+        this.closeAssignModal();
+        this.showToastMessage('Assignment request sent successfully.');
+        this.projectService.refreshProjects().subscribe();
+        this.loadAssignments();
+        this.loadDoneAssignments();
+        this.cdr.markForCheck();
+      },
+      error: error => {
+        this.isAssigning = false;
+        this.error = this.getAssignmentErrorMessage(error);
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  contactSpecialist(specialistId: string) {
+    const entrepreneurId = this.authService.currentUser?.id;
+    if (!entrepreneurId) {
+      this.error = 'You need to be signed in to start a conversation.';
+      this.cdr.markForCheck();
+      return;
+    }
+
+    this.error = '';
+    this.contactingSpecialistId = specialistId;
+    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
+    this.humChat.startConversation(entrepreneurId, specialistId, this.projectId || undefined).subscribe({
+      next: conversation => {
+        this.contactingSpecialistId = '';
+        this.router.navigate(['/dashboard/entrepreneur/conversations', conversation.id]);
+      },
+      error: () => {
+        this.contactingSpecialistId = '';
+        this.error = 'The conversation could not be opened. Please try again.';
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  loadAssignments() {
+    const entrepreneurId = this.authService.currentUser?.id;
+    if (!entrepreneurId || !this.projectId) {
+      this.assignments = [];
+      return;
+    }
+
+    this.isLoadingAssignments = true;
+    this.assignmentService.getEntrepreneurAssignments(entrepreneurId).subscribe({
+      next: assignments => {
+        this.assignments = assignments.filter(assignment => assignment.projectId === this.projectId || assignment.project?.id === this.projectId);
+        this.isLoadingAssignments = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.assignments = [];
+        this.isLoadingAssignments = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  loadDoneAssignments() {
+    const entrepreneurId = this.authService.currentUser?.id;
+    if (!entrepreneurId || !this.projectId) {
+      this.doneAssignments = [];
+      return;
+    }
+
+    this.isLoadingDoneAssignments = true;
+    this.assignmentService.getDoneAssignments(entrepreneurId).subscribe({
+      next: assignments => {
+        this.doneAssignments = assignments.filter(assignment => assignment.projectId === this.projectId || assignment.project?.id === this.projectId);
+        this.isLoadingDoneAssignments = false;
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.doneAssignments = [];
+        this.isLoadingDoneAssignments = false;
+        this.cdr.markForCheck();
+      }
+    });
+  }
+
+  get recommendationCards() {
+    return this.results.map(item => {
+      const specialist = this.specialists.find(candidate =>
+        candidate.id === item.specialistId ||
+        candidate.specialistId === item.specialistId ||
+        candidate.fullName === item.specialistName
+      );
+
+      const existingAssignment = this.assignments.find(assignment =>
+        assignment.projectId === this.projectId &&
+        assignment.specialistId === item.specialistId &&
+        (assignment.status || '').toUpperCase() !== 'CANCELLED'
+      );
+
+      return {
+        specialistId: item.specialistId,
+        profileRouteId: specialist?.id || specialist?.userId || item.specialistId,
+        fullName: specialist?.fullName || item.specialistName || ('Recommended specialist #' + item.rank),
+        profession: specialist?.profession || item.expertiseDomain || 'Advisor',
+        averageRating: specialist?.averageRating || 0,
+        hourlyRate: specialist?.hourlyRate || 0,
+        availability: this.getAvailabilityLabel(specialist?.availabilityStatus || item.availability),
+        availabilityClass: this.getAvailabilityClass(specialist?.availabilityStatus || item.availability),
+        reason: item.reason,
+        skills: item.skills,
+        recommendedScore: item.recommendedScore,
+        isAssigned: !!existingAssignment,
+        assignmentLabel: existingAssignment
+          ? `Assignment already exists (${this.getAssignmentStatusLabel(existingAssignment.status)}).`
+          : ''
+      };
+    });
+  }
+
+  get selectedProject(): Project | undefined {
+    return this.projects.find(project => project.id === this.projectId);
+  }
+
+  get canAssignSelectedProject(): boolean {
+    return this.isProjectValidated(this.selectedProject);
+  }
+
+  get shouldShowProjectAssignmentHint(): boolean {
+    return !!this.projectId && !!this.projectAssignmentHint;
+  }
+
+  get projectAssignmentHint(): string {
+    if (!this.projectId) {
+      return '';
+    }
+
+    if (this.isProjectCompleted(this.selectedProject)) {
+      return 'This project is completed. Review and evaluation are available below.';
+    }
+
+    if (!this.canAssignSelectedProject) {
+      return `This project must be validated before assignment. Current status: ${this.getProjectStatusLabel(this.selectedProject)}.`;
+    }
+
+    return '';
+  }
+
+  getAssignmentStatusLabel(status?: string): string {
+    switch ((status || '').toUpperCase()) {
+      case 'PENDING': return 'Waiting for specialist response';
+      case 'ACCEPTED': return 'In Progress';
+      case 'REJECTED': return 'Rejected';
+      case 'DONE': return 'Completed';
+      case 'CANCELLED': return 'Cancelled';
+      default: return status || 'Pending';
+    }
+  }
+
+  getProjectStatusLabel(project?: Project): string {
+    return ((project?.projectStatus || 'DRAFT') as string)
+      .replace(/_/g, ' ')
+      .toLowerCase()
+      .replace(/\b\w/g, letter => letter.toUpperCase());
+  }
+
+  getAssignmentStatusClass(status?: string): string {
+    switch ((status || '').toUpperCase()) {
+      case 'PENDING': return 'pending';
+      case 'ACCEPTED': return 'accepted';
+      case 'REJECTED': return 'rejected';
+      case 'DONE': return 'done';
+      case 'CANCELLED': return 'cancelled';
+      default: return '';
+    }
   }
 
   formatSkills(skills?: string[] | string): string {
@@ -91,30 +340,58 @@ export class SpecialistRecommendation implements OnInit {
     return skills || 'Project expertise, strategy, market';
   }
 
-  startConversation(item: AiSpecialistRecommendation) {
-    const entrepreneurId = this.authService.currentUser?.id || '';
-    const specialistId = item.specialistId || '';
+  isProjectValidated(project?: Project): boolean {
+    return (project?.projectStatus || '').toUpperCase() === 'VALIDATED';
+  }
 
-    if (!entrepreneurId || !specialistId) {
-      this.error = 'Conversation could not be started because an identifier is missing.';
-      return;
+  isProjectCompleted(project?: Project): boolean {
+    return (project?.projectStatus || '').toUpperCase() === 'COMPLETED';
+  }
+
+  getAssignmentActionLabel(isAssigned: boolean): string {
+    if (isAssigned) {
+      return 'Assignment Exists';
     }
 
-    this.error = '';
-    this.startingSpecialistId = specialistId;
-    this.humChat.setCurrentUser(entrepreneurId, this.authService.userRole);
-    this.humChat.startConversation(entrepreneurId, specialistId, this.projectId || undefined).subscribe({
-      next: conversation => {
-        this.startingSpecialistId = '';
-        this.router.navigate(['/conversations'], {
-          queryParams: { conversationId: conversation.id }
-        });
-      },
-      error: () => {
-        this.startingSpecialistId = '';
-        this.error = 'Conversation could not be started. Please try again.';
-        this.cdr.markForCheck();
-      }
-    });
+    if (this.isProjectCompleted(this.selectedProject)) {
+      return 'Completed';
+    }
+
+    return 'Assign';
   }
+
+  private getAvailabilityLabel(status?: string): string {
+    if (!status) return 'To confirm';
+    return status.toUpperCase() === 'AVAILABLE' ? 'Available' : 'Busy';
+  }
+
+  private getAvailabilityClass(status?: string): string {
+    return (status || '').toUpperCase() === 'AVAILABLE' ? 'available' : 'unavailable';
+  }
+
+  private showToastMessage(message: string) {
+    this.toastMessage = message;
+    this.showToast = true;
+    window.clearTimeout(this.toastTimer as any);
+    this.toastTimer = window.setTimeout(() => {
+      this.showToast = false;
+      this.cdr.markForCheck();
+    }, 3000);
+  }
+
+  private getAssignmentErrorMessage(error: any): string {
+    const backendMessage = String(error?.error?.message || error?.message || '').trim();
+
+    if (backendMessage.includes('Project must be VALIDATED before assignment')) {
+      return this.projectAssignmentHint;
+    }
+
+    if (backendMessage.includes('Already assigned to this specialist')) {
+      return 'This specialist already has an assignment history with this project.';
+    }
+
+    return 'The assignment could not be created. Please try again.';
+  }
+
+  private toastTimer: number | undefined;
 }

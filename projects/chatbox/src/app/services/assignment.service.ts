@@ -112,13 +112,20 @@ export class AssignmentService {
   }
 
   private normalizeAssignment(assignment: ProjectAssignmentResponse): ProjectAssignmentResponse {
+    const assignmentId = String(assignment.assignmentId || assignment.id || '');
     return {
       ...assignment,
-      id: String(assignment.id || ''),
+      id: String(assignment.id || assignmentId || ''),
+      assignmentId,
       projectId: String(assignment.projectId || ''),
       specialistId: String(assignment.specialistId || ''),
       entrepreneurId: String(assignment.entrepreneurId || ''),
-      status: assignment.status || 'PENDING'
+      status: assignment.status || 'PENDING',
+      createdAt: assignment.createdAt || assignment['assignedAt'] || '',
+      respondedAt: assignment.respondedAt || assignment['respondedAt'] || '',
+      doneAt: assignment.doneAt || assignment['completedAt'] || '',
+      canEvaluate: typeof assignment.canEvaluate === 'boolean' ? assignment.canEvaluate : undefined,
+      canReview: typeof assignment.canReview === 'boolean' ? assignment.canReview : undefined
     };
   }
 }

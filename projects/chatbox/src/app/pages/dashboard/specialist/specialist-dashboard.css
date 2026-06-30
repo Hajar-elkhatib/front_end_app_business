@@ -1,4 +1,5 @@
 .dashboard-head,
+.context-head,
 .section-header,
 .profile-title-row,
 .assignment-top,
@@ -33,8 +34,8 @@
 
 .profile-card {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 2rem;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
 }
 
 .profile-main {
@@ -87,8 +88,9 @@
 
 .profile-stats {
   display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.8rem;
-  min-width: 180px;
+  min-width: 0;
 }
 
 .profile-stats > div {
@@ -175,6 +177,32 @@
   gap: 0.15rem;
   padding: 0.8rem;
   text-align: left;
+}
+
+.conversation-item-top {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: space-between;
+}
+
+.conversation-unread {
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: var(--bg-tertiary);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.conversation-unread.has-unread {
+  background: var(--danger);
+  color: #fff;
 }
 
 .compact-list span,
@@ -286,7 +314,7 @@ th {
   align-items: end;
   display: grid;
   gap: 1rem;
-  grid-template-columns: 1.5fr repeat(4, minmax(120px, 1fr)) auto;
+  grid-template-columns: 1fr;
 }
 
 .slot-form label {
@@ -295,6 +323,129 @@ th {
   font-size: 0.78rem;
   font-weight: 700;
   gap: 0.35rem;
+}
+
+.availability-layout {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(320px, 1.2fr) minmax(280px, 0.8fr);
+}
+
+.availability-calendar-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.availability-calendar-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.availability-calendar-head h3 {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.availability-calendar-head p {
+  color: var(--text-secondary);
+  font-size: 0.84rem;
+  margin: 0.25rem 0 0;
+}
+
+.calendar-nav {
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+.calendar-nav-btn {
+  min-width: 2.5rem;
+  padding: 0.55rem 0.8rem;
+}
+
+.availability-calendar-weekdays,
+.availability-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.availability-calendar-weekdays span {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.availability-calendar-day {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 16px;
+  color: var(--text-primary);
+  display: grid;
+  gap: 0.35rem;
+  justify-items: center;
+  min-height: 84px;
+  padding: 0.6rem 0.35rem;
+  transition: border-color 0.16s ease, background-color 0.16s ease, transform 0.16s ease;
+}
+
+.availability-calendar-day:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.availability-calendar-day:not(:disabled):hover {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  transform: translateY(-1px);
+}
+
+.availability-calendar-day.outside {
+  opacity: 0.28;
+}
+
+.availability-calendar-day.today .availability-day-chip {
+  box-shadow: 0 0 0 1px var(--indigo-500);
+}
+
+.availability-calendar-day.has-slots .availability-day-chip,
+.availability-calendar-day.selected .availability-day-chip {
+  background: var(--indigo-600);
+  color: #fff;
+}
+
+.availability-calendar-day.selected {
+  border-color: var(--indigo-100);
+  background: var(--indigo-50);
+}
+
+.availability-day-chip {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  transition: inherit;
+}
+
+.availability-slot-mark {
+  min-width: 1.2rem;
+  height: 1.2rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #dc2626;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
 .chat-shell {
@@ -377,13 +528,17 @@ th {
   margin: 0 0 0.35rem;
 }
 
+.message-row.mine .message-bubble p {
+  color: #fff;
+}
+
 .message-bubble small {
   color: var(--text-muted);
   font-size: 0.7rem;
 }
 
 .message-row.mine .message-bubble small {
-  color: rgba(255, 255, 255, 0.75);
+  color: #fff;
 }
 
 .chat-compose {
@@ -392,6 +547,21 @@ th {
   gap: 0.75rem;
   grid-template-columns: 1fr auto;
   padding: 1rem;
+}
+
+.compose-send {
+  width: 40px;
+  min-width: 40px;
+  padding-left: 0;
+  padding-right: 0;
+  color: #fff;
+}
+
+.compose-send svg {
+  display: block;
+  color: #fff;
+  opacity: 1;
+  stroke: #fff;
 }
 
 .empty-state,
@@ -434,6 +604,10 @@ th {
     grid-template-columns: 1fr;
   }
 
+  .availability-layout {
+    grid-template-columns: 1fr;
+  }
+
   .conversation-list {
     border-bottom: 1px solid var(--border-color);
     border-right: 0;
@@ -442,6 +616,7 @@ th {
 
 @media (max-width: 840px) {
   .dashboard-head,
+  .context-head,
   .profile-main,
   .section-header,
   .card-actions,
@@ -454,12 +629,23 @@ th {
   .section-grid,
   .assignment-grid,
   .evaluation-summary,
-  .review-grid {
+  .review-grid,
+  .profile-stats {
     grid-template-columns: 1fr;
   }
 
   .slot-table,
   .card.p-0 {
     overflow-x: auto;
+  }
+
+  .availability-calendar-day {
+    min-height: 70px;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .availability-day-chip {
+    width: 2rem;
+    height: 2rem;
   }
 }

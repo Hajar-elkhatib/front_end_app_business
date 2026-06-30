@@ -46,11 +46,12 @@ export class AuthService {
   login(email: string, password: string): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(`${this.baseUrl}/login`, { email, password }).pipe(
       tap(response => {
-        if (response && response.token) {
-          localStorage.setItem('nexus_token', response.token);
-          const user = this.mapLoginResponseToUser(response, email);
+        const payload = this.unwrapLoginResponse(response);
+        if (payload && payload.token) {
+          localStorage.setItem('nexus_token', payload.token);
+          const user = this.mapLoginResponseToUser(payload, email);
           localStorage.setItem('nexus_user', JSON.stringify(user));
-          this.persistSpecialistIdentity(response);
+          this.persistSpecialistIdentity(payload);
           this.currentUserSubject.next(user);
         }
       })
@@ -113,6 +114,14 @@ export class AuthService {
     if (normalized.includes('entrepreneur')) return 'entrepreneur';
     if (normalized.includes('admin')) return 'admin';
     return normalized;
+  }
+
+  private unwrapLoginResponse(response: LoginResponse | { data?: LoginResponse } | null | undefined): LoginResponse {
+    if (!response) {
+      return {} as LoginResponse;
+    }
+
+    return (response as { data?: LoginResponse }).data || (response as LoginResponse);
   }
 
   private persistSpecialistIdentity(response: LoginResponse): void {

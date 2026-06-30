@@ -7,6 +7,7 @@ export interface EvaluationTime {
 
 export interface Evaluation {
   id: string;
+  assignmentId?: string;
   projectId?: string;
   specialistId: string;
   entrepreneurId: string;
@@ -24,6 +25,7 @@ export interface Evaluation {
 
 export interface EvaluationRequest {
   projectId?: string;
+  assignmentId?: string;
   specialistId: string;
   entrepreneurId: string;
   entrepreneurName?: string;

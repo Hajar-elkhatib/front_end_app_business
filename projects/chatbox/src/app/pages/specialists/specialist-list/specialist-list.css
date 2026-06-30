@@ -287,6 +287,15 @@
   padding-top: 0.9rem;
 }
 
+.sl-profile-action {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  margin-top: 0.9rem;
+  pointer-events: none;
+  width: 100%;
+}
+
 .sl-rate {
   color: var(--text-primary);
   font-size: 1.08rem;

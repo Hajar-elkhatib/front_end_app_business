@@ -26,9 +26,11 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
   isLoading = true;
   isSending = false;
   connectionReady = false;
+  loadError = '';
 
   private messageSubscription?: Subscription;
   private connectionSubscription?: Subscription;
+  private conversationsSubscription?: Subscription;
 
   constructor(
     private humChat: HumChat,
@@ -76,21 +78,55 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
       this.cdr.markForCheck();
     });
 
-    this.humChat.getConversations().subscribe(convos => {
-      this.conversations = convos;
-      this.isLoading = false;
-      if (convos.length > 0) {
-        const requestedConversationId = this.route.snapshot.queryParamMap.get('conversationId');
-        const requestedConversation = convos.find(convo => convo.id === requestedConversationId);
-        this.selectConversation(requestedConversation || convos[0]);
+    this.conversationsSubscription = this.humChat.conversations$.subscribe(conversations => {
+      this.conversations = conversations;
+      if (this.activeConversation) {
+        this.activeConversation = conversations.find(conversation => conversation.id === this.activeConversation?.id) || this.activeConversation;
       }
       this.cdr.markForCheck();
+    });
+
+    this.humChat.getConversations().subscribe({
+      next: convos => {
+        this.isLoading = false;
+        this.loadError = '';
+        if (convos.length > 0) {
+          const requestedConversationId = this.route.snapshot.paramMap.get('conversationId')
+            || this.route.snapshot.queryParamMap.get('conversationId');
+          const requestedConversation = convos.find(convo => convo.id === requestedConversationId);
+          this.selectConversation(requestedConversation || convos[0]);
+        } else {
+          const requestedConversationId = this.route.snapshot.paramMap.get('conversationId')
+            || this.route.snapshot.queryParamMap.get('conversationId');
+          if (requestedConversationId) {
+            this.humChat.getConversation(requestedConversationId).subscribe({
+              next: conversation => {
+                this.conversations = [conversation];
+                this.selectConversation(conversation);
+                this.cdr.markForCheck();
+              },
+              error: () => {
+                this.loadError = 'Conversation could not be loaded.';
+                this.cdr.markForCheck();
+              }
+            });
+          }
+        }
+        this.cdr.markForCheck();
+      },
+      error: () => {
+        this.conversations = [];
+        this.isLoading = false;
+        this.loadError = 'Conversations could not be loaded. Please try again.';
+        this.cdr.markForCheck();
+      }
     });
   }
 
   ngOnDestroy() {
     this.messageSubscription?.unsubscribe();
     this.connectionSubscription?.unsubscribe();
+    this.conversationsSubscription?.unsubscribe();
     this.humChat.disconnect();
   }
 
@@ -100,6 +136,7 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
 
   selectConversation(convo: Conversation) {
     this.activeConversation = convo;
+    this.markConversationAsRead(convo.id);
     this.humChat.connect(convo.id);
     this.humChat.getMessages(convo.id).subscribe(msgs => {
       this.messages = msgs;
@@ -120,9 +157,27 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
       content
     };
 
+    if (!this.connectionReady) {
+      this.loadError = 'Chat is still connecting. Try again in a moment.';
+      this.cdr.markForCheck();
+      return;
+    }
+
     this.isSending = true;
     this.newMessage = '';
-    this.humChat.sendMessageWS(request);
+    this.humChat.sendMessage(request).subscribe({
+      next: () => {
+        this.loadError = '';
+        this.isSending = false;
+        this.cdr.markForCheck();
+        this.scrollToBottom();
+      },
+      error: () => {
+        this.loadError = 'Message could not be sent. Please try again.';
+        this.isSending = false;
+        this.cdr.markForCheck();
+      }
+    });
     this.cdr.markForCheck();
   }
 
@@ -144,5 +199,9 @@ export class Chat implements OnInit, AfterViewChecked, OnDestroy {
         }
       };
     });
+  }
+
+  private markConversationAsRead(conversationId: string): void {
+    this.humChat.markConversationAsRead(conversationId).subscribe();
   }
 }

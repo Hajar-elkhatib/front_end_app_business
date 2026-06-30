@@ -43,23 +43,73 @@
       </div>
     </div>
 
-    <!-- Stats -->
-    <div class="sd-stats">
-      <div class="sd-stat">
-        <div class="sd-stat-val">${{specialist.hourlyRate}}</div>
-        <div class="sd-stat-label">Hourly Rate</div>
-      </div>
-      <div class="sd-stat">
-        <div class="sd-stat-val">{{averageRating}}</div>
-        <div class="sd-stat-label">Rating</div>
-      </div>
-      <div class="sd-stat">
-        <div class="sd-stat-val">{{reviewCount}}</div>
-        <div class="sd-stat-label">Reviews</div>
-      </div>
-      <div class="sd-stat">
-        <div class="sd-stat-val">{{specialist.responseRate || 0}}%</div>
-        <div class="sd-stat-label">Response Rate</div>
+    <!-- Evaluation -->
+    <div class="sd-card sd-evaluation-card">
+      <div class="sd-evaluation-grid">
+        <div class="sd-evaluation-col sd-evaluation-col-left">
+          <h3>OVERALL RATING</h3>
+          <div class="sd-evaluation-score">{{averageRating}}</div>
+          <div class="sd-rating-stars" [attr.aria-label]="'Average rating ' + averageRating + ' out of 5'">
+            <svg *ngFor="let star of evaluationStars; let i = index" class="sd-rating-star" width="30" height="30" viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                class="sd-rating-star-empty"
+                d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+              ></path>
+              <path
+                class="sd-rating-star-fill"
+                d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                [style.clip-path]="'inset(0 ' + ((1 - ratingFill(i + 1)) * 100) + '% 0 0)'"
+                fill="#f59e0b"
+              ></path>
+            </svg>
+          </div>
+          <p class="sd-evaluation-meta">({{evaluationCount}} evaluations)</p>
+        </div>
+
+        <div class="sd-evaluation-divider" aria-hidden="true"></div>
+
+        <div class="sd-evaluation-col sd-evaluation-col-right">
+          <h3>YOUR EVALUATION</h3>
+          <div class="sd-star-picker sd-evaluation-stars" [class.readonly]="!canEvaluate">
+            <button
+              *ngFor="let star of evaluationStars"
+              type="button"
+              class="sd-star-button"
+              [disabled]="!canEvaluate"
+              (click)="selectEvaluation(star)"
+              [attr.aria-label]="'Rate ' + star + ' stars'"
+              [attr.aria-pressed]="selectedEvaluationScore >= star"
+            >
+              <svg width="32" height="32" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  class="sd-rating-star-empty"
+                  d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                ></path>
+                <path
+                  class="sd-rating-star-fill"
+                  d="M12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77Z"
+                  [style.clip-path]="'inset(0 ' + ((1 - userRatingFill(star)) * 100) + '% 0 0)'"
+                  [attr.fill]="selectedEvaluationScore >= star ? '#f59e0b' : '#f59e0b'"
+                ></path>
+              </svg>
+            </button>
+          </div>
+          <p class="sd-evaluation-note" *ngIf="canEvaluate">Share your experience with {{specialist.fullName}}</p>
+          <p class="sd-evaluation-note sd-evaluation-note-muted" *ngIf="!canEvaluate">
+            <span class="sd-lock">🔒</span>
+            You can rate this specialist after completing a project with them.
+          </p>
+          <div class="sd-evaluation-actions" *ngIf="canEvaluate && hasEvaluation">
+            <button type="button" class="sd-review-link danger" (click)="deleteEvaluation()">Remove evaluation</button>
+          </div>
+          <p class="sd-evaluation-message" *ngIf="evaluationMessage">{{evaluationMessage}}</p>
+        </div>
       </div>
     </div>
 
@@ -83,10 +133,6 @@
           <div class="sd-card-head">
             <div>
               <h3>Reviews ({{reviewCount}})</h3>
-              <div class="sd-average" *ngIf="hasReviews">
-                <span class="sd-average-score">{{averageRating | number:'1.1-1'}}</span>
-                <span class="sd-average-text">Average rating</span>
-              </div>
             </div>
           </div>
           <div *ngIf="!hasReviews" class="sd-calendar-placeholder">
@@ -98,34 +144,17 @@
               <span class="sd-review-author">{{reviewerDisplay(r)}}</span>
               <span class="sd-review-date">{{createdAtDisplay(r)}}</span>
             </div>
-            <div class="sd-review-stars">
-              <svg *ngFor="let s of ratingStars; let i = index" [class.sd-star]="i < r.rating" [class.sd-star-empty]="i >= r.rating" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            </div>
             <p class="sd-review-text">{{r.comment}}</p>
-            <div class="sd-review-actions">
-              <button *ngIf="canDeleteReview(r)" type="button" class="sd-review-link" (click)="startEditReview(r)">Edit</button>
-              <button *ngIf="canDeleteReview(r)" type="button" class="sd-review-link danger" (click)="deleteReview(r)">Delete</button>
+            <div class="sd-review-actions" *ngIf="canManageReview(r)">
+              <button type="button" class="sd-review-link" (click)="startEditReview(r)">Edit</button>
+              <button type="button" class="sd-review-link danger" (click)="deleteReview(r)">Delete</button>
             </div>
           </div>
         </div>
 
-        <div class="sd-card">
+        <div class="sd-card" *ngIf="canSubmitReview">
           <h3>{{editingReviewId ? 'Edit Review' : 'Submit Review'}}</h3>
           <form [formGroup]="reviewForm" (ngSubmit)="saveReview()" style="display: grid; gap: 1rem;">
-            <label style="display: grid; gap: 0.4rem;">
-              <span class="sd-form-label">Reviewer name</span>
-              <input class="input" type="text" formControlName="reviewerName" placeholder="Enter reviewer name">
-            </label>
-
-            <label style="display: grid; gap: 0.4rem;">
-              <span class="sd-form-label">Star rating</span>
-              <div class="sd-star-picker" (mouseleave)="setHoverRating(0)">
-                <button type="button" *ngFor="let star of ratingStars" class="sd-star-button" (mouseenter)="setHoverRating(star)" (click)="setRating(star)">
-                  <svg width="22" height="22" viewBox="0 0 24 24" [attr.fill]="star <= (hoverRating || selectedRating) ? 'currentColor' : 'none'" stroke="currentColor" stroke-width="1.7"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                </button>
-              </div>
-            </label>
-
             <label style="display: grid; gap: 0.4rem;">
               <span class="sd-form-label">Comment</span>
               <textarea class="input" rows="3" formControlName="comment" placeholder="Share your feedback"></textarea>
@@ -139,6 +168,11 @@
             <p *ngIf="evaluationError" style="color: var(--danger); font-size: 0.85rem;">{{evaluationError}}</p>
             <p *ngIf="evaluationSuccess" style="color: #047857; font-size: 0.85rem;">{{evaluationSuccess}}</p>
           </form>
+        </div>
+
+        <div class="sd-card" *ngIf="!canSubmitReview">
+          <h3>Submit Review</h3>
+          <p class="sd-bio">Review access appears after an entrepreneur completes an assignment with this specialist.</p>
         </div>
 
       </div>
@@ -155,36 +189,163 @@
 
         <div class="sd-card">
           <div class="sd-card-head">
-            <h3>Availability</h3>
+            <div>
+              <h3>Availability Calendar</h3>
+              <p class="sd-section-subtitle">Open slots this entrepreneur can request.</p>
+            </div>
             <span class="sd-status-badge" [class.online]="specialist.available" [class.offline]="!specialist.available">
-              {{specialist.available ? 'Available' : 'Busy'}}
+              {{availabilitySlots.length}} open
             </span>
           </div>
-          <div class="sd-availability-panel">
-            <div class="sd-availability-line">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-              <div>
-                <div class="sd-availability-title">Weekly availability</div>
-                <div class="sd-availability-text">Monday-Friday</div>
+          <div class="sd-availability-calendar">
+            <div class="sd-calendar-toolbar">
+              <button type="button" class="sd-calendar-nav" (click)="changeAvailabilityMonth(-1)" aria-label="Previous month">‹</button>
+              <strong>{{availabilityMonthLabel}}</strong>
+              <button type="button" class="sd-calendar-nav" (click)="changeAvailabilityMonth(1)" aria-label="Next month">›</button>
+            </div>
+            <p class="sd-calendar-status">{{specialist.available ? 'Available now' : 'Currently busy'}}</p>
+            <div class="sd-calendar-weekdays">
+              <span *ngFor="let day of weekdayLabels">{{day}}</span>
+            </div>
+            <div class="sd-calendar-grid">
+              <div
+                *ngFor="let day of availabilityCalendar"
+                class="sd-calendar-day"
+                [class.outside]="!day.inCurrentMonth"
+                [class.today]="day.isToday"
+                [class.has-slots]="day.slots.length > 0"
+                [class.is-selectable]="day.slots.length > 0"
+                [class.is-selected]="selectedAvailabilityDateKey === day.dateKey && day.slots.length > 0"
+                (click)="selectAvailabilityDay(day)"
+              >
+                <span class="sd-calendar-day-badge">{{day.dayNumber}}</span>
               </div>
             </div>
-            <div class="sd-availability-line">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 8v5l3 3"/><circle cx="12" cy="12" r="9"/></svg>
-              <div>
-                <div class="sd-availability-title">Working hours</div>
-                <div class="sd-availability-text">09:00 - 17:00</div>
+            <div class="sd-calendar-selection" *ngIf="availabilitySlots.length > 0">
+              <p class="sd-calendar-helper" *ngIf="selectedAvailabilityDaySlots.length === 0">
+                Select a blue day to see and reserve the open slots for that date.
+              </p>
+              <div class="sd-selected-slots" *ngIf="selectedAvailabilityDaySlots.length > 0">
+                <div class="sd-selected-slots-head">
+                  <strong>{{selectedAvailabilityDayLabel}}</strong>
+                  <span>{{selectedAvailabilityDaySlots.length}} open slot{{selectedAvailabilityDaySlots.length > 1 ? 's' : ''}}</span>
+                </div>
+                <button
+                  *ngFor="let slot of selectedAvailabilityDaySlots"
+                  type="button"
+                  class="sd-slot-option"
+                  [class.selected]="selectedAvailabilitySlotId === slot.id"
+                  (click)="selectAvailabilitySlot(slot)"
+                >
+                  <div>
+                    <strong>{{slot.startTime}} - {{slot.endTime}}</strong>
+                    <p>{{availabilitySummary(slot)}}</p>
+                  </div>
+                  <span class="sd-slot-option-capacity">{{slot.maxSessions}} session{{slot.maxSessions > 1 ? 's' : ''}}</span>
+                </button>
               </div>
+            </div>
+            <div class="sd-upcoming-slots" *ngIf="upcomingAvailability.length > 0">
+              <div class="sd-upcoming-slots-title">Upcoming open slots</div>
+              <div *ngFor="let slot of upcomingAvailability" class="sd-upcoming-slot">
+                <div>
+                  <strong>{{slot.startTime}} - {{slot.endTime}}</strong>
+                  <p>{{availabilitySummary(slot)}}</p>
+                </div>
+                <span class="sd-upcoming-slot-capacity">{{slot.maxSessions}} session{{slot.maxSessions > 1 ? 's' : ''}}</span>
+              </div>
+            </div>
+            <div *ngIf="!availabilitySlots.length" class="sd-calendar-empty-note">
+              No open availability slots yet. Dates will turn blue here as soon as this specialist publishes availability.
+            </div>
+            <div class="sd-slot-request" *ngIf="isEntrepreneurViewer">
+              <div class="sd-slot-request-head">
+                <strong>Reserve This Slot</strong>
+                <p>{{slotReservationHint}}</p>
+              </div>
+              <form [formGroup]="slotRequestForm" (ngSubmit)="requestSelectedSlot()" class="sd-slot-request-form">
+                <div class="sd-upcoming-slots" *ngIf="selectedAvailabilitySlot">
+                  <div class="sd-history-note">
+                    <span class="sd-history-kicker">Slot</span>
+                    <strong>{{selectedAvailabilitySlot.startTime}} - {{selectedAvailabilitySlot.endTime}}</strong>
+                    <p>{{selectedAvailabilityDayLabel}}</p>
+                  </div>
+
+                  <div class="sd-history-note" *ngIf="hasSingleAssignableProject">
+                    <span class="sd-history-kicker">Project</span>
+                    <strong>{{assignableProjects[0].title}}</strong>
+                    <p>Automatically attached</p>
+                  </div>
+                </div>
+
+                <label *ngIf="assignableProjects.length > 1">
+                  <span>Project to attach</span>
+                  <select class="input" formControlName="projectId" [disabled]="isRequestingSlot">
+                    <option value="">Choose a validated project</option>
+                    <option *ngFor="let project of assignableProjects" [value]="project.id">{{project.title}}</option>
+                  </select>
+                </label>
+
+                <button
+                  class="sd-btn-chat"
+                  type="submit"
+                  [disabled]="!canRequestSelectedSlot"
+                >
+                  {{isRequestingSlot ? 'Reserving...' : 'Reserve Selected Slot'}}
+                </button>
+                <p
+                  *ngIf="slotRequestMessage"
+                  class="sd-slot-request-message"
+                  [class.success]="slotRequestMessageType === 'success'"
+                  [class.error]="slotRequestMessageType === 'error'"
+                >
+                  {{slotRequestMessage}}
+                </p>
+              </form>
             </div>
           </div>
         </div>
 
         <div class="sd-card">
-          <h3>Project History</h3>
-          <div class="sd-calendar-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-            <p style="margin-top: 0.75rem;">{{specialist.completedProjects || 0}} projects completed.</p>
-            <p>Detailed history available after hiring.</p>
+          <div class="sd-card-head">
+            <div>
+              <h3>Your History With This Specialist</h3>
+              <p class="sd-section-subtitle">Past and current assignments between you and {{specialist.fullName}}.</p>
+            </div>
+            <span class="sd-history-total" *ngIf="hasRelationshipHistory">{{relationshipHistory.length}} records</span>
           </div>
+          <div *ngIf="hasRelationshipHistory; else noRelationshipHistory" class="sd-history-list">
+            <div *ngFor="let item of relationshipHistory" class="sd-history-item">
+              <div class="sd-history-accent" [ngClass]="historyStatusClass(item.status)"></div>
+              <div class="sd-history-body">
+                <div class="sd-history-top">
+                  <div class="sd-history-main">
+                    <span class="sd-history-kicker">Shared project</span>
+                    <strong>{{item.projectTitle}}</strong>
+                    <p>{{historyTimeline(item)}}</p>
+                  </div>
+                  <span class="sd-history-status" [ngClass]="historyStatusClass(item.status)">{{historyStatusLabel(item.status)}}</span>
+                </div>
+                <div class="sd-history-notes" *ngIf="item.message || item.responseMessage">
+                  <div *ngIf="item.message" class="sd-history-note">
+                    <span>Request</span>
+                    <p>{{item.message}}</p>
+                  </div>
+                  <div *ngIf="item.responseMessage" class="sd-history-note">
+                    <span>Response</span>
+                    <p>{{item.responseMessage}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ng-template #noRelationshipHistory>
+            <div class="sd-calendar-placeholder">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              <p style="margin-top: 0.75rem;">No shared project history yet.</p>
+              <p>Your assignment history will appear here once you work with this specialist.</p>
+            </div>
+          </ng-template>
         </div>
       </div>
     </div>

@@ -101,9 +101,20 @@
 .nav-icon { width: 16px; height: 16px; opacity: 0.8; }
 .active .nav-icon { opacity: 1; }
 
-.badge-count { padding: 0.1rem 0.4rem; font-size: 0.7rem; border-radius: 4px; box-shadow: none; border: none; }
-.bg-indigo { background: var(--indigo-600); }
-.text-white { color: white; }
+.badge-count {
+  min-width: 1.4rem;
+  height: 1.4rem;
+  padding: 0 0.35rem;
+  font-size: 0.68rem;
+  border-radius: 999px;
+  box-shadow: none;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--danger);
+  color: #fff;
+}
 
 .sidebar-footer {
   position: relative;

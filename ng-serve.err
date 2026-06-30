@@ -1,0 +1,1366 @@
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'loadAvailabilitySlots' does not exist on type 'SpecialistDetails'. Did you mean 'availabilitySlots'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:106:15:
+[37m      106 │           this.[32mloadAvailabilitySlots[37m(specialistMongoId);
+          ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+  'availabilitySlots' is declared here.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:44:2:
+[37m      44 │   [32mavailabilitySlots[37m: Availability[] = [];
+         ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'loadRelationshipHistory' does not exist on type 'SpecialistDetails'. Did you mean 'relationshipHistory'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:108:15:
+[37m      108 │           this.[32mloadRelationshipHistory[37m(specialistMongoId);
+          ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  'relationshipHistory' is declared here.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:46:2:
+[37m      46 │   [32mrelationshipHistory[37m: RelationshipHistoryItem[] = [];
+         ╵   [32m~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'loadAvailabilitySlots' does not exist on type 'SpecialistDetails'. Did you mean 'availabilitySlots'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:106:15:
+[37m      106 │           this.[32mloadAvailabilitySlots[37m(specialistMongoId);
+          ╵                [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+  'availabilitySlots' is declared here.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:44:2:
+[37m      44 │   [32mavailabilitySlots[37m: Availability[] = [];
+         ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'loadRelationshipHistory' does not exist on type 'SpecialistDetails'. Did you mean 'relationshipHistory'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:108:15:
+[37m      108 │           this.[32mloadRelationshipHistory[37m(specialistMongoId);
+          ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  'relationshipHistory' is declared here.
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:46:2:
+[37m      46 │   [32mrelationshipHistory[37m: RelationshipHistoryItem[] = [];
+         ╵   [32m~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'slotTimestamp' does not exist on type 'SpecialistDetails'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:171:27:
+[37m      171 │       .filter(slot => this.[32mslotTimestamp[37m(slot) >= now)
+          ╵                            [32m~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'formatCalendarDate' does not exist on type 'SpecialistDetails'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:341:19:
+[37m      341 │     return `${this.[32mformatCalendarDate[37m(slot.availableDate)} · ${s...
+          ╵                    [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:367:29:
+[37m      367 │     const completedAt = item.[32mcompletedAt[37m || item.doneAt;
+          ╵                              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'formatCalendarDate' does not exist on type 'SpecialistDetails'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:369:34:
+[37m      369 │       return `Completed on ${this.[32mformatCalendarDate[37m(completedAt)}`;
+          ╵                                   [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'formatCalendarDate' does not exist on type 'SpecialistDetails'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:372:34:
+[37m      372 │ ...turn `Responded on ${this.[32mformatCalendarDate[37m(item.respondedAt)}`;
+          ╵                              [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:374:13:
+[37m      374 │     if (item.[32massignedAt[37m || item.createdAt) {
+          ╵              [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'formatCalendarDate' does not exist on type 'SpecialistDetails'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:375:33:
+[37m      375 │ ...n `Assigned on ${this.[32mformatCalendarDate[37m(item.assignedAt || it...
+          ╵                          [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:375:57:
+[37m      375 │ ...is.formatCalendarDate(item.[32massignedAt[37m || item.createdAt || '')}`;
+          ╵                               [32m~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:367:29:
+[37m      367 │     const completedAt = item.[32mcompletedAt[37m || item.doneAt;
+          ╵                              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:374:13:
+[37m      374 │     if (item.[32massignedAt[37m || item.createdAt) {
+          ╵              [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:375:57:
+[37m      375 │ ...is.formatCalendarDate(item.[32massignedAt[37m || item.createdAt || '')}`;
+          ╵                               [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:690:11:
+[37m      690 │       item.[32mcompletedAt[37m ||
+          ╵            [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:693:11:
+[37m      693 │       item.[32massignedAt[37m ||
+          ╵            [32m~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:367:29:
+[37m      367 │     const completedAt = item.[32mcompletedAt[37m || item.doneAt;
+          ╵                              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:374:13:
+[37m      374 │     if (item.[32massignedAt[37m || item.createdAt) {
+          ╵              [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:375:57:
+[37m      375 │ ...is.formatCalendarDate(item.[32massignedAt[37m || item.createdAt || '')}`;
+          ╵                               [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:690:11:
+[37m      690 │       item.[32mcompletedAt[37m ||
+          ╵            [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:693:11:
+[37m      693 │       item.[32massignedAt[37m ||
+          ╵            [32m~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:367:29:
+[37m      367 │     const completedAt = item.[32mcompletedAt[37m || item.doneAt;
+          ╵                              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:374:13:
+[37m      374 │     if (item.[32massignedAt[37m || item.createdAt) {
+          ╵              [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:375:57:
+[37m      375 │ ...is.formatCalendarDate(item.[32massignedAt[37m || item.createdAt || '')}`;
+          ╵                               [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:690:11:
+[37m      690 │       item.[32mcompletedAt[37m ||
+          ╵            [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:693:11:
+[37m      693 │       item.[32massignedAt[37m ||
+          ╵            [32m~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:367:29:
+[37m      367 │     const completedAt = item.[32mcompletedAt[37m || item.doneAt;
+          ╵                              [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:374:13:
+[37m      374 │     if (item.[32massignedAt[37m || item.createdAt) {
+          ╵              [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:375:57:
+[37m      375 │ ...is.formatCalendarDate(item.[32massignedAt[37m || item.createdAt || '')}`;
+          ╵                               [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'completedAt' comes from an index signature, so it must be accessed with ['completedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:690:11:
+[37m      690 │       item.[32mcompletedAt[37m ||
+          ╵            [32m~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'assignedAt' comes from an index signature, so it must be accessed with ['assignedAt'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-details/specialist-details.ts:693:11:
+[37m      693 │       item.[32massignedAt[37m ||
+          ╵            [32m~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2741: Property 'assignmentLabel' is missing in type '{ specialistId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; reason: string; skills?: string | string[] | undefined; recommendedScore: number; isAssigned: boolean; }' but required in type '{ specialistId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; reason: string; skills?: string | string[] | undefined; recommendedScore: number; isAssigned: boolean; assignmentLabel: string; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:115:4:
+[37m      115 │     [32mthis.selectedRecommendation[37m = item;
+          ╵     [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  'assignmentLabel' is declared here.
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:51:244:
+[37m      51 │ ...ber; isAssigned: boolean; [32massignmentLabel[37m: string } | null = null;
+         ╵                              [32m~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2345: Argument of type '{ specialistId: string; profileRouteId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; availabilityClass: string; reason: string; skills: string | ... 1 more ... | undefined; recommendedScore: number; isAssigned: boolean; }' is not assignable to parameter of type '{ specialistId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; reason: string; skills?: string | string[] | undefined; recommendedScore: number; isAssigned: boolean; assignmentLabel: string; }'.
+  Property 'assignmentLabel' is missing in type '{ specialistId: string; profileRouteId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; availabilityClass: string; reason: string; skills: string | ... 1 more ... | undefined; recommendedScore: number; isAssigned: boolean; }' but required in type '{ specialistId: string; fullName: string; profession: string; averageRating: number; hourlyRate: number; availability: string; reason: string; skills?: string | string[] | undefined; recommendedScore: number; isAssigned: boolean; assignmentLabel: string; }'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.html:51:78:
+[37m      51 │ ...ton" (click)="openAssignModal([32mitem[37m)" [disabled]="isAssigning ||...
+         ╵                                  [32m~~~~[0m
+
+  Error occurs in the template of component SpecialistRecommendation.
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:21:15:
+[37m      21 │   templateUrl: [32m'./specialist-recommendation.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'canAssignSelectedProject' does not exist on type 'SpecialistRecommendation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:115:14:
+[37m      115 │     if (!this.[32mcanAssignSelectedProject[37m) {
+          ╵               [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'projectAssignmentHint' does not exist on type 'SpecialistRecommendation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:116:24:
+[37m      116 │       this.error = this.[32mprojectAssignmentHint[37m;
+          ╵                         [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'canAssignSelectedProject' does not exist on type 'SpecialistRecommendation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:143:14:
+[37m      143 │     if (!this.[32mcanAssignSelectedProject[37m) {
+          ╵               [32m~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'projectAssignmentHint' does not exist on type 'SpecialistRecommendation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:144:24:
+[37m      144 │       this.error = this.[32mprojectAssignmentHint[37m;
+          ╵                         [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'getAssignmentErrorMessage' does not exist on type 'SpecialistRecommendation'. Did you mean 'assignmentMessage'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:173:26:
+[37m      173 │         this.error = this.[32mgetAssignmentErrorMessage[37m(error);
+          ╵                           [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  'assignmentMessage' is declared here.
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:50:2:
+[37m      50 │   [32massignmentMessage[37m = '';
+         ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2551: Property 'getAssignmentErrorMessage' does not exist on type 'SpecialistRecommendation'. Did you mean 'assignmentMessage'?[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:173:26:
+[37m      173 │         this.error = this.[32mgetAssignmentErrorMessage[37m(error);
+          ╵                           [32m~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+  'assignmentMessage' is declared here.
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:50:2:
+[37m      50 │   [32massignmentMessage[37m = '';
+         ╵   [32m~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isProjectValidated' does not exist on type 'SpecialistRecommendation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:286:16:
+[37m      286 │     return this.[32misProjectValidated[37m(this.selectedProject);
+          ╵                 [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'getProjectStatusLabel' does not exist on type 'SpecialistRecommendation'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/specialists/specialist-recommendation/specialist-recommendation.ts:294:85:
+[37m      294 │ ...rrent status: ${this.[32mgetProjectStatusLabel[37m(this.selectedProjec...
+          ╵                         [32m~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'MainLayout'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.html:51:80:
+[37m      51 │ ...-white badge-count" *ngIf="[32munreadCount[37m > 0">{{unreadCount}}</span>
+         ╵                               [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component MainLayout.
+
+    projects/chatbox/src/app/layout/main-layout.ts:20:15:
+[37m      20 │   templateUrl: [32m'./main-layout.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'MainLayout'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.html:51:99:
+[37m      51 │ ...-white badge-count" *ngIf="unreadCount > 0">{{[32munreadCount[37m}}</span>
+         ╵                                                  [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component MainLayout.
+
+    projects/chatbox/src/app/layout/main-layout.ts:20:15:
+[37m      20 │   templateUrl: [32m'./main-layout.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'MainLayout'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.html:126:51:
+[37m      126 │ ...   <span class="notification-dot" *ngIf="[32munreadCount[37m > 0"></span>
+          ╵                                             [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component MainLayout.
+
+    projects/chatbox/src/app/layout/main-layout.ts:20:15:
+[37m      20 │   templateUrl: [32m'./main-layout.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'MainLayout'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.html:51:80:
+[37m      51 │ ...-white badge-count" *ngIf="[32munreadCount[37m > 0">{{unreadCount}}</span>
+         ╵                               [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component MainLayout.
+
+    projects/chatbox/src/app/layout/main-layout.ts:20:15:
+[37m      20 │   templateUrl: [32m'./main-layout.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'MainLayout'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.html:51:99:
+[37m      51 │ ...-white badge-count" *ngIf="unreadCount > 0">{{[32munreadCount[37m}}</span>
+         ╵                                                  [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component MainLayout.
+
+    projects/chatbox/src/app/layout/main-layout.ts:20:15:
+[37m      20 │   templateUrl: [32m'./main-layout.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'unreadCount' does not exist on type 'MainLayout'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/layout/main-layout.html:126:51:
+[37m      126 │ ...   <span class="notification-dot" *ngIf="[32munreadCount[37m > 0"></span>
+          ╵                                             [32m~~~~~~~~~~~[0m
+
+  Error occurs in the template of component MainLayout.
+
+    projects/chatbox/src/app/layout/main-layout.ts:20:15:
+[37m      20 │   templateUrl: [32m'./main-layout.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneur' comes from an index signature, so it must be accessed with ['entrepreneur'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:21:
+[37m      334 │       ? conversation.[32mentrepreneur[37m?.fullName || conversation.entre...
+          ╵                      [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurName' comes from an index signature, so it must be accessed with ['entrepreneurName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:60:
+[37m      334 │ ...llName || conversation.[32mentrepreneurName[37m || conversation.entrep...
+          ╵                           [32m~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'entrepreneurFullName' comes from an index signature, so it must be accessed with ['entrepreneurFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:334:93:
+[37m      334 │ ...onversation.entrepreneurName || conversation.[32mentrepreneurFullName[37m
+          ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialist' comes from an index signature, so it must be accessed with ['specialist'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:21:
+[37m      335 │       : conversation.[32mspecialist[37m?.fullName || conversation.special...
+          ╵                      [32m~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistName' comes from an index signature, so it must be accessed with ['specialistName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:58:
+[37m      335 │ ...ullName || conversation.[32mspecialistName[37m || conversation.special...
+          ╵                            [32m~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'specialistFullName' comes from an index signature, so it must be accessed with ['specialistFullName'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:335:89:
+[37m      335 │ ...| conversation.specialistName || conversation.[32mspecialistFullName[37m;
+          ╵                                                  [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS4111: Property 'name' comes from an index signature, so it must be accessed with ['name'].[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/services/hum-chat.ts:337:38:
+[37m      337 │     const fallbackName = conversation.[32mname[37m;
+          ╵                                       [32m~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isPastDateKey' does not exist on type 'SpecialistDashboard'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:237:31:
+[37m      237 │     if (!availableDate || this.[32misPastDateKey[37m(availableDate)) {
+          ╵                                [32m~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2339: Property 'isPastDateKey' does not exist on type 'SpecialistDashboard'.[0m [1m[35m[plugin angular-compiler][0m
+
+    projects/chatbox/src/app/pages/dashboard/specialist/specialist-dashboard.ts:237:31:
+[37m      237 │     if (!availableDate || this.[32misPastDateKey[37m(availableDate)) {
+          ╵                                [32m~~~~~~~~~~~~~[0m
+
+[39m[22m

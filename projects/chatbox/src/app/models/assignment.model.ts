@@ -2,10 +2,13 @@ export type ProjectAssignmentStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'DON
 
 export interface ProjectAssignmentResponse {
   id: string;
+  assignmentId?: string;
   projectId: string;
   specialistId: string;
   entrepreneurId: string;
   status: ProjectAssignmentStatus;
+  canEvaluate?: boolean;
+  canReview?: boolean;
   message?: string;
   responseMessage?: string;
   createdAt?: Date | string;

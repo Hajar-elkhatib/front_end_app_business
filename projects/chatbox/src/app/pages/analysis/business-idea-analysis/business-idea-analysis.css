@@ -43,9 +43,11 @@
 .sentiment-card { gap: .7rem; display: grid; }
 .input { width: 100%; }
 .recommendation-list { display: grid; gap: .75rem; }
-.recommendation-list div { border-top: 1px solid var(--border-color); padding-top: .75rem; }
+.recommendation-list > div { border-top: 1px solid var(--border-color); padding-top: .75rem; }
 .recommendation-list strong, .recommendation-list span { display: block; }
 .recommendation-list span { color: var(--indigo-600); font-weight: 800; font-size: .85rem; }
+.recommendation-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+.recommendation-actions .btn { font-size: .85rem; padding: .45rem .7rem; }
 .text-panels { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
 @media (max-width: 900px) {
   .ai-header, .score-shell { grid-template-columns: 1fr; display: grid; }

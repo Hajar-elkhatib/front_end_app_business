@@ -1,8 +1,10 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { HumChat } from '../services/hum-chat';
 
 interface SearchSuggestion {
   label: string;
@@ -18,8 +20,10 @@ interface SearchSuggestion {
   templateUrl: './main-layout.html',
   styleUrls: ['./main-layout.css']
 })
-export class MainLayout implements OnInit {
+export class MainLayout implements OnInit, OnDestroy {
   isDarkMode = false;
+  conversationUnreadCount = 0;
+  private conversationSubscription?: Subscription;
 
   ngOnInit() {
     const savedTheme = localStorage.getItem('theme');
@@ -28,6 +32,12 @@ export class MainLayout implements OnInit {
     if (this.isDarkMode) {
       document.documentElement.setAttribute('data-theme', 'dark');
     }
+
+    this.initializeConversationBadge();
+  }
+
+  ngOnDestroy() {
+    this.conversationSubscription?.unsubscribe();
   }
 
   toggleTheme() {
@@ -45,7 +55,11 @@ export class MainLayout implements OnInit {
 
   notifications: { text: string; time: string; read: boolean }[] = [];
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private humChat: HumChat
+  ) {}
 
   get currentUser() {
     return this.authService.currentUser;
@@ -65,6 +79,21 @@ export class MainLayout implements OnInit {
     return '/profile/entrepreneur';
   }
 
+  get specialistRecommendationsRoute(): string {
+    return '/dashboard/entrepreneur/specialist-recommendations';
+  }
+
+  get specialistsRoute(): string {
+    return '/dashboard/entrepreneur/specialists';
+  }
+
+  get conversationsRoute(): string {
+    if (this.isSpecialist) {
+      return '/dashboard/specialist/conversations';
+    }
+    return '/dashboard/entrepreneur/conversations';
+  }
+
   get isAdmin(): boolean {
     return this.authService.userRole === 'admin';
   }
@@ -81,7 +110,7 @@ export class MainLayout implements OnInit {
     return (this.currentUser?.fullName || 'N').charAt(0).toUpperCase();
   }
 
-  get unreadCount(): number {
+  get notificationUnreadCount(): number {
     return this.notifications.filter(n => !n.read).length;
   }
 
@@ -187,13 +216,15 @@ export class MainLayout implements OnInit {
   }
 
   navigateTo(route: string, event?: Event) {
+    event?.preventDefault();
     event?.stopPropagation();
     this.closeDropdowns();
-    this.router.navigate([route]);
+    void this.router.navigateByUrl(route);
   }
 
   isRouteActive(route: string): boolean {
-    return this.router.url.split('?')[0] === route;
+    const current = this.router.url.split('?')[0];
+    return current === route || this.sameNavigationGroup(current, route);
   }
 
   @HostListener('document:keydown.control.k', ['$event'])
@@ -214,6 +245,57 @@ export class MainLayout implements OnInit {
     this.showSearchSuggestions = false;
   }
 
+  private initializeConversationBadge(): void {
+    const currentUser = this.authService.currentUser;
+    if (!currentUser?.id || this.isAdmin) {
+      this.conversationUnreadCount = 0;
+      return;
+    }
+
+    this.conversationSubscription = this.humChat.conversations$.subscribe(conversations => {
+      this.conversationUnreadCount = conversations.reduce((total, conversation) => total + Number(conversation.unreadCount || 0), 0);
+    });
+
+    if (this.isSpecialist) {
+      const savedSpecialistId = localStorage.getItem('specialistId') || localStorage.getItem('specialist_id');
+      if (savedSpecialistId) {
+        this.loadConversationBadge(savedSpecialistId, currentUser.role);
+        return;
+      }
+
+      this.authService.getSpecialistProfile(currentUser.id).subscribe({
+        next: specialist => {
+          const specialistId = String(specialist?.id || specialist?._id || specialist?.specialistId || specialist?.mongoId || currentUser.id);
+          if (specialistId) {
+            localStorage.setItem('specialistId', specialistId);
+          }
+          this.loadConversationBadge(specialistId, currentUser.role);
+        },
+        error: () => this.loadConversationBadge(currentUser.id, currentUser.role)
+      });
+      return;
+    }
+
+    this.loadConversationBadge(currentUser.id, currentUser.role);
+  }
+
+  private loadConversationBadge(userId: string, role: string): void {
+    if (!userId) {
+      this.conversationUnreadCount = 0;
+      return;
+    }
+
+    this.humChat.setCurrentUser(userId, role);
+    this.humChat.getConversations().subscribe({
+      next: conversations => {
+        this.conversationUnreadCount = conversations.reduce((total, conversation) => total + Number(conversation.unreadCount || 0), 0);
+      },
+      error: () => {
+        this.conversationUnreadCount = 0;
+      }
+    });
+  }
+
   private getSearchableLinks(): SearchSuggestion[] {
     if (this.isAdmin) {
       return [
@@ -232,7 +314,7 @@ export class MainLayout implements OnInit {
         { label: 'Specialist dashboard', description: 'Your specialist workspace', route: '/dashboard/specialist' },
         { label: 'Assigned projects', description: 'Recommended and assigned work', route: '/specialist/assigned-projects' },
         { label: 'Availability', description: 'Manage available time slots', route: '/specialist/availability' },
-        { label: 'Conversations', description: 'Messages with entrepreneurs', route: '/conversations' },
+        { label: 'Conversations', description: 'Messages with entrepreneurs', route: '/dashboard/specialist/conversations' },
         { label: 'Evaluations', description: 'Reviews and scores', route: '/specialist/evaluations' },
         { label: 'Profile', description: 'Specialist profile', route: '/profile/specialist' }
       ];
@@ -247,11 +329,26 @@ export class MainLayout implements OnInit {
       { label: 'Sentiment analysis', description: 'Opinion and review analysis', route: '/analysis/sentiment' },
       { label: 'Reports', description: 'Generated project reports', route: '/reports' },
       { label: 'AI assistant', description: 'Chatbot and RAG', route: '/chatbot' },
-      { label: 'Specialists', description: 'Browse specialists', route: '/specialists' },
-      { label: 'Specialist recommendations', description: 'Matched specialists', route: '/specialist-recommendations' },
-      { label: 'Conversations', description: 'Messages with specialists', route: '/conversations' },
+      { label: 'Specialists', description: 'Browse specialists', route: '/dashboard/entrepreneur/specialists' },
+      { label: 'Specialist recommendations', description: 'Matched specialists', route: '/dashboard/entrepreneur/specialist-recommendations' },
+      { label: 'Conversations', description: 'Messages with specialists', route: '/dashboard/entrepreneur/conversations' },
       { label: 'Complaints', description: 'Create and track complaints', route: '/complaints' },
       { label: 'Profile', description: 'Entrepreneur profile', route: '/profile/entrepreneur' }
     ];
+  }
+
+  private sameNavigationGroup(current: string, route: string): boolean {
+    const aliases: Record<string, string[]> = {
+      '/dashboard/entrepreneur/specialist-recommendations': ['/specialist-recommendations'],
+      '/dashboard/entrepreneur/specialists': ['/specialists'],
+      '/dashboard/entrepreneur/conversations': ['/conversations', '/entrepreneur/conversations'],
+      '/dashboard/specialist/conversations': ['/conversations', '/specialist/conversations']
+    };
+
+    const routeAliases = aliases[route] || [];
+    return routeAliases.some(alias => current === alias || current.startsWith(`${alias}/`))
+      || (route === '/dashboard/entrepreneur/specialists' && current.startsWith('/dashboard/entrepreneur/specialists/'))
+      || (route === '/dashboard/entrepreneur/conversations' && current.startsWith('/dashboard/entrepreneur/conversations/'))
+      || (route === '/dashboard/specialist/conversations' && current.startsWith('/dashboard/specialist/conversations/'));
   }
 }

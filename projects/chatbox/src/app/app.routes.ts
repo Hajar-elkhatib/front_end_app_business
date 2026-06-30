@@ -25,6 +25,13 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: 'dashboard', canActivate: [dashboardRedirectGuard], loadComponent: () => import('./pages/dashboard/dashboard').then(m => m.Dashboard) },
+      { path: 'dashboard/entrepreneur/specialist-recommendations', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/specialists/specialist-recommendation/specialist-recommendation').then(m => m.SpecialistRecommendation) },
+      { path: 'dashboard/entrepreneur/specialists', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/specialists/specialist-list/specialist-list').then(m => m.SpecialistList) },
+      { path: 'dashboard/entrepreneur/specialists/:id', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/specialists/specialist-details/specialist-details').then(m => m.SpecialistDetails) },
+      { path: 'dashboard/entrepreneur/conversations', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
+      { path: 'dashboard/entrepreneur/conversations/:conversationId', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
+      { path: 'dashboard/specialist/conversations', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
+      { path: 'dashboard/specialist/conversations/:conversationId', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
       { path: 'dashboard/entrepreneur', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/dashboard/entrepreneur/entrepreneur-dashboard').then(m => m.EntrepreneurDashboard) },
       { path: 'dashboard/specialist', canActivate: [roleGuard], data: { roles: ['specialist'] }, loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
       { path: 'entrepreneur/dashboard', redirectTo: 'dashboard/entrepreneur', pathMatch: 'full' },
@@ -44,6 +51,9 @@ export const routes: Routes = [
       { path: 'marketplace', redirectTo: 'specialists', pathMatch: 'full' },
       { path: 'chat', redirectTo: 'conversations', pathMatch: 'full' },
       { path: 'conversations', canActivate: [roleGuard], data: { roles: ['entrepreneur', 'specialist'] }, loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
+      { path: 'conversations/:conversationId', canActivate: [roleGuard], data: { roles: ['entrepreneur', 'specialist'] }, loadComponent: () => import('./pages/chat/chat').then(m => m.Chat) },
+      { path: 'entrepreneur/conversations', redirectTo: 'conversations', pathMatch: 'full' },
+      { path: 'entrepreneur/conversations/:conversationId', redirectTo: 'conversations/:conversationId', pathMatch: 'full' },
 
       { path: 'specialists', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/specialists/specialist-list/specialist-list').then(m => m.SpecialistList) },
       { path: 'specialists/:id', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/specialists/specialist-details/specialist-details').then(m => m.SpecialistDetails) },
@@ -79,6 +89,7 @@ export const routes: Routes = [
       { path: 'specialist/availability', canActivate: [roleGuard], data: { roles: ['specialist'], tab: 'availability' }, loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
       { path: 'specialist/assigned-projects', canActivate: [roleGuard], data: { roles: ['specialist'], tab: 'assignments' }, loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
       { path: 'specialist/conversations', redirectTo: 'conversations', pathMatch: 'full' },
+      { path: 'specialist/conversations/:conversationId', redirectTo: 'conversations/:conversationId', pathMatch: 'full' },
       { path: 'specialist/evaluations', canActivate: [roleGuard], data: { roles: ['specialist'], tab: 'completed' }, loadComponent: () => import('./pages/dashboard/specialist/specialist-dashboard').then(m => m.SpecialistDashboard) },
 
       { path: 'profile/entrepreneur', canActivate: [roleGuard], data: { roles: ['entrepreneur'] }, loadComponent: () => import('./pages/profile/entrepreneur-profile/entrepreneur-profile').then(m => m.EntrepreneurProfile) },
@@ -90,4 +101,3 @@ export const routes: Routes = [
   },
   { path: '**', loadComponent: () => import('./pages/errors/not-found').then(m => m.NotFound) }
 ];
-

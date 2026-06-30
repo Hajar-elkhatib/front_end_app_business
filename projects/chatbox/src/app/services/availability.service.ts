@@ -21,7 +21,12 @@ export class AvailabilityService {
   private baseUrl = `${environment.apiUrl}/availability`;
 
   addSlot(payload: CreateAvailabilityPayload): Observable<Availability> {
-    return this.http.post<Availability>(this.baseUrl, payload).pipe(
+    const body = {
+      ...payload,
+      availableDate: this.toBackendDate(payload.availableDate)
+    };
+
+    return this.http.post<Availability>(this.baseUrl, body).pipe(
       map(slot => this.normalizeSlot(slot))
     );
   }
@@ -46,6 +51,16 @@ export class AvailabilityService {
 
   deleteSlot(id: string): Observable<string> {
     return this.http.delete(`${this.baseUrl}/${encodeURIComponent(id)}`, { responseType: 'text' });
+  }
+
+  private toBackendDate(value: string): number | string {
+    const [year, month, day] = String(value || '').split('-').map(Number);
+    if ([year, month, day].some(part => Number.isNaN(part))) {
+      return value;
+    }
+
+    // Keep the selected calendar day stable when the backend stores dates with timezones.
+    return Date.UTC(year, month - 1, day, 12, 0, 0);
   }
 
   private normalizeSlot(slot: Availability): Availability {

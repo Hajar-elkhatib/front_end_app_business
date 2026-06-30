@@ -1,0 +1,131 @@
+<section class="mini-page">
+  <div class="toast" *ngIf="showToast">{{toastMessage}}</div>
+  <header>
+    <p class="kicker">Specialists</p>
+    <h1>Specialist Recommendations</h1>
+    <p>Find the most relevant profiles to support your validation, market work, or strategy.</p>
+  </header>
+
+  <div class="toolbar">
+    <select class="input" [(ngModel)]="projectId" (ngModelChange)="onProjectChange($event)">
+      <option value="">Select a project</option>
+      <option *ngFor="let project of projects" [value]="project.id">{{project.title}} - {{getProjectStatusLabel(project)}}</option>
+    </select>
+    <button class="btn btn-indigo" (click)="run()" [disabled]="!projectId || isLoading">{{isLoading ? 'Searching...' : 'View Recommendations'}}</button>
+  </div>
+
+  <div class="state" *ngIf="!projectId">Select a project to run the analysis.</div>
+  <div class="state" *ngIf="shouldShowProjectAssignmentHint">{{projectAssignmentHint}}</div>
+  <div class="state" *ngIf="error">{{error}}</div>
+  <div class="state" *ngIf="projectId && !isLoading && !error && recommendationCards.length === 0">No recommendation is available for this project yet.</div>
+
+  <div class="list" *ngIf="recommendationCards.length > 0">
+    <article class="recommendation-card" *ngFor="let item of recommendationCards">
+      <div class="card-header">
+        <div>
+          <strong>{{item.fullName}}</strong>
+          <span>{{item.profession}}</span>
+        </div>
+        <span class="availability-badge" [ngClass]="item.availabilityClass">{{item.availability}}</span>
+      </div>
+      <p>{{item.reason || 'This profile matches the project priorities.'}}</p>
+      <div class="stats-grid">
+        <div>
+          <small>Rating</small>
+          <strong>{{item.averageRating | number:'1.1-1'}}</strong>
+        </div>
+        <div>
+          <small>Hourly rate</small>
+          <strong>${{item.hourlyRate}}</strong>
+        </div>
+        <div>
+          <small>Match</small>
+          <strong class="match">{{item.recommendedScore | number:'1.0-1'}}%</strong>
+        </div>
+      </div>
+      <small>Skills: {{formatSkills(item.skills)}}</small>
+      <div class="actions">
+        <a class="btn btn-secondary" [routerLink]="['/dashboard/entrepreneur/specialists', item.profileRouteId]">View Profile</a>
+        <button class="btn btn-secondary" type="button" (click)="contactSpecialist(item.specialistId)" [disabled]="contactingSpecialistId === item.specialistId">
+          {{contactingSpecialistId === item.specialistId ? 'Opening...' : 'Contact'}}
+        </button>
+        <button class="btn btn-indigo" type="button" (click)="openAssignModal(item)" [disabled]="isAssigning || item.isAssigned || !projectId || !canAssignSelectedProject">
+          {{getAssignmentActionLabel(item.isAssigned)}}
+        </button>
+      </div>
+    </article>
+  </div>
+
+  <section class="panel-section" *ngIf="projectId">
+    <h2>My Assignments</h2>
+    <div class="state" *ngIf="isLoadingAssignments">Loading assignments...</div>
+    <div class="state" *ngIf="!isLoadingAssignments && assignments.length === 0">No assignments have been created yet.</div>
+    <div class="table-wrap" *ngIf="assignments.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Specialist</th>
+            <th>Status</th>
+            <th>Assigned date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let assignment of assignments">
+            <td>{{assignment.project?.title || assignment.projectId}}</td>
+            <td>{{assignment.specialist?.fullName || assignment.specialistId}}</td>
+            <td>
+              <span class="status-pill" [ngClass]="getAssignmentStatusClass(assignment.status)">{{getAssignmentStatusLabel(assignment.status)}}</span>
+            </td>
+            <td>{{assignment.createdAt ? (assignment.createdAt | date:'mediumDate') : '-'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="panel-section" *ngIf="projectId">
+    <h2>Completed Assignments</h2>
+    <div class="state" *ngIf="isLoadingDoneAssignments">Loading completed assignments...</div>
+    <div class="state" *ngIf="!isLoadingDoneAssignments && doneAssignments.length === 0">No completed assignments yet.</div>
+    <div class="table-wrap" *ngIf="doneAssignments.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Specialist</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let assignment of doneAssignments">
+            <td>{{assignment.project?.title || assignment.projectId}}</td>
+            <td>{{assignment.specialist?.fullName || assignment.specialistId}}</td>
+            <td>
+              <span class="status-pill" [ngClass]="getAssignmentStatusClass(assignment.status)">{{getAssignmentStatusLabel(assignment.status)}}</span>
+            </td>
+            <td class="actions-cell">
+              <button *ngIf="assignment['canReview']" class="btn btn-secondary" type="button">Review</button>
+              <button *ngIf="assignment['canEvaluate']" class="btn btn-indigo" type="button">Evaluation</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="modal-backdrop" *ngIf="showAssignModal" (click)="closeAssignModal()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <h2>Assign specialist</h2>
+      <p *ngIf="selectedRecommendation">Send a short message to {{selectedRecommendation.fullName}} for {{projects.find(p => p.id === projectId)?.title || 'this project'}}.</p>
+      <textarea class="input" rows="4" [(ngModel)]="assignmentMessage" placeholder="Optional message for the specialist"></textarea>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" type="button" (click)="closeAssignModal()" [disabled]="isAssigning">Cancel</button>
+        <button class="btn btn-indigo" type="button" (click)="confirmAssign()" [disabled]="isAssigning">
+          {{isAssigning ? 'Assigning...' : 'Confirm Assignment'}}
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
