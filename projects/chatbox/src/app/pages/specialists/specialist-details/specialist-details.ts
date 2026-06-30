@@ -38,6 +38,8 @@ export class SpecialistDetails implements OnInit {
   reviewToast = '';
   canSubmitReview = false;
   canEvaluate = false;
+  isStartingConversation = false;
+  contactError = '';
   selectedEvaluationScore = 0;
   averageEvaluationScore = 0;
   evaluationCount = 0;
@@ -503,5 +505,18 @@ export class SpecialistDetails implements OnInit {
         this.router.navigate(['/specialists']);
       });
     }
+  }
+
+  startConversation() {
+    if (!this.specialist || this.isStartingConversation) {
+      return;
+    }
+
+    this.isStartingConversation = true;
+    this.contactError = '';
+    this.router.navigate(['/conversations']).finally(() => {
+      this.isStartingConversation = false;
+      this.cdr.markForCheck();
+    });
   }
 }
